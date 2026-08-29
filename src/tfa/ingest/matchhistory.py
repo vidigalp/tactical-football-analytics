@@ -19,7 +19,12 @@ from dataclasses import dataclass
 import pandas as pd
 import requests
 
-from tfa.competitions import COMPETITIONS, CORE_COLUMNS, Competition
+from tfa.competitions import (
+    COMPETITIONS,
+    OPTIONAL_COLUMNS,
+    REQUIRED_COLUMNS,
+    Competition,
+)
 
 log = logging.getLogger(__name__)
 
@@ -90,22 +95,42 @@ def fetch_csv(
     return Fetched(competition=comp.code, season=season, url=url, raw=raw, frame=frame)
 
 
+def _decode(raw: bytes) -> str:
+    """Decode a season file, handling a quarter-century of encoding drift.
+
+    Recent files are UTF-8 with a byte-order mark; older ones are latin-1 and
+    are not valid UTF-8. Decoding everything as latin-1 turns the BOM into a
+    literal ``ï»¿`` glued to the first column name, so ``Div`` silently becomes
+    ``ï»¿Div`` and the file appears to be missing a required column. Decoding
+    everything as UTF-8 instead throws on the older files.
+
+    Neither can be assumed, and getting it wrong the other way would mangle
+    accented team names — which would then fail to match across seasons.
+    """
+    if raw.startswith(b"\xef\xbb\xbf"):
+        return raw.decode("utf-8-sig")
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return raw.decode("latin-1")
+
+
 def _parse(raw: bytes, comp: Competition, season: str) -> pd.DataFrame:
-    # These files carry trailing blank columns and occasional ragged rows;
-    # python engine tolerates them, and encoding is latin-1 in older seasons.
+    # These files carry trailing blank columns and occasional ragged rows, so
+    # the python engine is used for its tolerance of both.
     frame = pd.read_csv(
-        io.BytesIO(raw),
-        encoding="latin-1",
+        io.StringIO(_decode(raw)),
         on_bad_lines="skip",
         engine="python",
     )
+    frame.columns = [str(c).strip().lstrip("﻿") for c in frame.columns]
     frame = frame.loc[:, [c for c in frame.columns if not str(c).startswith("Unnamed")]]
     frame = frame.dropna(how="all")
     # A row without a home team is padding, not a match.
     if "HomeTeam" in frame.columns:
         frame = frame[frame["HomeTeam"].notna()]
 
-    missing = [c for c in CORE_COLUMNS if c not in frame.columns]
+    missing = [c for c in REQUIRED_COLUMNS if c not in frame.columns]
     if missing:
         raise SchemaError(
             f"{comp.code} {season}: missing required columns {missing}. "
@@ -113,6 +138,12 @@ def _parse(raw: bytes, comp: Competition, season: str) -> pd.DataFrame:
         )
 
     frame = frame.copy()
+    # Optional columns are filled rather than demanded, so a file with fouls but
+    # no shots is still usable for discipline work. Which columns were absent
+    # stays visible in the data as NA rather than being silently zero.
+    for column in OPTIONAL_COLUMNS:
+        if column not in frame.columns:
+            frame[column] = pd.NA
     frame["Div"] = comp.code
     frame["season"] = season
     frame["country"] = comp.country
@@ -120,8 +151,22 @@ def _parse(raw: bytes, comp: Competition, season: str) -> pd.DataFrame:
     if "Referee" not in frame.columns:
         frame["Referee"] = pd.NA
 
-    frame["Date"] = pd.to_datetime(frame["Date"], dayfirst=True, errors="coerce")
+    frame["Date"] = _parse_dates(frame["Date"])
     return frame.reset_index(drop=True)
+
+
+def _parse_dates(series: pd.Series) -> pd.Series:
+    """Parse dates that are dd/mm/yy in older files and dd/mm/yyyy in newer ones.
+
+    Tried explicitly rather than inferred, because inference is per-element and
+    a two-digit year is ambiguous enough that pandas can silently disagree with
+    itself between rows of the same file.
+    """
+    for fmt in ("%d/%m/%Y", "%d/%m/%y"):
+        parsed = pd.to_datetime(series, format=fmt, errors="coerce")
+        if parsed.notna().mean() > 0.95:
+            return parsed
+    return pd.to_datetime(series, dayfirst=True, errors="coerce")
 
 
 def fetch_many(

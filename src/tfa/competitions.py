@@ -32,14 +32,25 @@ from dataclasses import dataclass, field
 
 BASE_URL = "https://www.football-data.co.uk/mmz4281"
 
-#: Columns this project relies on. Asserted present for every division.
-CORE_COLUMNS: tuple[str, ...] = (
+#: Columns without which a file cannot be used at all: match identity, result,
+#: and the discipline counts this project is built around. Absence is fatal.
+REQUIRED_COLUMNS: tuple[str, ...] = (
     "Div", "Date", "HomeTeam", "AwayTeam",
     "FTHG", "FTAG", "FTR",
-    "HS", "AS", "HST", "AST",
-    "HF", "AF", "HC", "AC",
-    "HY", "AY", "HR", "AR",
+    "HF", "AF", "HY", "AY", "HR", "AR",
 )
+
+#: Present in most files but not all, and not required. Germany 2003-2005 carries
+#: fouls and cards without shots on target; discarding three seasons of real
+#: discipline data over a missing shooting column would be the wrong trade.
+#: Missing values are filled with NA so the schema stays rectangular.
+OPTIONAL_COLUMNS: tuple[str, ...] = (
+    "HS", "AS", "HST", "AST", "HC", "AC",
+    "HTHG", "HTAG", "HTR",
+)
+
+#: Everything the analysis may touch.
+CORE_COLUMNS: tuple[str, ...] = REQUIRED_COLUMNS + OPTIONAL_COLUMNS
 
 #: The first season carrying match statistics. Earlier files are results+odds only.
 FIRST_STATS_SEASON_YEAR = 2000

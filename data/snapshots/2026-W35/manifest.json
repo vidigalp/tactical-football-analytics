@@ -1,18 +1,138 @@
 {
-  "created_at": "2026-08-29T20:32:18+00:00",
+  "created_at": "2026-08-29T21:13:18+00:00",
   "entries": [
     {
-      "column_count": 27,
-      "competition": "ALL",
-      "parquet_path": "audit__ALL__2000-2025.parquet",
-      "retrieved_at": "2026-08-29T20:32:18+00:00",
-      "row_count": 286,
-      "schema_hash": "67850089aec59fcc",
-      "season": "2000-2025",
-      "sha256": "0b8242b41e1bcaa7b9b2c05615e86d7761a59a72827b837aa412693448c33730",
-      "source": "audit",
-      "url": "https://www.football-data.co.uk/mmz4281/"
+      "column_count": 32,
+      "competition": "B1",
+      "parquet_path": "football-data__B1__1920-2526.parquet",
+      "retrieved_at": "2026-08-29T21:13:04+00:00",
+      "row_count": 2079,
+      "schema_hash": "d3711ad164b6d5fc",
+      "season": "1920-2526",
+      "sha256": "8b78995a5718653ce936c272bdec7084e2c94a0a122c6ee06c1c203558d24cbc",
+      "source": "football-data",
+      "url": "https://www.football-data.co.uk/mmz4281/{season}/B1.csv"
+    },
+    {
+      "column_count": 32,
+      "competition": "D1",
+      "parquet_path": "football-data__D1__0001-2526.parquet",
+      "retrieved_at": "2026-08-29T21:13:06+00:00",
+      "row_count": 7537,
+      "schema_hash": "d3711ad164b6d5fc",
+      "season": "0001-2526",
+      "sha256": "b561a9077e03d73f7c784bc982f71c31b920e65cad198405b4a105a7f77ecfd2",
+      "source": "football-data",
+      "url": "https://www.football-data.co.uk/mmz4281/{season}/D1.csv"
+    },
+    {
+      "column_count": 32,
+      "competition": "E0",
+      "parquet_path": "football-data__E0__0001-2526.parquet",
+      "retrieved_at": "2026-08-29T21:13:08+00:00",
+      "row_count": 9790,
+      "schema_hash": "d3711ad164b6d5fc",
+      "season": "0001-2526",
+      "sha256": "eca174f019e459f84262477ac9c6cb75be248e64fa62900d8c459ead9cd866a3",
+      "source": "football-data",
+      "url": "https://www.football-data.co.uk/mmz4281/{season}/E0.csv"
+    },
+    {
+      "column_count": 32,
+      "competition": "F1",
+      "parquet_path": "football-data__F1__0708-2526.parquet",
+      "retrieved_at": "2026-08-29T21:13:09+00:00",
+      "row_count": 6894,
+      "schema_hash": "d3711ad164b6d5fc",
+      "season": "0708-2526",
+      "sha256": "0f0baf59813d76325404e6e19cd26478a77eec04dac1b0b7bf122c11c3939337",
+      "source": "football-data",
+      "url": "https://www.football-data.co.uk/mmz4281/{season}/F1.csv"
+    },
+    {
+      "column_count": 32,
+      "competition": "G1",
+      "parquet_path": "football-data__G1__1920-2526.parquet",
+      "retrieved_at": "2026-08-29T21:13:10+00:00",
+      "row_count": 1668,
+      "schema_hash": "d3711ad164b6d5fc",
+      "season": "1920-2526",
+      "sha256": "44dd3a880a3ab415efdc7b789539627451051a6a204a24e78f4a3fecb7dcc217",
+      "source": "football-data",
+      "url": "https://www.football-data.co.uk/mmz4281/{season}/G1.csv"
+    },
+    {
+      "column_count": 32,
+      "competition": "I1",
+      "parquet_path": "football-data__I1__0506-2526.parquet",
+      "retrieved_at": "2026-08-29T21:13:12+00:00",
+      "row_count": 7968,
+      "schema_hash": "d3711ad164b6d5fc",
+      "season": "0506-2526",
+      "sha256": "53a29e0f4f94d1de4de6c3cdbdd8a16fd467380e1fb76e4b764103e5f461b35e",
+      "source": "football-data",
+      "url": "https://www.football-data.co.uk/mmz4281/{season}/I1.csv"
+    },
+    {
+      "column_count": 32,
+      "competition": "N1",
+      "parquet_path": "football-data__N1__1718-2526.parquet",
+      "retrieved_at": "2026-08-29T21:13:12+00:00",
+      "row_count": 2680,
+      "schema_hash": "d3711ad164b6d5fc",
+      "season": "1718-2526",
+      "sha256": "46adb744a8126d748423c778fbe779cd9106fa75d2e2d7be88e78f25c064cef9",
+      "source": "football-data",
+      "url": "https://www.football-data.co.uk/mmz4281/{season}/N1.csv"
+    },
+    {
+      "column_count": 32,
+      "competition": "P1",
+      "parquet_path": "football-data__P1__1718-2526.parquet",
+      "retrieved_at": "2026-08-29T21:13:13+00:00",
+      "row_count": 2754,
+      "schema_hash": "d3711ad164b6d5fc",
+      "season": "1718-2526",
+      "sha256": "350a7bdc2013e71536721962bd00b7bbc32d6cb2d7b293a83cec7ae74c4a39a2",
+      "source": "football-data",
+      "url": "https://www.football-data.co.uk/mmz4281/{season}/P1.csv"
+    },
+    {
+      "column_count": 32,
+      "competition": "SC0",
+      "parquet_path": "football-data__SC0__0001-2526.parquet",
+      "retrieved_at": "2026-08-29T21:13:15+00:00",
+      "row_count": 5606,
+      "schema_hash": "d3711ad164b6d5fc",
+      "season": "0001-2526",
+      "sha256": "e9236fc46f546d719fb20cd1d8b146622148d896b6792c5bdcc8fb812bf9a6ac",
+      "source": "football-data",
+      "url": "https://www.football-data.co.uk/mmz4281/{season}/SC0.csv"
+    },
+    {
+      "column_count": 32,
+      "competition": "SP1",
+      "parquet_path": "football-data__SP1__0506-2526.parquet",
+      "retrieved_at": "2026-08-29T21:13:17+00:00",
+      "row_count": 7980,
+      "schema_hash": "d3711ad164b6d5fc",
+      "season": "0506-2526",
+      "sha256": "e19e3ddce2e15b2e6dc54f91216edaf2b12f5c6c8a531f032a1cea450e0ac1d5",
+      "source": "football-data",
+      "url": "https://www.football-data.co.uk/mmz4281/{season}/SP1.csv"
+    },
+    {
+      "column_count": 32,
+      "competition": "T1",
+      "parquet_path": "football-data__T1__1718-2526.parquet",
+      "retrieved_at": "2026-08-29T21:13:18+00:00",
+      "row_count": 3057,
+      "schema_hash": "d3711ad164b6d5fc",
+      "season": "1718-2526",
+      "sha256": "ef83c6ee645f5ba93baa59423f6c621d3e98dab72f7a0fed9ea7b4e87f7272fa",
+      "source": "football-data",
+      "url": "https://www.football-data.co.uk/mmz4281/{season}/T1.csv"
     }
   ],
-  "entry_count": 1
+  "entry_count": 11
 }
