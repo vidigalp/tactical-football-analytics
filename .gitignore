@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Third-party source caches. See DATA_SOURCES.md: FBref and Understat data is
+# NEVER committed to this repo. A CI test asserts this boundary holds.
+soccerdata/
+.cache/
+data/cache/
+data/fbref/
+data/understat/
+
+# Scratch
+scratch/
+*.tmp
