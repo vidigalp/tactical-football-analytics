@@ -87,6 +87,40 @@ We respect all of that. If FBref is ever consulted locally for a goals/cards agr
 result is reported as a summary statistic and the underlying data is never committed. A CI test
 asserts no FBref-derived artifact exists in the tree.
 
+## Manager tenures — hand-assembled, and why not from Transfermarkt
+
+Manager identity does not exist in any of the sources above, so it has to be assembled by hand.
+That makes it the least reliable data here and the most in need of explicit handling: every row
+cites a resolvable URL, date precision is recorded as day/month/season, and coverage is measured
+and published rather than assumed. See `src/tfa/managers.py`.
+
+**Transfermarkt is not used.** It is the most complete manager-tenure source in existence, and it
+was the obvious candidate. Its terms of use, clause 11.1, rule it out twice over:
+
+> "The User is not permitted to access or copy the Digital Content using bots, spiders, screen
+> scraping or other automated processes. The user is also prohibited from using the digital content
+> for the training or development of artificial intelligence (AI), including language models,
+> machine learning, neural networks..."
+
+Automated retrieval is prohibited, and use of the content by a language model is prohibited
+outright — which matters directly for a project that documents an AI-assisted workflow. These
+terms are near-identical to the Sports Reference terms that put FBref off this project's critical
+path, so using Transfermarkt anyway would contradict our own published policy. Convenience is not
+a reason to hold a second source to a lower standard than the first.
+
+**Used instead**, in order of preference:
+
+1. **Wikipedia** (Portuguese and English) — CC BY-SA, explicitly reusable with attribution, and it
+   carries dedicated club manager-history pages.
+2. **zerozero.pt** — Portuguese football database; permissive `robots.txt` that disallows a single
+   endpoint and publishes a coaches sitemap.
+3. **Club official sites** and **Liga Portugal**.
+4. **Reputable news reports** for a specific appointment or departure, which have the advantage of
+   dating the event precisely.
+
+Anything unverifiable is left out and reported as a gap. A missing row costs coverage; an invented
+one costs the project its premise.
+
 ## Not available at all
 
 Published in the README as a permanent guard, so no future contributor builds on a column that
