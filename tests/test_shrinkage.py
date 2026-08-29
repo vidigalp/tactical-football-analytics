@@ -12,19 +12,25 @@ from tfa.stats.shrinkage import (
     shrink_gamma_poisson,
 )
 
-RNG = np.random.default_rng(20260829)
 
+def simulate_beta_binomial(
+    n_teams: int, trials_per_team: int, alpha: float, beta: float, seed: int = 0
+):
+    """Draw teams from a known Beta prior, then observe finite samples.
 
-def simulate_beta_binomial(n_teams: int, trials_per_team: int, alpha: float, beta: float):
-    """Draw teams from a known Beta prior, then observe finite samples."""
-    true_rates = RNG.beta(alpha, beta, size=n_teams)
+    Each call gets its own generator. Sharing one across tests makes results
+    depend on execution order, which showed up here as a test that passed alone
+    and failed in the suite.
+    """
+    rng = np.random.default_rng(20260829 + seed)
+    true_rates = rng.beta(alpha, beta, size=n_teams)
     trials = np.full(n_teams, trials_per_team, dtype=float)
-    successes = RNG.binomial(trials.astype(int), true_rates).astype(float)
+    successes = rng.binomial(trials.astype(int), true_rates).astype(float)
     return successes, trials, true_rates
 
 
 def test_recovers_known_prior():
-    successes, trials, _ = simulate_beta_binomial(400, 400, alpha=12.0, beta=60.0)
+    successes, trials, _ = simulate_beta_binomial(400, 400, alpha=12.0, beta=60.0, seed=1)
     prior = beta_binomial_prior(successes, trials)
     assert prior.mean == pytest.approx(12 / 72, abs=0.01)
     # n0 = 72; recovery is noisy but should land in the right region.
@@ -39,7 +45,7 @@ def test_sampling_variance_correction_matters():
     between-team spread.
     """
     alpha, beta = 12.0, 60.0
-    successes, trials, _ = simulate_beta_binomial(20, 60, alpha=alpha, beta=beta)
+    successes, trials, _ = simulate_beta_binomial(20, 60, alpha=alpha, beta=beta, seed=2)
 
     corrected = beta_binomial_prior(successes, trials)
 
@@ -58,7 +64,7 @@ def test_sampling_variance_correction_matters():
 
 def test_shrinkage_beats_raw_on_squared_error():
     """The entire justification for shrinking, tested directly."""
-    successes, trials, true_rates = simulate_beta_binomial(20, 40, alpha=12.0, beta=60.0)
+    successes, trials, true_rates = simulate_beta_binomial(20, 40, alpha=12.0, beta=60.0, seed=3)
     out = shrink_beta_binomial(successes, trials)
 
     raw_error = float(np.mean((out["raw"] - true_rates) ** 2))
@@ -89,7 +95,7 @@ def test_intervals_contain_the_estimate_and_widen_with_less_data():
 
 def test_reliability_identity():
     """r(n) = n/(n+n0), so r = 0.5 exactly at the prior sample size."""
-    successes, trials, _ = simulate_beta_binomial(30, 100, alpha=12.0, beta=60.0)
+    successes, trials, _ = simulate_beta_binomial(30, 100, alpha=12.0, beta=60.0, seed=4)
     prior = beta_binomial_prior(successes, trials)
     n0 = prior.prior_sample_size
     assert prior.reliability(n0) == pytest.approx(0.5)
@@ -98,9 +104,10 @@ def test_reliability_identity():
 
 
 def test_gamma_poisson_recovers_and_shrinks():
-    true_rates = RNG.gamma(shape=25.0, scale=1.0, size=200)
+    rng = np.random.default_rng(7)
+    true_rates = rng.gamma(shape=25.0, scale=1.0, size=200)
     exposure = np.full(200, 30.0)
-    counts = RNG.poisson(true_rates * exposure).astype(float)
+    counts = rng.poisson(true_rates * exposure).astype(float)
 
     prior = gamma_poisson_prior(counts, exposure)
     assert prior.mean == pytest.approx(25.0, rel=0.1)
@@ -118,8 +125,9 @@ def test_prior_requires_at_least_two_units():
 
 def test_flags_when_variance_is_undetectable():
     """Teams drawn from an identical rate must be reported as indistinguishable."""
+    rng = np.random.default_rng(99)
     trials = np.full(18, 40.0)
-    successes = RNG.binomial(40, 0.17, size=18).astype(float)
+    successes = rng.binomial(40, 0.17, size=18).astype(float)
     prior = beta_binomial_prior(successes, trials)
     assert prior.detectable_variance is False
 
@@ -131,5 +139,43 @@ def test_flags_when_variance_is_undetectable():
 
 
 def test_detects_variance_when_it_is_real():
-    successes, trials, _ = simulate_beta_binomial(20, 400, alpha=12.0, beta=60.0)
+    successes, trials, _ = simulate_beta_binomial(20, 400, alpha=12.0, beta=60.0, seed=5)
     assert beta_binomial_prior(successes, trials).detectable_variance is True
+
+
+def test_historical_prior_recovers_true_spread_more_accurately():
+    """A prior fitted on history is *more accurate*, not merely stronger.
+
+    An earlier version of this test asserted the thin prior would be weaker.
+    That is false, and the failure was informative: a prior fitted on a few
+    matches is **unreliable in both directions**. Over 200 replications with a
+    true n0 of 72, a thin fit has an interquartile range of roughly 54 to 320,
+    so it can understate or overstate how much teams differ by several fold.
+
+    Portugal's 2026-27 fit happened to land low, which under-shrank an extreme
+    team. It could as easily have landed high. The case for using history is
+    accuracy, not direction.
+    """
+    from tfa.stats.shrinkage import historical_prior
+
+    true_n0 = 72.0
+    rng = np.random.default_rng(4242)
+
+    def log2_error(n_teams: int, trials: int, reps: int = 60) -> float:
+        errors = []
+        for _ in range(reps):
+            rates = rng.beta(12.0, 60.0, size=n_teams)
+            t = np.full(n_teams, float(trials))
+            s = rng.binomial(t.astype(int), rates).astype(float)
+            fitted = historical_prior(s, t).prior_sample_size
+            errors.append(abs(np.log2(fitted / true_n0)))
+        return float(np.median(errors))
+
+    thin = log2_error(18, 40)
+    history = log2_error(200, 450)
+
+    assert history < thin / 2, (
+        f"history should recover the true spread far more accurately "
+        f"(median |log2| error {history:.2f} vs thin {thin:.2f})"
+    )
+    assert history < 0.3

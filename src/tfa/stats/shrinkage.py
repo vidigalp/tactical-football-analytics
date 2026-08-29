@@ -228,3 +228,38 @@ def shrink_gamma_poisson(
             "reliability": prior.reliability(exposure),
         }
     )
+
+
+def historical_prior(
+    history_successes: np.ndarray,
+    history_trials: np.ndarray,
+    *,
+    family: str = "beta",
+) -> BetaBinomialPrior | GammaPoissonPrior:
+    """Fit a prior on completed seasons, for use on an in-progress one.
+
+    Fitting the prior on the season being judged is circular and, early on,
+    nearly uninformative: three matches per team cannot reveal how much teams
+    genuinely differ. The estimate of between-team spread is then itself noise,
+    and it is the quantity that decides how hard to shrink.
+
+    Completed seasons answer it directly, and the gain is **accuracy rather than
+    direction**. Simulated with a true prior sample size of 72, a fit on 18 teams
+    with 40 trials each has an interquartile range of roughly 54 to 320; a fit on
+    many completed seasons lands between 68 and 79. The thin fit can understate
+    or overstate how much teams differ by several fold, and there is no way to
+    tell which from the thin data alone.
+
+    Portugal 2026-27 happened to land low — 99 fouls of prior weight against
+    1,213 from completed seasons — which under-shrank an extreme team from 5.9
+    to 7.8 fouls per yellow. It could as easily have landed high and over-shrunk
+    a real signal.
+
+    What history knows about how much teams differ does not stop being true
+    because a new season started.
+    """
+    if family == "beta":
+        return beta_binomial_prior(history_successes, history_trials)
+    if family == "gamma":
+        return gamma_poisson_prior(history_successes, history_trials)
+    raise ValueError(f"unknown family {family!r}")
