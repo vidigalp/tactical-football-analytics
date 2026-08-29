@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    # Weekly, so a reference that rots after publication is caught.
+    - cron: "0 6 * * 1"
 
 jobs:
   test:
@@ -16,3 +19,15 @@ jobs:
       - run: uv sync --all-extras --dev
       - run: uv run ruff check .
       - run: uv run pytest -m "not network"
+
+  citations:
+    # Every citation must resolve to a registered DOI whose title matches what we
+    # claim it is. This is the structural guard described in AI_WORKFLOW.md.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --all-extras --dev
+      - run: uv run pytest -m network

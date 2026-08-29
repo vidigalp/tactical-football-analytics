@@ -1,0 +1,343 @@
+% Verified references.
+%
+% Every entry carries a `provenance` field recording the evidence tier it earned:
+%   peer-reviewed | preprint | industry | observatory | book | blog
+% Nothing may be cited at a higher tier than this field states.
+%
+% Every entry must have a resolvable doi or url. This is enforced by
+% `tfa.citations` and tested in CI. Anything that cannot be verified belongs in
+% unverified.bib and may not be cited in published output.
+
+% ---------------------------------------------------------------------------
+% Football: fouls, cards, discipline
+% ---------------------------------------------------------------------------
+
+@article{phatak2021dirty,
+  author       = {Phatak, Ashwin and Rein, Robert and Memmert, Daniel},
+  title        = {The Dirty League: English Premier League Provides Higher Incentives
+                  for Fouling as Compared to Other European Soccer Leagues},
+  journal      = {Journal of Human Kinetics},
+  volume       = {80},
+  pages        = {263--276},
+  year         = {2021},
+  doi          = {10.2478/hukin-2021-0095},
+  url          = {https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8607766/},
+  provenance   = {peer-reviewed},
+  openaccess   = {yes},
+  note         = {Uses fouls-to-yellow-cards across five leagues as an indicator of
+                  fouling incentive. Reports Simpson's paradox on this ratio: the
+                  pooled trend differs from within-league trends, so it must never be
+                  analysed pooled across leagues.}
+}
+
+@article{wright2003professional,
+  author       = {Wright, Mike and Hirotsu, Nobuyoshi},
+  title        = {The Professional Foul in Football: Tactics and Deterrents},
+  journal      = {Journal of the Operational Research Society},
+  volume       = {54},
+  number       = {3},
+  pages        = {213--221},
+  year         = {2003},
+  doi          = {10.1057/palgrave.jors.2601506},
+  provenance   = {peer-reviewed},
+  openaccess   = {no},
+  note         = {Models when a professional foul is rationally worthwhile given game
+                  state. Frequently misattributed to Ridder; the authors are Wright
+                  and Hirotsu.}
+}
+
+@article{ridder1994down,
+  author       = {Ridder, Geert and Cramer, J. S. and Hopstaken, Peter},
+  title        = {Down to Ten: Estimating the Effect of a Red Card in Soccer},
+  journal      = {Journal of the American Statistical Association},
+  volume       = {89},
+  number       = {427},
+  pages        = {1124--1127},
+  year         = {1994},
+  doi          = {10.1080/01621459.1994.10476850},
+  provenance   = {peer-reviewed},
+  openaccess   = {no}
+}
+
+@article{dawson2007referees,
+  author       = {Dawson, Peter and Dobson, Stephen and Goddard, John and Wilson, John},
+  title        = {Are Football Referees Really Biased and Inconsistent? Evidence on the
+                  Incidence of Disciplinary Sanction in the English Premier League},
+  journal      = {Journal of the Royal Statistical Society: Series A},
+  volume       = {170},
+  number       = {1},
+  pages        = {231--250},
+  year         = {2007},
+  doi          = {10.1111/j.1467-985X.2006.00451.x},
+  provenance   = {peer-reviewed},
+  openaccess   = {no},
+  note         = {League-wide disciplinary incidence is stable, but referees differ
+                  significantly from one another.}
+}
+
+@article{boyko2007referee,
+  author       = {Boyko, Ryan H. and Boyko, Adam R. and Boyko, Mark G.},
+  title        = {Referee Bias Contributes to Home Advantage in English Premiership Football},
+  journal      = {Journal of Sports Sciences},
+  volume       = {25},
+  number       = {11},
+  pages        = {1185--1194},
+  year         = {2007},
+  doi          = {10.1080/02640410601038576},
+  provenance   = {peer-reviewed},
+  openaccess   = {no}
+}
+
+@article{sors2021silence,
+  author       = {Sors, Fabrizio and Grassi, Massimo and Agostini, Tiziano and Murgia, Mauro},
+  title        = {The Sound of Silence in Association Football: Home Advantage and Referee
+                  Bias Decrease in Matches Played without Spectators},
+  journal      = {European Journal of Sport Science},
+  volume       = {21},
+  number       = {12},
+  pages        = {1597--1605},
+  year         = {2021},
+  doi          = {10.1080/17461391.2020.1845814},
+  provenance   = {peer-reviewed},
+  openaccess   = {no}
+}
+
+@article{azmat2024xb,
+  author       = {Azmat, Amod and Yi, Sun Sheng},
+  title        = {Investigating Fouling Efficiency in Football Using Expected Booking (xB) Model},
+  journal      = {arXiv preprint},
+  eprint       = {2401.08718},
+  year         = {2024},
+  doi          = {10.48550/arXiv.2401.08718},
+  url          = {https://arxiv.org/abs/2401.08718},
+  provenance   = {preprint},
+  openaccess   = {yes},
+  note         = {Models P(card | foul context). The correctly specified alternative to a
+                  raw fouls-per-card ratio. NOT peer-reviewed -- cite as preprint.}
+}
+
+% ---------------------------------------------------------------------------
+% Data science: shrinkage, multiplicity, reliability, reproducibility
+% ---------------------------------------------------------------------------
+
+@article{efron1975stein,
+  author       = {Efron, Bradley and Morris, Carl},
+  title        = {Data Analysis Using Stein's Estimator and Its Generalizations},
+  journal      = {Journal of the American Statistical Association},
+  volume       = {70},
+  number       = {350},
+  pages        = {311--319},
+  year         = {1975},
+  doi          = {10.1080/01621459.1975.10479864},
+  provenance   = {peer-reviewed},
+  openaccess   = {no}
+}
+
+@article{brown2008season,
+  author       = {Brown, Lawrence D.},
+  title        = {In-Season Prediction of Batting Averages: A Field Test of Empirical Bayes
+                  and Bayes Methodologies},
+  journal      = {The Annals of Applied Statistics},
+  volume       = {2},
+  number       = {1},
+  pages        = {113--152},
+  year         = {2008},
+  doi          = {10.1214/07-AOAS138},
+  provenance   = {peer-reviewed},
+  openaccess   = {yes},
+  note         = {The peer-reviewed anchor for empirical-Bayes rate estimation in sport.}
+}
+
+@article{benjamini1995controlling,
+  author       = {Benjamini, Yoav and Hochberg, Yosef},
+  title        = {Controlling the False Discovery Rate: A Practical and Powerful Approach
+                  to Multiple Testing},
+  journal      = {Journal of the Royal Statistical Society: Series B},
+  volume       = {57},
+  number       = {1},
+  pages        = {289--300},
+  year         = {1995},
+  doi          = {10.1111/j.2517-6161.1995.tb02031.x},
+  provenance   = {peer-reviewed},
+  openaccess   = {no}
+}
+
+@article{gelman2012multiple,
+  author       = {Gelman, Andrew and Hill, Jennifer and Yajima, Masanao},
+  title        = {Why We (Usually) Don't Have to Worry About Multiple Comparisons},
+  journal      = {Journal of Research on Educational Effectiveness},
+  volume       = {5},
+  number       = {2},
+  pages        = {189--211},
+  year         = {2012},
+  doi          = {10.1080/19345747.2011.618213},
+  url          = {https://arxiv.org/abs/0907.2478},
+  provenance   = {peer-reviewed},
+  openaccess   = {yes},
+  note         = {Justifies partial pooling as the primary multiplicity control within a
+                  metric. Does not extend across metrics.}
+}
+
+@article{kruschke2018rope,
+  author       = {Kruschke, John K. and Liddell, Torrin M.},
+  title        = {The Bayesian New Statistics: Hypothesis Testing, Estimation, Meta-Analysis,
+                  and Power Analysis from a Bayesian Perspective},
+  journal      = {Psychonomic Bulletin and Review},
+  volume       = {25},
+  pages        = {178--206},
+  year         = {2018},
+  doi          = {10.3758/s13423-016-1221-4},
+  provenance   = {peer-reviewed},
+  openaccess   = {yes},
+  note         = {Region of practical equivalence (ROPE) decision rules.}
+}
+
+@article{barnett2005regression,
+  author       = {Barnett, Adrian G. and van der Pols, Jolieke C. and Dobson, Annette J.},
+  title        = {Regression to the Mean: What It Is and How to Deal with It},
+  journal      = {International Journal of Epidemiology},
+  volume       = {34},
+  number       = {1},
+  pages        = {215--220},
+  year         = {2005},
+  doi          = {10.1093/ije/dyh299},
+  provenance   = {peer-reviewed},
+  openaccess   = {yes},
+  note         = {Why selecting on an extreme and re-measuring produces an artifact.}
+}
+
+@article{cronbach1951alpha,
+  author       = {Cronbach, Lee J.},
+  title        = {Coefficient Alpha and the Internal Structure of Tests},
+  journal      = {Psychometrika},
+  volume       = {16},
+  pages        = {297--334},
+  year         = {1951},
+  doi          = {10.1007/BF02310555},
+  provenance   = {peer-reviewed},
+  openaccess   = {no}
+}
+
+@article{simmons2011false,
+  author       = {Simmons, Joseph P. and Nelson, Leif D. and Simonsohn, Uri},
+  title        = {False-Positive Psychology: Undisclosed Flexibility in Data Collection and
+                  Analysis Allows Presenting Anything as Significant},
+  journal      = {Psychological Science},
+  volume       = {22},
+  number       = {11},
+  pages        = {1359--1366},
+  year         = {2011},
+  doi          = {10.1177/0956797611417632},
+  provenance   = {peer-reviewed},
+  openaccess   = {yes}
+}
+
+@article{ioannidis2005why,
+  author       = {Ioannidis, John P. A.},
+  title        = {Why Most Published Research Findings Are False},
+  journal      = {PLoS Medicine},
+  volume       = {2},
+  number       = {8},
+  pages        = {e124},
+  year         = {2005},
+  doi          = {10.1371/journal.pmed.0020124},
+  provenance   = {peer-reviewed},
+  openaccess   = {yes}
+}
+
+@article{peng2011reproducible,
+  author       = {Peng, Roger D.},
+  title        = {Reproducible Research in Computational Science},
+  journal      = {Science},
+  volume       = {334},
+  number       = {6060},
+  pages        = {1226--1227},
+  year         = {2011},
+  doi          = {10.1126/science.1213847},
+  provenance   = {peer-reviewed},
+  openaccess   = {yes}
+}
+
+@article{wilkinson2016fair,
+  author       = {Wilkinson, Mark D. and others},
+  title        = {The FAIR Guiding Principles for Scientific Data Management and Stewardship},
+  journal      = {Scientific Data},
+  volume       = {3},
+  pages        = {160018},
+  year         = {2016},
+  doi          = {10.1038/sdata.2016.18},
+  provenance   = {peer-reviewed},
+  openaccess   = {yes}
+}
+
+@article{gebru2021datasheets,
+  author       = {Gebru, Timnit and Morgenstern, Jamie and Vecchione, Briana and
+                  Vaughan, Jennifer Wortman and Wallach, Hanna and
+                  Daum{\'e} III, Hal and Crawford, Kate},
+  title        = {Datasheets for Datasets},
+  journal      = {Communications of the ACM},
+  volume       = {64},
+  number       = {12},
+  pages        = {86--92},
+  year         = {2021},
+  doi          = {10.1145/3458723},
+  provenance   = {peer-reviewed},
+  openaccess   = {yes}
+}
+
+@article{leys2013outliers,
+  author       = {Leys, Christophe and Ley, Christophe and Klein, Olivier and
+                  Bernard, Philippe and Licata, Laurent},
+  title        = {Detecting Outliers: Do Not Use Standard Deviation Around the Mean,
+                  Use Absolute Deviation Around the Median},
+  journal      = {Journal of Experimental Social Psychology},
+  volume       = {49},
+  number       = {4},
+  pages        = {764--766},
+  year         = {2013},
+  doi          = {10.1016/j.jesp.2013.03.013},
+  provenance   = {peer-reviewed},
+  openaccess   = {no}
+}
+
+@article{chandola2009anomaly,
+  author       = {Chandola, Varun and Banerjee, Arindam and Kumar, Vipin},
+  title        = {Anomaly Detection: A Survey},
+  journal      = {ACM Computing Surveys},
+  volume       = {41},
+  number       = {3},
+  pages        = {1--58},
+  year         = {2009},
+  doi          = {10.1145/1541880.1541882},
+  provenance   = {peer-reviewed},
+  openaccess   = {no}
+}
+
+@article{simpson1951interpretation,
+  author       = {Simpson, E. H.},
+  title        = {The Interpretation of Interaction in Contingency Tables},
+  journal      = {Journal of the Royal Statistical Society: Series B},
+  volume       = {13},
+  number       = {2},
+  pages        = {238--241},
+  year         = {1951},
+  doi          = {10.1111/j.2517-6161.1951.tb00088.x},
+  provenance   = {peer-reviewed},
+  openaccess   = {no}
+}
+
+@article{ji2023hallucination,
+  author       = {Ji, Ziwei and Lee, Nayeon and Frieske, Rita and Yu, Tiezheng and
+                  Su, Dan and Xu, Yan and Ishii, Etsuko and Bang, Ye Jin and
+                  Madotto, Andrea and Fung, Pascale},
+  title        = {Survey of Hallucination in Natural Language Generation},
+  journal      = {ACM Computing Surveys},
+  volume       = {55},
+  number       = {12},
+  pages        = {1--38},
+  year         = {2023},
+  doi          = {10.1145/3571730},
+  provenance   = {peer-reviewed},
+  openaccess   = {yes},
+  note         = {Backs the verification harness described in AI_WORKFLOW.md.}
+}
