@@ -4,7 +4,7 @@ Provenance of the metrics here:
 
 * ``fouls_per_match`` — INDUSTRY. A plain count rate, universally reported.
 * ``cards_per_match`` — INDUSTRY. As above.
-* ``cards_per_foul`` — LITERATURE, with care. Phatak et al. (2021) use the
+* ``yellows_per_foul`` — LITERATURE, with care. Phatak et al. (2021) use the
   reciprocal (fouls per yellow card) across five leagues as an indicator of
   fouling incentive. It is *not* a named, validated metric with an agreed
   definition, and it must never be pooled across leagues: the same paper reports
@@ -69,8 +69,8 @@ def with_shrinkage(team_seasons: pd.DataFrame) -> pd.DataFrame:
         # Whether the league's teams are separable at all at this sample size.
         group["fouls_detectable"] = foul_prior.detectable_variance
         group["cards_detectable"] = card_prior.detectable_variance
-        group["cards_per_foul_detectable"] = rate_prior.detectable_variance
-        group["cards_per_foul_n0"] = rate_prior.prior_sample_size
+        group["yellows_per_foul_detectable"] = rate_prior.detectable_variance
+        group["yellows_per_foul_n0"] = rate_prior.prior_sample_size
 
         group["fouls_per_match"] = fouls["raw"]
         group["fouls_per_match_shrunk"] = fouls["shrunk"]
@@ -82,20 +82,26 @@ def with_shrinkage(team_seasons: pd.DataFrame) -> pd.DataFrame:
         group["cards_per_match_lo"] = cards["lower"]
         group["cards_per_match_hi"] = cards["upper"]
 
-        group["cards_per_foul"] = rate["raw"]
-        group["cards_per_foul_shrunk"] = rate["shrunk"]
-        group["cards_per_foul_lo"] = rate["lower"]
-        group["cards_per_foul_hi"] = rate["upper"]
-        group["cards_per_foul_weight"] = rate["shrinkage_weight"]
-        group["cards_per_foul_reliability"] = rate["reliability"]
+        group["yellows_per_foul"] = rate["raw"]
+        group["yellows_per_foul_shrunk"] = rate["shrunk"]
+        group["yellows_per_foul_lo"] = rate["lower"]
+        group["yellows_per_foul_hi"] = rate["upper"]
+        group["yellows_per_foul_weight"] = rate["shrinkage_weight"]
+        group["yellows_per_foul_reliability"] = rate["reliability"]
 
         # The reciprocal is the form the literature and the public use, but it is
-        # never modelled directly: E[F/C] != 1/E[C/F], and it is undefined for a
+        # never modelled directly: E[F/Y] != 1/E[Y/F], and it is undefined for a
         # team with no cards. Derived from the shrunken rate instead.
-        group["fouls_per_card"] = 1.0 / group["cards_per_foul"]
-        group["fouls_per_card_shrunk"] = 1.0 / group["cards_per_foul_shrunk"]
-        group["fouls_per_card_lo"] = 1.0 / group["cards_per_foul_hi"]
-        group["fouls_per_card_hi"] = 1.0 / group["cards_per_foul_lo"]
+        #
+        # Named for yellows, not cards, because that is what the numerator is.
+        # Including reds would change the denominator for the minority of teams
+        # that have one, and Phatak et al. use yellows. A column called
+        # "per_card" computed from yellows is exactly the kind of quiet
+        # definitional drift this project exists to catch.
+        group["fouls_per_yellow"] = 1.0 / group["yellows_per_foul"]
+        group["fouls_per_yellow_shrunk"] = 1.0 / group["yellows_per_foul_shrunk"]
+        group["fouls_per_yellow_lo"] = 1.0 / group["yellows_per_foul_hi"]
+        group["fouls_per_yellow_hi"] = 1.0 / group["yellows_per_foul_lo"]
 
         out.append(group)
 

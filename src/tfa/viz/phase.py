@@ -36,7 +36,7 @@ def _iso_lines(ax: plt.Axes, ratios: tuple[float, ...], xlim: tuple[float, float
         y_end = xlim[1] / ratio
         if ax.get_ylim()[0] < y_end < ax.get_ylim()[1]:
             ax.annotate(
-                f"{ratio:g} fouls/card",
+                f"{ratio:g} fouls/yellow",
                 xy=(xlim[1], y_end), xytext=(-4, 3), textcoords="offset points",
                 ha="right", va="bottom", fontsize=7, color=theme.MUTED, zorder=1,
             )
@@ -49,6 +49,7 @@ def phase_space(
     league: str,
     season_label: str,
     snapshot: str,
+    cutoff: str | None = None,
     label_extremes: int = 3,
 ) -> list[Path]:
     """Shrunken phase space for a single league-season, with intervals."""
@@ -84,7 +85,7 @@ def phase_space(
 
     # Name only the teams at the extremes of the ratio, so the figure stays
     # readable and no team is singled out for its position alone.
-    ranked = d.sort_values("fouls_per_card_shrunk")
+    ranked = d.sort_values("fouls_per_yellow_shrunk")
     for _, row in pd.concat([ranked.head(label_extremes), ranked.tail(label_extremes)]).iterrows():
         ax.annotate(
             row["team"],
@@ -121,8 +122,11 @@ def phase_space(
         fig,
         path,
         theme.Stamp(
-            metric="Shrunken team rates, 95% credible intervals. Dashed: constant fouls per card",
-            sample=f"{len(d)} teams, median {median_matches} matches each",
+            metric="Shrunken team rates, 95% credible intervals. Dashed: constant fouls per yellow",
+            sample=(
+                f"{len(d)} teams, median {median_matches} matches each"
+                + (f", to {cutoff}" if cutoff else "")
+            ),
             source="football-data.co.uk",
             snapshot=snapshot,
         ),
@@ -136,59 +140,63 @@ def raw_versus_shrunk(
     league: str,
     season_label: str,
     snapshot: str,
+    cutoff: str | None = None,
 ) -> list[Path]:
     """What happens to a fouls-per-card ranking once the sample is respected.
 
     The left column is the ranking a spreadsheet produces. The right column is
     the same teams after shrinkage. The lines between them are the finding.
     """
-    d = teams.dropna(subset=["fouls_per_card"]).copy()
-    d = d.sort_values("fouls_per_card", ascending=False).reset_index(drop=True)
+    d = teams.dropna(subset=["fouls_per_yellow"]).copy()
+    d = d.sort_values("fouls_per_yellow", ascending=False).reset_index(drop=True)
 
     fig, ax = plt.subplots(figsize=(theme.DOUBLE_COLUMN, 5.0))
 
     for _, row in d.iterrows():
         ax.plot(
-            [0, 1], [row["fouls_per_card"], row["fouls_per_card_shrunk"]],
+            [0, 1], [row["fouls_per_yellow"], row["fouls_per_yellow_shrunk"]],
             color=theme.MUTED, alpha=0.35, linewidth=0.8, zorder=1,
         )
 
-    ax.scatter([0] * len(d), d["fouls_per_card"], s=30,
+    ax.scatter([0] * len(d), d["fouls_per_yellow"], s=30,
                color=theme.PALETTE[1], zorder=3, label="raw ratio")
-    ax.scatter([1] * len(d), d["fouls_per_card_shrunk"], s=30, marker="s",
+    ax.scatter([1] * len(d), d["fouls_per_yellow_shrunk"], s=30, marker="s",
                color=theme.PALETTE[0], zorder=3, label="after shrinkage")
 
     top = d.iloc[0]
     ax.annotate(
         # ASCII only: the configured font stack has no arrow glyph, and a
         # missing glyph renders as a tofu box in the published figure.
-        f"{top['team']}: {top['fouls_per_card']:.1f} down to "
-        f"{top['fouls_per_card_shrunk']:.1f}",
-        xy=(0, top["fouls_per_card"]), xytext=(0.06, top["fouls_per_card"]),
+        f"{top['team']}: {top['fouls_per_yellow']:.1f} down to "
+        f"{top['fouls_per_yellow_shrunk']:.1f}",
+        xy=(0, top["fouls_per_yellow"]), xytext=(0.06, top["fouls_per_yellow"]),
         fontsize=8, color=theme.INK, va="center",
     )
 
     ax.set_xlim(-0.25, 1.45)
     ax.set_xticks([0, 1])
     ax.set_xticklabels(["what the raw\nnumbers say", "what the sample\nsupports"])
-    ax.set_ylabel("Fouls per card")
+    ax.set_ylabel("Fouls per yellow card")
     ax.set_title(f"{league}, {season_label}")
     ax.legend(loc="upper right", frameon=False)
     theme.grid(ax, axis="y")
 
     median_matches = int(d["matches"].median())
-    spread_raw = d["fouls_per_card"].max() - d["fouls_per_card"].min()
-    spread_shrunk = d["fouls_per_card_shrunk"].max() - d["fouls_per_card_shrunk"].min()
+    spread_raw = d["fouls_per_yellow"].max() - d["fouls_per_yellow"].min()
+    spread_shrunk = d["fouls_per_yellow_shrunk"].max() - d["fouls_per_yellow_shrunk"].min()
 
     return theme.save(
         fig,
         path,
         theme.Stamp(
             metric=(
-                f"Fouls per card. Spread collapses from {spread_raw:.1f} to "
+                f"Fouls per yellow card. Spread collapses from {spread_raw:.1f} to "
                 f"{spread_shrunk:.1f} once sample size is respected"
             ),
-            sample=f"{len(d)} teams, median {median_matches} matches each",
+            sample=(
+                f"{len(d)} teams, median {median_matches} matches each"
+                + (f", to {cutoff}" if cutoff else "")
+            ),
             source="football-data.co.uk",
             snapshot=snapshot,
         ),

@@ -44,6 +44,7 @@ def main() -> None:
     if matches.empty:
         raise SystemExit(f"no matches for {args.league} {args.season}")
 
+    cutoff = matches["Date"].max().date().isoformat()
     teams = with_shrinkage(team_season(matches))
     theme.apply()
 
@@ -55,27 +56,30 @@ def main() -> None:
     written = phase.phase_space(
         teams, out / f"phase-{args.league}-{args.season}",
         league=f"{comp.name} ({comp.country})", season_label=label, snapshot=stamp,
+        cutoff=cutoff,
     )
     written += phase.raw_versus_shrunk(
         teams, out / f"shrinkage-{args.league}-{args.season}",
         league=f"{comp.name} ({comp.country})", season_label=label, snapshot=stamp,
+        cutoff=cutoff,
     )
     for p in written:
         print("wrote", p.relative_to(ROOT))
 
     cols = ["team", "matches", "fouls", "yellows",
-            "fouls_per_card", "fouls_per_card_shrunk",
-            "fouls_per_card_lo", "fouls_per_card_hi",
-            "cards_per_foul_reliability"]
-    view = teams[cols].sort_values("fouls_per_card", ascending=False)
+            "fouls_per_yellow", "fouls_per_yellow_shrunk",
+            "fouls_per_yellow_lo", "fouls_per_yellow_hi",
+            "yellows_per_foul_reliability"]
+    view = teams[cols].sort_values("fouls_per_yellow", ascending=False)
     print(f"\n{comp.name} {label} — {len(teams)} teams, "
-          f"median {int(teams.matches.median())} matches\n")
+          f"median {int(teams.matches.median())} matches, "
+          f"latest match {cutoff}\n")
     print(view.round(2).to_string(index=False))
-    print(f"\nraw spread    : {view.fouls_per_card.min():.1f} to "
-          f"{view.fouls_per_card.max():.1f}")
-    print(f"shrunk spread : {view.fouls_per_card_shrunk.min():.1f} to "
-          f"{view.fouls_per_card_shrunk.max():.1f}")
-    print(f"reliability   : {view.cards_per_foul_reliability.median():.2f} "
+    print(f"\nraw spread    : {view.fouls_per_yellow.min():.1f} to "
+          f"{view.fouls_per_yellow.max():.1f}")
+    print(f"shrunk spread : {view.fouls_per_yellow_shrunk.min():.1f} to "
+          f"{view.fouls_per_yellow_shrunk.max():.1f}")
+    print(f"reliability   : {view.yellows_per_foul_reliability.median():.2f} "
           f"(need 0.70 to rank teams — see METHODS.md)")
 
 

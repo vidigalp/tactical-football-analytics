@@ -151,3 +151,31 @@ def test_overround_is_plausible(matches):
     over = matches["odds_overround"].dropna()
     assert (over > 1.0).all(), "an overround at or below 1 is a bad price, not a market"
     assert over.median() < 1.15
+
+
+def test_yellows_per_foul_uses_yellows_not_all_cards(matches):
+    """The metric named for yellows must be computed from yellows.
+
+    Regression test for a naming drift caught in review: the column was called
+    'fouls_per_card' while the numerator was yellows alone. For teams with a red
+    card the two differ, so the name was quietly wrong. Phatak et al. use yellow
+    cards, so yellows is the correct numerator and the name now says so.
+    """
+    from tfa.metrics.discipline import team_season, with_shrinkage
+
+    sample = matches[(matches.Div == "P1") & (matches.season == "2627")]
+    if sample.empty:
+        pytest.skip("no in-progress Portuguese season in this snapshot")
+
+    teams = with_shrinkage(team_season(sample))
+    reconstructed = teams["fouls"] / teams["yellows"]
+    pd.testing.assert_series_equal(
+        teams["fouls_per_yellow"].astype(float),
+        reconstructed.astype(float),
+        check_names=False,
+    )
+    # And it must NOT equal the version using yellows + reds, wherever reds exist.
+    with_reds = teams["fouls"] / teams["cards"]
+    assert (teams["fouls_per_yellow"] != with_reds).any(), (
+        "if these never differ the test is not exercising the distinction"
+    )
