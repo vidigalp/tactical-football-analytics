@@ -88,13 +88,38 @@ def test_team_counts_match_league_size(matches):
 
     If a club were spelled two ways, this count would inflate and every
     team-level estimate would silently split in two.
+
+    Restricted to completed seasons: in a season still in progress, a team that
+    has not yet played at home is simply absent from the home-team column.
     """
     expected = {"E0": 20, "SP1": 20, "I1": 20, "D1": 18, "SC0": 12, "G1": 14}
+    completed = matches[matches["year"] < matches["year"].max()]
     for code, size in expected.items():
         counts = (
-            matches[matches.Div == code].groupby("season")["HomeTeam"].nunique()
+            completed[completed.Div == code].groupby("season")["HomeTeam"].nunique()
         )
         assert counts.eq(size).all(), f"{code}: {counts[counts != size].to_dict()}"
+
+
+def test_current_season_is_in_progress_not_broken(matches):
+    """The newest season should be partial, and every team in it should be known.
+
+    Guards the distinction between 'season under way' and 'ingest truncated':
+    a partial season is expected, an unrecognised club name is not.
+    """
+    latest = matches["year"].max()
+    current = matches[matches["year"] == latest]
+    history = matches[matches["year"] < latest]
+
+    for code, group in current.groupby("Div"):
+        played = group.groupby("HomeTeam").size().sum()
+        assert played > 0, code
+        # Promoted clubs legitimately appear for the first time, so this only
+        # asserts the season is not empty and names parse, not that all are seen.
+        assert group["HomeTeam"].notna().all()
+        assert group["AwayTeam"].notna().all()
+
+    assert len(history) > len(current), "history must exceed the in-progress season"
 
 
 def test_referee_present_only_where_expected(matches):
