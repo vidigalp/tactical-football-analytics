@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pandas as pd
 import pytest
 
@@ -54,9 +56,47 @@ def test_overlapping_tenures_are_rejected():
 def test_ongoing_tenure_followed_by_another_is_rejected():
     with pytest.raises(TenureError, match="ongoing"):
         validate(make([
-            {"manager": "First", "start_date": "2019-07-01", "end_date": ""},
-            {"manager": "Second", "start_date": "2020-07-01", "end_date": ""},
+            {"manager": "First", "start_date": "2019-07-01", "end_date": "ongoing"},
+            {"manager": "Second", "start_date": "2020-07-01", "end_date": "ongoing"},
         ]))
+
+
+def test_unverified_end_is_not_treated_as_ongoing():
+    """The distinction that stops years of matches going to the wrong person.
+
+    An empty end means the departure date could not be sourced. Treating that
+    as "still in post" would silently extend the tenure to the present.
+    """
+    matches = pd.DataFrame({
+        "Div": ["P1"] * 2, "season": ["1920"] * 2, "team": ["Porto"] * 2,
+        "Date": pd.to_datetime(["2019-08-01", "2024-01-01"]),
+    })
+    tenures = make([
+        {"manager": "Unknown End", "start_date": "2019-07-01", "end_date": ""},
+    ])
+    out = attach(matches, tenures)
+    # With no successor to bound it, an unverified tenure covers nothing.
+    assert out["manager"].isna().all()
+
+
+def test_unverified_end_is_bounded_by_the_successor():
+    matches = pd.DataFrame({
+        "Div": ["P1"] * 3, "season": ["1920"] * 3, "team": ["Porto"] * 3,
+        "Date": pd.to_datetime(["2019-08-01", "2020-08-01", "2021-08-01"]),
+    })
+    tenures = make([
+        {"manager": "First", "start_date": "2019-07-01", "end_date": ""},
+        {"manager": "Second", "start_date": "2020-07-01", "end_date": "ongoing"},
+    ])
+    out = attach(matches, tenures)
+    assert out["manager"].tolist() == ["First", "Second", "Second"]
+
+
+def test_unverified_end_does_not_trip_the_overlap_check():
+    validate(make([
+        {"manager": "First", "start_date": "2019-07-01", "end_date": ""},
+        {"manager": "Second", "start_date": "2020-07-01", "end_date": "ongoing"},
+    ]))
 
 
 def test_row_without_a_source_is_rejected():
@@ -124,3 +164,79 @@ def test_committed_dataset_is_valid_if_present():
     """Whatever is committed must satisfy every rule above."""
     frame = load("primeira_liga")
     validate(frame)
+
+
+def test_primeira_liga_coverage_has_not_degraded():
+    """Coverage is a published number, so it gets a floor.
+
+    Guards against a future edit that drops rows or breaks club-name mapping —
+    both of which would quietly reduce coverage rather than fail anything.
+    """
+    import pandas as pd
+
+    from tfa.competitions import season_start_year
+    from tfa.ingest.matches import to_team_match
+    from tfa.snapshot import read_manifest
+
+    root = Path(__file__).resolve().parents[1]
+    snapshots = sorted((root / "data" / "snapshots").glob("*-W*"))
+    if not snapshots:
+        pytest.skip("no snapshot committed")
+
+    entries = [
+        e for e in read_manifest(snapshots[-1])
+        if e.source == "football-data" and e.competition == "P1"
+    ]
+    if not entries:
+        pytest.skip("no Portuguese match data committed")
+
+    matches = pd.concat(
+        [pd.read_parquet(snapshots[-1] / e.parquet_path) for e in entries],
+        ignore_index=True,
+    )
+    cov = coverage(to_team_match(matches), load("primeira_liga"))
+    overall = cov["covered"].sum() / cov["matches"].sum()
+    assert overall > 0.70, f"coverage fell to {overall:.1%}"
+
+    # Recent seasons should be near-complete; older ones are patchier because
+    # pre-season appointments are recorded inconsistently upstream.
+    cov["year"] = cov["season"].map(season_start_year)
+    recent = cov[cov["year"] >= 2024]
+    assert recent["covered"].sum() / recent["matches"].sum() > 0.85
+
+
+def test_every_club_in_the_table_maps_to_match_data():
+    """A club name that matches nothing would silently contribute zero coverage."""
+    import pandas as pd
+
+    from tfa.ingest.matches import to_team_match
+    from tfa.snapshot import read_manifest
+
+    root = Path(__file__).resolve().parents[1]
+    snapshots = sorted((root / "data" / "snapshots").glob("*-W*"))
+    if not snapshots:
+        pytest.skip("no snapshot committed")
+    entries = [
+        e for e in read_manifest(snapshots[-1])
+        if e.source == "football-data" and e.competition == "P1"
+    ]
+    if not entries:
+        pytest.skip("no Portuguese match data committed")
+
+    matches = pd.concat(
+        [pd.read_parquet(snapshots[-1] / e.parquet_path) for e in entries],
+        ignore_index=True,
+    )
+    known = set(to_team_match(matches)["team"].unique())
+    tenure_clubs = set(load("primeira_liga")["club"].unique())
+
+    unmatched = sorted(tenure_clubs - known)
+    assert not unmatched, (
+        f"club names with no match data: {unmatched}. A name that matches "
+        "nothing contributes zero coverage without failing anything."
+    )
+
+    # The reverse is a known gap, not an error: these clubs appear in the match
+    # data but were not researched. Asserted so the list cannot grow unnoticed.
+    missing_tenures = sorted(known - tenure_clubs)
+    assert missing_tenures == ["Aves", "Belenenses", "Feirense"], missing_tenures

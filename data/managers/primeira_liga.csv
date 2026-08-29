@@ -1,0 +1,177 @@
+club,club_full,manager,start_date,start_precision,end_date,end_precision,caretaker,source_url,confidence,notes
+Porto,FC Porto,Sérgio Conceição,2017-06-08,day,2024-06-04,day,false,https://en.wikipedia.org/wiki/List_of_FC_Porto_managers,high,season article gives 2024-05-24 for departure
+Porto,FC Porto,Vítor Bruno,2024-06-06,day,2025-01-20,day,false,https://en.wikipedia.org/wiki/List_of_FC_Porto_managers,high,
+Porto,FC Porto,José Tavares,2025-01-20,day,2025-01-27,day,true,https://en.wikipedia.org/wiki/List_of_FC_Porto_managers,high,
+Porto,FC Porto,Martín Anselmi,2025-01-27,day,2025-07-01,day,false,https://en.wikipedia.org/wiki/List_of_FC_Porto_managers,high,
+Porto,FC Porto,Francesco Farioli,2025-07-06,day,ongoing,,false,https://en.wikipedia.org/wiki/List_of_FC_Porto_managers,high,
+Benfica,SL Benfica,Rui Vitória,2015-06-15,day,2019-01-02,day,false,https://en.wikipedia.org/wiki/List_of_S.L._Benfica_managers,high,list gives 2019-01-04; truncated to precede Lage
+Benfica,SL Benfica,Bruno Lage,2019-01-03,day,2020-06-29,day,false,https://en.wikipedia.org/wiki/2018%E2%80%9319_Primeira_Liga#Managerial_changes,high,
+Benfica,SL Benfica,Nélson Veríssimo,2020-06-30,day,2020-08-01,day,true,https://en.wikipedia.org/wiki/List_of_S.L._Benfica_managers,high,
+Benfica,SL Benfica,Jorge Jesus,2020-08-03,day,2021-12-28,day,false,https://en.wikipedia.org/wiki/List_of_S.L._Benfica_managers,high,
+Benfica,SL Benfica,Nélson Veríssimo,2021-12-28,day,2022-05-13,day,true,https://en.wikipedia.org/wiki/List_of_S.L._Benfica_managers,high,season article gives 2022-05-15
+Benfica,SL Benfica,Roger Schmidt,2022-05-18,day,2024-08-31,day,false,https://en.wikipedia.org/wiki/List_of_S.L._Benfica_managers,high,"season article gives 2022-06-01 start, 2024-09-01 end"
+Benfica,SL Benfica,Bruno Lage,2024-09-05,day,2025-09-17,day,false,https://en.wikipedia.org/wiki/List_of_S.L._Benfica_managers,high,
+Benfica,SL Benfica,José Mourinho,2025-09-18,day,2026-06-09,day,false,https://en.wikipedia.org/wiki/List_of_S.L._Benfica_managers,high,
+Benfica,SL Benfica,Marco Silva,2026-06-09,day,ongoing,,false,https://en.wikipedia.org/wiki/List_of_S.L._Benfica_managers,high,
+Sp Lisbon,Sporting CP,Jorge Jesus,2015-06-05,day,2018-06-05,day,false,https://en.wikipedia.org/wiki/List_of_Sporting_CP_managers,high,
+Sp Lisbon,Sporting CP,Siniša Mihajlović,2018-06-18,day,2018-06-28,day,false,https://en.wikipedia.org/wiki/2018%E2%80%9319_Primeira_Liga#Managerial_changes,high,appointed and dismissed without a competitive match
+Sp Lisbon,Sporting CP,José Peseiro,2018-07-01,day,2018-11-01,day,false,https://en.wikipedia.org/wiki/List_of_Sporting_CP_managers,high,
+Sp Lisbon,Sporting CP,Tiago Fernandes,2018-11-02,day,2018-11-11,day,true,https://en.wikipedia.org/wiki/List_of_Sporting_CP_managers,high,
+Sp Lisbon,Sporting CP,Marcel Keizer,2018-11-12,day,2019-09-05,day,false,https://en.wikipedia.org/wiki/List_of_Sporting_CP_managers,high,
+Sp Lisbon,Sporting CP,Leonel Pontes,2019-09-05,day,2019-09-26,day,true,https://en.wikipedia.org/wiki/List_of_Sporting_CP_managers,high,
+Sp Lisbon,Sporting CP,Silas,2019-09-27,day,2020-03-03,day,false,https://en.wikipedia.org/wiki/List_of_Sporting_CP_managers,high,truncated to precede Amorim
+Sp Lisbon,Sporting CP,Ruben Amorim,2020-03-04,day,2024-11-10,day,false,https://en.wikipedia.org/wiki/Ruben_Amorim,high,season article gives 2020-03-05
+Sp Lisbon,Sporting CP,João Pereira,2024-11-11,day,2024-12-26,day,false,https://en.wikipedia.org/wiki/List_of_Sporting_CP_managers,high,
+Sp Lisbon,Sporting CP,Rui Borges,2024-12-26,day,ongoing,,false,"https://en.wikipedia.org/wiki/Rui_Borges_(footballer,_born_1981)",high,club list stale; confirmed from manager page
+Sp Braga,SC Braga,Abel Ferreira,2017-04-26,day,2019-07-01,day,false,https://en.wikipedia.org/wiki/Abel_Ferreira,high,
+Sp Braga,SC Braga,Ricardo Sá Pinto,2019-07-03,day,2019-12-22,day,false,https://en.wikipedia.org/wiki/Ricardo_S%C3%A1_Pinto,high,truncated to precede Amorim
+Sp Braga,SC Braga,Ruben Amorim,2019-12-23,day,2020-03-04,day,false,https://en.wikipedia.org/wiki/Ruben_Amorim,high,season article gives 2019-12-27
+Sp Braga,SC Braga,Custódio Castro,2020-03-05,day,2020-06-30,day,false,https://en.wikipedia.org/wiki/Cust%C3%B3dio_Castro,high,truncated to precede Artur Jorge
+Sp Braga,SC Braga,Artur Jorge,2020-07-01,day,2020-07-28,day,true,https://en.wikipedia.org/wiki/2019%E2%80%9320_Primeira_Liga#Managerial_changes,high,
+Sp Braga,SC Braga,Carlos Carvalhal,2020-07-28,day,2022-05-15,day,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,high,
+Sp Braga,SC Braga,Artur Jorge,2022-06-01,day,2024-04-03,day,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,high,
+Sp Braga,SC Braga,Rui Duarte,2024-04-03,day,2024-05-24,day,true,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,high,
+Sp Braga,SC Braga,Daniel Sousa,2024-05-24,day,2024-08-11,day,false,https://en.wikipedia.org/wiki/Daniel_Sousa_(football_manager),high,
+Sp Braga,SC Braga,Carlos Carvalhal,2024-08-12,day,2025-05-20,day,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,high,
+Sp Braga,SC Braga,Carlos Vicens,2025-05-28,day,ongoing,,false,https://en.wikipedia.org/wiki/Carlos_Vicens,high,season article gives 2025-05-22
+Guimaraes,Vitória de Guimarães,Pedro Martins,2016-05-23,day,2018-02-18,day,false,https://en.wikipedia.org/wiki/Pedro_Martins_(Portuguese_footballer),high,
+Guimaraes,Vitória de Guimarães,José Peseiro,2018-02-28,day,2018-05-15,day,false,https://en.wikipedia.org/wiki/2017%E2%80%9318_Primeira_Liga#Managerial_changes,high,
+Guimaraes,Vitória de Guimarães,Luís Castro,2018-05-20,day,2019-06-12,day,false,"https://en.wikipedia.org/wiki/Lu%C3%ADs_Castro_(footballer,_born_1961)",high,season article gives 2018-05-21
+Guimaraes,Vitória de Guimarães,Ivo Vieira,2019-06-17,day,2020-07-24,day,false,https://en.wikipedia.org/wiki/Ivo_Vieira,high,
+Guimaraes,Vitória de Guimarães,Tiago Mendes,2020-07-28,day,2020-10-08,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Guimaraes,Vitória de Guimarães,João Henriques,2020-10-13,day,2021-04-05,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Guimaraes,Vitória de Guimarães,Bino,2021-04-05,day,2021-05-13,day,true,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Guimaraes,Vitória de Guimarães,Moreno,2021-05-13,day,2021-05-20,day,true,https://en.wikipedia.org/wiki/Moreno_(Portuguese_footballer),medium,truncated to precede Pepa
+Guimaraes,Vitória de Guimarães,Pepa,2021-05-21,day,2022-07-12,day,false,https://en.wikipedia.org/wiki/Pepa_(footballer),medium,season article gives 2021-07-01 handover
+Guimaraes,Vitória de Guimarães,Moreno,2022-07-12,day,2023-08-13,day,false,https://en.wikipedia.org/wiki/Moreno_(Portuguese_footballer),high,
+Guimaraes,Vitória de Guimarães,Paulo Turra,2023-08-21,day,2023-10-03,day,false,https://en.wikipedia.org/wiki/Paulo_Turra,high,
+Guimaraes,Vitória de Guimarães,Álvaro Pacheco,2023-10-04,day,2024-05-15,day,false,https://en.wikipedia.org/wiki/%C3%81lvaro_Pacheco,high,
+Guimaraes,Vitória de Guimarães,Rui Borges,2024-05-28,day,2024-12-26,day,false,"https://en.wikipedia.org/wiki/Rui_Borges_(footballer,_born_1981)",high,
+Guimaraes,Vitória de Guimarães,Daniel Sousa,2024-12-26,day,2025-01-13,day,false,https://en.wikipedia.org/wiki/Daniel_Sousa_(football_manager),high,
+Guimaraes,Vitória de Guimarães,Luís Freire,2025-01-15,day,2025-05-20,day,false,https://en.wikipedia.org/wiki/Lu%C3%ADs_Freire,high,
+Guimaraes,Vitória de Guimarães,Gil Lameiras,2026-03-09,day,2026-06-24,day,false,https://en.wikipedia.org/wiki/Gil_Lameiras,high,season article gives 2026-03-10
+Guimaraes,Vitória de Guimarães,Tiago Margarido,2026-06-24,day,ongoing,,false,https://en.wikipedia.org/wiki/2026%E2%80%9327_Primeira_Liga#Managerial_changes,medium,inferred from absence of a recorded change
+Academico Viseu,Académico de Viseu,Bruno Pinheiro,2026-06-19,day,ongoing,,false,https://en.wikipedia.org/wiki/2026%E2%80%9327_Primeira_Liga#Managerial_changes,high,
+Alverca,FC Alverca,Custódio Castro,2025-06-17,day,2026-05-16,day,false,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,high,
+Alverca,FC Alverca,Sérgio Ferreira,2026-06-29,day,ongoing,,false,https://en.wikipedia.org/wiki/2026%E2%80%9327_Primeira_Liga#Managerial_changes,high,
+Arouca,FC Arouca,Daniel Ramos,2023-05-29,day,2023-11-15,day,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,high,
+Arouca,FC Arouca,Daniel Sousa,2023-11-15,day,2024-05-20,day,false,https://en.wikipedia.org/wiki/Daniel_Sousa_(football_manager),high,
+Arouca,FC Arouca,Vasco Seabra,2024-10-29,day,ongoing,,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,medium,inferred from absence of a recorded change
+AVS,AVS Futebol SAD,Daniel Ramos,2024-11-15,day,2025-02-13,day,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,high,
+AVS,AVS Futebol SAD,Rui Ferreira,2025-02-16,day,,,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,low,end unverified
+AVS,AVS Futebol SAD,João Pedro Sousa,2025-09-23,day,2025-12-16,day,false,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,high,
+AVS,AVS Futebol SAD,João Henriques,2025-12-20,day,,,false,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,low,end unverified
+Boavista,Boavista FC,Jorge Simão,2017-09-14,day,,,false,https://en.wikipedia.org/wiki/2017%E2%80%9318_Primeira_Liga#Managerial_changes,low,end unverified
+Boavista,Boavista FC,Daniel Ramos,2019-12-18,day,2020-07-25,day,false,https://en.wikipedia.org/wiki/2019%E2%80%9320_Primeira_Liga#Managerial_changes,high,
+Boavista,Boavista FC,Vasco Seabra,2020-07-30,day,2020-12-08,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Boavista,Boavista FC,Daniel Gonçalves,2020-12-08,day,2020-12-13,day,true,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Boavista,Boavista FC,Jesualdo Ferreira,2020-12-13,day,2021-06-30,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,truncated to precede Sousa
+Boavista,Boavista FC,João Pedro Sousa,2021-07-01,day,2021-11-30,day,false,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,high,
+Boavista,Boavista FC,Petit,2021-11-30,day,2023-12-12,day,false,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,high,
+Boavista,Boavista FC,Ricardo Paiva,2023-12-29,day,2024-04-16,day,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,high,
+Boavista,Boavista FC,Jorge Simão,2024-04-16,day,,,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,low,end unverified
+Boavista,Boavista FC,Lito Vidigal,2025-02-09,day,2025-04-06,day,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,high,
+Boavista,Boavista FC,Jorge Couto,2025-04-06,day,2025-04-13,day,true,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,high,
+Boavista,Boavista FC,Stuart Baxter,2025-04-13,day,,,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,low,end unverified
+Casa Pia,Casa Pia AC,Pedro Moreira,2023-11-21,day,2024-02-15,day,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,high,
+Casa Pia,Casa Pia AC,Gonçalo Santos,2024-02-16,day,,,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,low,end unverified
+Casa Pia,Casa Pia AC,Gonçalo Brandão,2025-11-04,day,2026-01-08,day,true,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,high,
+Casa Pia,Casa Pia AC,Álvaro Pacheco,2026-01-08,day,2026-06-16,day,false,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,high,
+Casa Pia,Casa Pia AC,Filipe Coelho,2026-07-05,day,ongoing,,false,https://en.wikipedia.org/wiki/2026%E2%80%9327_Primeira_Liga#Managerial_changes,high,
+Chaves,GD Chaves,Luís Castro,2017-06-01,day,2018-05-20,day,false,"https://en.wikipedia.org/wiki/Lu%C3%ADs_Castro_(footballer,_born_1961)",high,
+Chaves,GD Chaves,Daniel Ramos,2018-06-08,day,,,false,https://en.wikipedia.org/wiki/2018%E2%80%9319_Primeira_Liga#Managerial_changes,low,end unverified
+Chaves,GD Chaves,José Gomes,2023-06-16,day,2023-09-19,day,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,high,
+Chaves,GD Chaves,Moreno,2023-09-21,day,2024-05-20,day,false,https://en.wikipedia.org/wiki/Moreno_(Portuguese_footballer),high,
+Estoril,GD Estoril Praia,Filipe Pedro,2017-10-21,day,2017-11-13,day,true,https://en.wikipedia.org/wiki/2017%E2%80%9318_Primeira_Liga#Managerial_changes,high,
+Estoril,GD Estoril Praia,Ivo Vieira,2017-11-13,day,,,false,https://en.wikipedia.org/wiki/2017%E2%80%9318_Primeira_Liga#Managerial_changes,low,end unverified
+Estoril,GD Estoril Praia,Nélson Veríssimo,2022-07-02,day,2023-02-24,day,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,high,
+Estoril,GD Estoril Praia,Ricardo Soares,2023-02-28,day,2023-06-06,day,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,high,
+Estoril,GD Estoril Praia,Álvaro Pacheco,2023-06-19,day,2023-09-24,day,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,high,
+Estoril,GD Estoril Praia,Vasco Seabra,2023-09-25,day,,,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,low,end unverified
+Estoril,GD Estoril Praia,Vasco Matos,2026-07-08,day,ongoing,,false,https://en.wikipedia.org/wiki/2026%E2%80%9327_Primeira_Liga#Managerial_changes,high,
+Estrela,CF Estrela da Amadora,José Augusto Faria,2024-09-23,day,2025-09-15,day,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,high,
+Estrela,CF Estrela da Amadora,Luís Silva,2025-09-19,day,2025-09-28,day,true,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,high,
+Estrela,CF Estrela da Amadora,João Nuno,2025-09-28,day,,,false,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,low,end unverified; handover to Bacci undocumented
+Estrela,CF Estrela da Amadora,Pepa,2026-06-12,day,ongoing,,false,https://en.wikipedia.org/wiki/2026%E2%80%9327_Primeira_Liga#Managerial_changes,high,
+Famalicao,FC Famalicão,Silas,2021-02-01,day,2021-03-08,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Famalicao,FC Famalicão,Ivo Vieira,2021-03-08,day,2021-12-19,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Famalicao,FC Famalicão,Rui Pedro Silva,2021-12-19,day,2022-09-20,day,false,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,high,
+Famalicao,FC Famalicão,João Pedro Sousa,2022-09-22,day,2024-03-19,day,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,high,
+Famalicao,FC Famalicão,Armando Evangelista,2024-03-20,day,2024-12-02,day,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,high,
+Famalicao,FC Famalicão,Hugo Oliveira,2024-12-10,day,2026-07-12,day,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,high,
+Famalicao,FC Famalicão,Carlos Carvalhal,2026-07-14,day,ongoing,,false,https://en.wikipedia.org/wiki/2026%E2%80%9327_Primeira_Liga#Managerial_changes,high,
+Farense,SC Farense,Jorge Costa,2021-02-04,day,,,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,low,end unverified
+Farense,SC Farense,Tozé Marreco,2024-09-25,day,,,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,low,end unverified
+Gil Vicente,Gil Vicente FC,Ricardo Soares,2020-11-13,day,2022-06-28,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Gil Vicente,Gil Vicente FC,Ivo Vieira,2022-06-28,day,2022-11-02,day,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,high,
+Gil Vicente,Gil Vicente FC,Carlos Cunha,2022-11-02,day,2022-11-14,day,true,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,high,
+Gil Vicente,Gil Vicente FC,Daniel Sousa,2022-11-16,day,2023-06-26,day,false,https://en.wikipedia.org/wiki/Daniel_Sousa_(football_manager),high,season article gives 2022-11-14
+Gil Vicente,Gil Vicente FC,Vítor Campelos,2023-06-30,day,,,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,low,end unverified
+Gil Vicente,Gil Vicente FC,Bruno Pinheiro,2024-08-09,day,2025-02-18,day,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,high,
+Gil Vicente,Gil Vicente FC,José Pedro Pinto,2025-02-20,day,,,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,low,end unverified; season table shows Peixoto at season end
+Gil Vicente,Gil Vicente FC,Luís Pinto,2026-06-20,day,ongoing,,false,https://en.wikipedia.org/wiki/2026%E2%80%9327_Primeira_Liga#Managerial_changes,high,
+Maritimo,CS Marítimo,Cláudio Braga,2018-06-12,day,2018-11-26,day,false,https://en.wikipedia.org/wiki/2018%E2%80%9319_Primeira_Liga#Managerial_changes,high,
+Maritimo,CS Marítimo,Petit,2018-11-27,day,,,false,https://en.wikipedia.org/wiki/2018%E2%80%9319_Primeira_Liga#Managerial_changes,low,end unverified
+Maritimo,CS Marítimo,José Gomes,2019-11-14,day,2020-07-27,day,false,https://en.wikipedia.org/wiki/2019%E2%80%9320_Primeira_Liga#Managerial_changes,high,
+Maritimo,CS Marítimo,Lito Vidigal,2020-07-30,day,2020-12-04,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Maritimo,CS Marítimo,Milton Mendes,2020-12-05,day,2021-03-05,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Maritimo,CS Marítimo,Julio Velázquez,2021-03-11,day,2021-11-11,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Maritimo,CS Marítimo,Vasco Seabra,2021-11-14,day,2022-09-05,day,false,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,high,
+Maritimo,CS Marítimo,João Henriques,2022-09-08,day,2022-12-15,day,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,high,
+Maritimo,CS Marítimo,José Gomes,2022-12-15,day,,,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,low,end unverified
+Moreirense,Moreirense FC,Manuel Machado,2017-05-27,day,2017-10-29,day,false,https://en.wikipedia.org/wiki/2017%E2%80%9318_Primeira_Liga#Managerial_changes,high,
+Moreirense,Moreirense FC,Sérgio Vieira,2017-10-31,day,2018-02-13,day,false,https://en.wikipedia.org/wiki/2017%E2%80%9318_Primeira_Liga#Managerial_changes,high,
+Moreirense,Moreirense FC,Petit,2018-02-14,day,2018-05-20,day,false,https://en.wikipedia.org/wiki/2017%E2%80%9318_Primeira_Liga#Managerial_changes,high,
+Moreirense,Moreirense FC,Ivo Vieira,2018-05-29,day,,,false,https://en.wikipedia.org/wiki/2018%E2%80%9319_Primeira_Liga#Managerial_changes,low,end unverified
+Moreirense,Moreirense FC,Ricardo Soares,2019-12-18,day,2020-11-09,day,false,https://en.wikipedia.org/wiki/2019%E2%80%9320_Primeira_Liga#Managerial_changes,high,
+Moreirense,Moreirense FC,César Peixoto,2020-11-10,day,2021-01-02,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Moreirense,Moreirense FC,Leandro Mendes,2021-01-02,day,2021-01-05,day,true,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Moreirense,Moreirense FC,Vasco Seabra,2021-01-05,day,,,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,low,end unverified
+Moreirense,Moreirense FC,Lito Vidigal,2021-12-04,day,2022-01-05,day,false,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,high,
+Moreirense,Moreirense FC,Ricardo Sá Pinto,2022-01-07,day,,,false,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,low,end unverified
+Moreirense,Moreirense FC,Rui Borges,2023-07-04,day,2024-05-28,day,false,"https://en.wikipedia.org/wiki/Rui_Borges_(footballer,_born_1981)",high,season article gives 2023-07-01
+Moreirense,Moreirense FC,Cristiano Bacci,2025-02-28,day,2025-05-19,day,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,high,
+Moreirense,Moreirense FC,Vasco Botelho da Costa,2025-06-05,day,ongoing,,false,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,medium,inferred from absence of a recorded change
+Nacional,CD Nacional,Manuel Machado,2021-03-22,day,,,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,low,end unverified
+Nacional,CD Nacional,Tiago Margarido,2023-06-02,day,2026-05-20,day,false,https://en.wikipedia.org/wiki/Tiago_Margarido,high,
+Nacional,CD Nacional,João Gião,2026-05-26,day,ongoing,,false,https://en.wikipedia.org/wiki/2026%E2%80%9327_Primeira_Liga#Managerial_changes,high,
+Pacos Ferreira,FC Paços de Ferreira,Petit,2017-10-23,day,2018-01-08,day,false,https://en.wikipedia.org/wiki/2017%E2%80%9318_Primeira_Liga#Managerial_changes,high,
+Pacos Ferreira,FC Paços de Ferreira,João Henriques,2018-01-12,day,,,false,https://en.wikipedia.org/wiki/2017%E2%80%9318_Primeira_Liga#Managerial_changes,low,end unverified
+Pacos Ferreira,FC Paços de Ferreira,Pepa,2019-09-02,day,2021-05-19,day,false,https://en.wikipedia.org/wiki/Pepa_(footballer),high,season article gives 2021-07-01
+Pacos Ferreira,FC Paços de Ferreira,Jorge Simão,2021-07-01,day,2021-12-11,day,false,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,high,
+Pacos Ferreira,FC Paços de Ferreira,César Peixoto,2021-12-16,day,2022-10-16,day,false,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,high,
+Pacos Ferreira,FC Paços de Ferreira,José Mota,2022-10-18,day,2022-12-16,day,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,high,
+Pacos Ferreira,FC Paços de Ferreira,César Peixoto,2023-01-01,day,,,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,low,end unverified
+Portimonense,Portimonense SC,António Folha,2018-07-02,day,2020-01-18,day,false,https://en.wikipedia.org/wiki/2018%E2%80%9319_Primeira_Liga#Managerial_changes,high,
+Portimonense,Portimonense SC,Bruno Lopes,2020-01-19,day,2020-02-05,day,true,https://en.wikipedia.org/wiki/2019%E2%80%9320_Primeira_Liga#Managerial_changes,high,truncated to precede Rolão Preto
+Portimonense,Portimonense SC,Joaquim Rolão Preto,2020-02-06,day,2020-02-09,day,true,https://en.wikipedia.org/wiki/2019%E2%80%9320_Primeira_Liga#Managerial_changes,medium,truncated to precede Paulo Sérgio
+Portimonense,Portimonense SC,Paulo Sérgio,2020-02-10,day,,,false,https://en.wikipedia.org/wiki/2019%E2%80%9320_Primeira_Liga#Managerial_changes,low,end unverified
+Rio Ave,Rio Ave FC,Miguel Cardoso,2017-06-12,day,2018-06-12,day,false,https://en.wikipedia.org/wiki/2017%E2%80%9318_Primeira_Liga#Managerial_changes,high,truncated to precede Gomes
+Rio Ave,Rio Ave FC,José Gomes,2018-06-13,day,2018-12-22,day,false,https://en.wikipedia.org/wiki/2018%E2%80%9319_Primeira_Liga#Managerial_changes,high,
+Rio Ave,Rio Ave FC,Daniel Ramos,2019-01-02,day,,,false,https://en.wikipedia.org/wiki/2018%E2%80%9319_Primeira_Liga#Managerial_changes,low,end unverified
+Rio Ave,Rio Ave FC,Mário Silva,2020-07-30,day,2020-12-30,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Rio Ave,Rio Ave FC,Pedro Cunha,2020-12-30,day,2021-01-29,day,true,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Rio Ave,Rio Ave FC,Miguel Cardoso,2021-01-29,day,,,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,low,end unverified
+Rio Ave,Rio Ave FC,Petit,2024-11-06,day,2025-05-17,day,false,https://en.wikipedia.org/wiki/2024%E2%80%9325_Primeira_Liga#Managerial_changes,high,
+Rio Ave,Rio Ave FC,Sotiris Sylaidopoulos,2025-06-27,day,ongoing,,false,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,medium,inferred from absence of a recorded change
+Santa Clara,CD Santa Clara,João Henriques,2018-05-31,day,2020-07-24,day,false,https://en.wikipedia.org/wiki/2018%E2%80%9319_Primeira_Liga#Managerial_changes,high,
+Santa Clara,CD Santa Clara,Daniel Ramos,2020-07-28,day,2021-10-07,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Santa Clara,CD Santa Clara,Nuno Campos,2021-10-12,day,2021-12-13,day,false,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,high,
+Santa Clara,CD Santa Clara,Tiago Sousa,2021-12-13,day,2022-01-10,day,true,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,high,
+Santa Clara,CD Santa Clara,Mário Silva,2022-01-10,day,2023-01-06,day,false,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,high,
+Santa Clara,CD Santa Clara,Jorge Simão,2023-01-11,day,2023-02-26,day,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,high,
+Santa Clara,CD Santa Clara,Danildo Accioly,2023-02-26,day,,,false,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,low,end unverified
+Santa Clara,CD Santa Clara,Petit,2026-02-03,day,ongoing,,false,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,medium,
+Tondela,CD Tondela,Pepa,2017-01-10,day,2019-05-24,day,false,https://en.wikipedia.org/wiki/Pepa_(footballer),high,
+Tondela,CD Tondela,Pako Ayestarán,2020-08-09,day,2022-03-16,day,false,https://en.wikipedia.org/wiki/2020%E2%80%9321_Primeira_Liga#Managerial_changes,high,
+Tondela,CD Tondela,Nuno Campos,2022-03-16,day,,,false,https://en.wikipedia.org/wiki/2021%E2%80%9322_Primeira_Liga#Managerial_changes,low,end unverified
+Tondela,CD Tondela,Cristiano Bacci,2025-11-13,day,2026-03-22,day,false,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,high,
+Tondela,CD Tondela,Gonçalo Feio,2026-03-29,day,,,false,https://en.wikipedia.org/wiki/2025%E2%80%9326_Primeira_Liga#Managerial_changes,low,end unverified
+Setubal,Vitória FC (Setúbal),Lito Vidigal,2018-05-22,day,,,false,https://en.wikipedia.org/wiki/2018%E2%80%9319_Primeira_Liga#Managerial_changes,low,end unverified
+Setubal,Vitória FC (Setúbal),Albert Meyong,2019-10-30,day,2019-11-11,day,true,https://en.wikipedia.org/wiki/2019%E2%80%9320_Primeira_Liga#Managerial_changes,high,
+Setubal,Vitória FC (Setúbal),Julio Velázquez,2019-11-11,day,2020-07-02,day,false,https://en.wikipedia.org/wiki/2019%E2%80%9320_Primeira_Liga#Managerial_changes,high,
+Setubal,Vitória FC (Setúbal),Albert Meyong,2020-07-02,day,2020-07-05,day,true,https://en.wikipedia.org/wiki/2019%E2%80%9320_Primeira_Liga#Managerial_changes,high,
+Setubal,Vitória FC (Setúbal),Alexandre Santana,2020-07-05,day,,,false,https://en.wikipedia.org/wiki/2019%E2%80%9320_Primeira_Liga#Managerial_changes,low,end unverified
+Vizela,FC Vizela,Manuel Tulipa,2022-11-30,day,2023-05-31,day,true,https://en.wikipedia.org/wiki/2022%E2%80%9323_Primeira_Liga#Managerial_changes,high,
+Vizela,FC Vizela,Pablo Villar,2023-06-02,day,2023-12-18,day,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,high,
+Vizela,FC Vizela,Rubén de la Barrera,2023-12-19,day,,,false,https://en.wikipedia.org/wiki/2023%E2%80%9324_Primeira_Liga#Managerial_changes,low,end unverified

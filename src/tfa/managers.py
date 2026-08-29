@@ -41,7 +41,7 @@ COLUMNS: tuple[str, ...] = (
     "manager",
     "start_date",
     "start_precision",
-    "end_date",        # empty string means still in post
+    "end_date",        # a date, "ongoing", or empty when the end is unverified
     "end_precision",
     "caretaker",
     "source_url",
@@ -65,11 +65,26 @@ class Tenure:
     confidence: str
     start_precision: str = "day"
     end_precision: str = "day"
+    ongoing: bool = False
+    """True only when a source states the manager is still in post.
+
+    Distinct from ``end is None``, which means the end date could not be
+    verified. Conflating the two would silently extend an unverified tenure to
+    the present and attribute years of matches to the wrong person — the exact
+    kind of quiet error this dataset is built to avoid.
+    """
 
     def covers(self, when: pd.Timestamp) -> bool:
         if when < self.start:
             return False
-        return self.end is None or when <= self.end
+        if self.ongoing:
+            return True
+        if self.end is None:
+            # End unverified: this tenure covers nothing on its own. The
+            # successor's start bounds it, and that bounding is applied in
+            # chain_unknown_ends() where it is visible and marked.
+            return False
+        return when <= self.end
 
 
 def path_for(league: str = "primeira_liga") -> Path:
@@ -90,8 +105,12 @@ def load(league: str = "primeira_liga") -> pd.DataFrame:
     return frame
 
 
+def is_ongoing(value: str) -> bool:
+    return str(value).strip().lower() in {"ongoing", "present"}
+
+
 def _parse_date(value: str, precision: str) -> pd.Timestamp | None:
-    if not value or value.lower() in {"ongoing", "present", ""}:
+    if not value or is_ongoing(value):
         return None
     if precision == "season":
         # A season-precision boundary is pinned to 1 July, the conventional
@@ -131,11 +150,13 @@ def validate(frame: pd.DataFrame) -> None:
     for club, tenures in by_club.items():
         tenures.sort(key=lambda t: t.start)
         for earlier, later in zip(tenures, tenures[1:], strict=False):
-            if earlier.end is None:
+            if earlier.ongoing:
                 raise TenureError(
                     f"{club}: {earlier.manager} is marked ongoing but "
                     f"{later.manager} starts afterwards"
                 )
+            if earlier.end is None:
+                continue  # bounded by the successor in chain_unknown_ends()
             if earlier.end > later.start:
                 raise TenureError(
                     f"{club}: {earlier.manager} (to {earlier.end.date()}) overlaps "
@@ -157,8 +178,36 @@ def to_tenures(frame: pd.DataFrame) -> list[Tenure]:
                 confidence=row["confidence"],
                 start_precision=row["start_precision"],
                 end_precision=row["end_precision"] or "day",
+                ongoing=is_ongoing(row["end_date"]),
             )
         )
+    return out
+
+
+def chain_unknown_ends(tenures: list[Tenure]) -> list[Tenure]:
+    """Bound an unverified end by the successor's verified start.
+
+    A manager whose departure date is undocumented, followed by a successor with
+    a documented appointment, was in post until at least that appointment. That
+    is an inference rather than a source, so it is applied here — in one visible
+    place — and never written into the CSV as though it were verified.
+    """
+    from dataclasses import replace
+
+    by_club: dict[str, list[Tenure]] = {}
+    for tenure in tenures:
+        by_club.setdefault(tenure.club, []).append(tenure)
+
+    out: list[Tenure] = []
+    for club_tenures in by_club.values():
+        club_tenures.sort(key=lambda t: t.start)
+        for i, tenure in enumerate(club_tenures):
+            if tenure.end is None and not tenure.ongoing and i + 1 < len(club_tenures):
+                successor = club_tenures[i + 1]
+                tenure = replace(
+                    tenure, end=successor.start - pd.Timedelta(days=1)
+                )
+            out.append(tenure)
     return out
 
 
@@ -169,7 +218,7 @@ def attach(matches: pd.DataFrame, tenures: pd.DataFrame) -> pd.DataFrame:
     of matches that manager has taken at that club — which is what makes a
     before-and-after comparison around a change possible.
     """
-    parsed = to_tenures(tenures)
+    parsed = chain_unknown_ends(to_tenures(tenures))
     by_club: dict[str, list[Tenure]] = {}
     for tenure in parsed:
         by_club.setdefault(tenure.club, []).append(tenure)
