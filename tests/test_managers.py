@@ -239,4 +239,4 @@ def test_every_club_in_the_table_maps_to_match_data():
     # The reverse is a known gap, not an error: these clubs appear in the match
     # data but were not researched. Asserted so the list cannot grow unnoticed.
     missing_tenures = sorted(known - tenure_clubs)
-    assert missing_tenures == ["Aves", "Belenenses", "Feirense"], missing_tenures
+    assert missing_tenures == ["Feirense"], missing_tenures
