@@ -171,7 +171,8 @@ def check_resolves(
     session = session or requests.Session()
     session.headers.setdefault(
         "User-Agent",
-        "tactical-football-analytics/0.1 (citation check; mailto:vidigalp@users.noreply.github.com)",
+        "tactical-football-analytics/0.1 (citation check; "
+        "mailto:vidigalp@users.noreply.github.com)",
     )
 
     if ref.doi:

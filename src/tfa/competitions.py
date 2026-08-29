@@ -9,10 +9,13 @@ Verified 2026-08-29 by auditing 363 competition-seasons (1993-2025):
 * **Match statistics begin in 2000-01.** Earlier files carry results and odds
   only, so the analytic window is 26 seasons, not 33.
 * **Match statistics were never backfilled.** They arrived league by league
-  over seventeen years: England and Scotland from 2000, Germany 2003, Italy
-  and Spain 2005, France 2007, Netherlands/Portugal/Turkey 2017, Belgium and
+  over seventeen years: England, Scotland and Germany from 2000, Italy and
+  Spain 2005, France 2007, Netherlands/Portugal/Turkey 2017, Belgium and
   Greece 2019. A file existing tells you nothing about it being usable.
-  Only 177 of 286 league-seasons in 2000-2025 carry fouls and cards.
+  Only 179 of 286 league-seasons in 2000-2025 carry fouls and cards.
+* Germany's series is **interrupted**: present 2000-2002, absent 2002-03,
+  continuous from 2003-04. Its referee column covers only those first two
+  seasons, so the richer early file was lost and only partly restored.
 * ``Referee`` coverage **narrowed over time**. England: continuous 2000-2025.
   Scotland: 2000-2011 and 2013-2025 (2012 missing). Germany: 2000-2001 only.
   Italy: 2005-2006 only. Two associations gained and then lost it.
@@ -87,6 +90,9 @@ class Competition:
     full_core_from: int = 0
     """First season start year with the complete core bundle, including shots on target."""
 
+    discipline_gaps: tuple[str, ...] = ()
+    """Seasons inside the discipline window where the file exists but has no fouls/cards."""
+
     season_gaps: tuple[str, ...] = ()
     """Season codes known to be missing or unusable."""
 
@@ -119,8 +125,14 @@ COMPETITIONS: dict[str, Competition] = {
                     referee_gaps=("1213",),
                     notes=("Referee available except 2012-13.",
                            "Yellows exclude the first of a second-bookable offence.")),
+        # Germany is the one interrupted series: fouls and cards are present in
+        # 2000-01 and 2001-02, absent in 2002-03, and continuous from 2003-04.
+        # The same two early seasons are the only ones carrying a referee column,
+        # so the whole richer file was lost and only partly restored.
         Competition("D1", "Bundesliga", "Germany", False, "9394",
-                    discipline_from=2003, full_core_from=2006),
+                    discipline_from=2000, full_core_from=2006,
+                    discipline_gaps=("0203",),
+                    notes=("Fouls and cards interrupted in 2002-03.",)),
         Competition("I1", "Serie A", "Italy", False, "9394",
                     discipline_from=2005, full_core_from=2005),
         Competition("SP1", "La Liga", "Spain", False, "9394",
@@ -202,4 +214,8 @@ def usable_seasons(
     start = comp.full_core_from if require_full_core else comp.discipline_from
     if not start:
         return []
-    return available_seasons(code, start, end_year)
+    return [
+        s
+        for s in available_seasons(code, start, end_year)
+        if s not in comp.discipline_gaps
+    ]

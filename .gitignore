@@ -17,3 +17,5 @@ data/understat/
 # Scratch
 scratch/
 *.tmp
+docs/
+site/

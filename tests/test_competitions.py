@@ -111,7 +111,7 @@ def test_first_stats_season_is_2000():
 def test_discipline_windows_match_audit():
     # Verified 2026-08-29: match stats arrived league by league, never backfilled.
     expected = {
-        "E0": 2000, "SC0": 2000, "D1": 2003, "I1": 2005, "SP1": 2005,
+        "E0": 2000, "SC0": 2000, "D1": 2000, "I1": 2005, "SP1": 2005,
         "F1": 2007, "N1": 2017, "P1": 2017, "T1": 2017, "B1": 2019, "G1": 2019,
     }
     assert {c: k.discipline_from for c, k in COMPETITIONS.items()} == expected
@@ -125,7 +125,15 @@ def test_usable_seasons_is_shorter_than_available():
 
 def test_total_usable_league_seasons():
     total = sum(len(usable_seasons(c, 2025)) for c in COMPETITIONS)
-    assert total == 177
+    assert total == 179
+
+
+def test_germany_discipline_series_is_interrupted():
+    # Germany is the only league whose fouls/cards series has a hole in it.
+    assert COMPETITIONS["D1"].discipline_gaps == ("0203",)
+    assert "0203" not in usable_seasons("D1", 2025)
+    assert "0102" in usable_seasons("D1", 2025)
+    assert "0304" in usable_seasons("D1", 2025)
 
 
 def test_full_core_never_precedes_discipline():
