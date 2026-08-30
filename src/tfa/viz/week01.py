@@ -141,3 +141,69 @@ def width_versus_football(audit: pd.DataFrame, path: Path, snapshot: str) -> lis
             snapshot=snapshot,
         ),
     )
+
+
+def referee_coverage(audit: pd.DataFrame, path: Path, snapshot: str) -> list[Path]:
+    """Which leagues name the official, and when they stopped.
+
+    The table version of this hides the shape. Two associations published
+    referee names and then stopped, which is the opposite of what you expect a
+    dataset to do over twenty-six years, and it is the binding constraint on
+    every discipline question this project can ask.
+    """
+    frame = audit[audit["available"]].copy()
+    frame["year"] = frame["season"].map(season_start_year)
+    frame["named"] = frame["Referee"].fillna(False).astype(bool)
+
+    # Most coverage first, so the two continuous series anchor the top and the
+    # seven empty rows read as a block rather than as scattered absences.
+    order = sorted(
+        frame["competition"].unique(),
+        key=lambda c: (-frame[frame["competition"] == c]["named"].sum(),
+                       COMPETITIONS[c].country),
+    )
+
+    fig, ax = plt.subplots(figsize=(theme.DOUBLE_COLUMN + 1.4, 4.0))
+
+    for row, code in enumerate(order):
+        sub = frame[frame["competition"] == code]
+        named = sub[sub["named"]]["year"]
+        unnamed = sub[~sub["named"]]["year"]
+
+        ax.scatter(unnamed, [row] * len(unnamed), s=26, marker="s",
+                   color="#e8e8e8", edgecolor="#cccccc", linewidth=0.4, zorder=2)
+        ax.scatter(named, [row] * len(named), s=26, marker="s",
+                   color=theme.PALETTE[0], zorder=3)
+
+        count = int(sub["named"].sum())
+        label = f"{count} seasons" if count else "never"
+        ax.annotate(label, xy=(2026.6, row), va="center", ha="left",
+                    fontsize=7.5, color=theme.MUTED, annotation_clip=False)
+
+    ax.set_yticks(range(len(order)))
+    ax.set_yticklabels([COMPETITIONS[c].country for c in order])
+    ax.set_xlabel("Season (start year)")
+    ax.set_title("Referee names: two leagues have them, two lost them")
+    ax.set_xlim(1999.2, 2026.0)
+    ax.set_ylim(len(order) - 0.4, -0.8)
+    theme.grid(ax, axis="x")
+
+    handles = [
+        plt.Line2D([], [], marker="s", linestyle="", markersize=6,
+                   color=theme.PALETTE[0], label="referee named"),
+        plt.Line2D([], [], marker="s", linestyle="", markersize=6,
+                   color="#e8e8e8", markeredgecolor="#cccccc",
+                   label="match data present, no referee"),
+    ]
+    ax.legend(handles=handles, loc="upper left", bbox_to_anchor=(0, -0.16),
+              ncol=2, borderaxespad=0)
+
+    return theme.save(
+        fig, path,
+        theme.Stamp(
+            metric="Seasons naming the match official, per league",
+            sample=f"{len(frame)} league-seasons with match data, 11 divisions",
+            source="football-data.co.uk",
+            snapshot=snapshot,
+        ),
+    )

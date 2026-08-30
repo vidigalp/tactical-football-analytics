@@ -113,6 +113,23 @@ A club's own quality is half of that fixture quality, so strong clubs genuinely 
 rate. They are not being singled out. They are playing in higher-quality matches, and those
 matches produce more cards per foul.
 
+## If not the club, then the manager?
+
+![Manager travel](figures/fig3-manager-travel.png)
+
+The natural next candidate. Managers set how a side presses and how it fouls, and Portuguese clubs
+change them often enough to test it: take every manager who worked at two or more clubs, measure
+each spell against that club's own baseline excluding them, and see whether the two spells agree.
+
+They do not. Across 46 spell pairs the correlation is **r = −0.063**, and a permutation test that
+reshuffles which spell belongs to which manager gives **p = 0.673**. The observed value sits in the
+middle of the null. A manager who runs a disciplined side at one club is no more likely than chance
+to do it at the next.
+
+Between-manager variance accounts for about 8% of the spread in spell effects, which is small
+enough that the honest reading is that this data cannot see a manager effect, rather than that none
+exists. Either way, the club-level story does not become a manager-level story.
+
 ## Wrong (4), sort of: someone got there first
 
 Dawson, Dobson, Goddard and Wilson published a gradient in cards by team strength in 2007
@@ -143,6 +160,13 @@ Adjusting for era, match situation and the actual official on the pitch:
 
 Porto sit at 0.989, indistinguishable from average. One club of twenty-six separates from
 expectation, and it is not the one in the original claim.
+
+![Clubs before and after adjustment](figures/fig2-clubs-adjusted.png)
+
+The figure shows the era-and-situation step only, which is why Porto reads 1.01 there against 0.99
+in the table: the referee adjustment moves them slightly further down. The shape is the point.
+Almost every club that looked unusual on the raw index stops looking unusual once the situation is
+accounted for, and the hollow-to-solid movement is the size of that correction.
 
 ### The multiplicity check, which is where most of these die
 
@@ -186,6 +210,18 @@ is a claim, and it is false.
 
 **Adjustment coarseness.** This one did not land. Five strength bands under-corrected the strongest
 clubs, so it was redone as a continuous fit. The association strengthened.
+
+![Shrinkage validation](figures/fig4-shrinkage-validation.png)
+
+There is a harder version of the same lesson. Taking 2,432 consecutive club-season pairs across the
+eleven leagues and asking which estimate best predicts a club's next season, the raw ratio is the
+worst of three. It is beaten by a shrunken estimate by 13%, and it is beaten by ignoring the club
+entirely and using the league mean. A number computed from one season of a club's own matches
+carries less information about that club's next season than not looking at the club at all.
+
+That is the quantitative form of the objection to the original claim. Not that the ratio was
+computed wrongly, but that a ratio on that little data is dominated by noise, and the correct
+response to a noisy estimate is to pull it toward the mean rather than to rank on it.
 
 The version that transfers: when a metric is an average over a group, ask whether the effect
 belongs to the group or to the situations the group is in. Cohorts, segments, cost centres, model

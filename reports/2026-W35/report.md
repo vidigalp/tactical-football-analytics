@@ -65,6 +65,8 @@ silently discards two real seasons.
 
 ### 3. Referee coverage narrowed rather than grew
 
+![Referee coverage](figures/referee-coverage.png)
+
 | League | Referee named |
 |---|---|
 | England | 2000–2025, continuous |
