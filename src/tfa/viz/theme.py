@@ -77,7 +77,6 @@ def apply() -> None:
             "grid.linestyle": "-",
             "figure.dpi": 150,
             "savefig.dpi": 300,
-            "savefig.bbox": "tight",
             "text.color": INK,
             # Type 42 keeps text as selectable vector rather than outlines.
             "pdf.fonttype": 42,
@@ -118,13 +117,17 @@ def save(
 
     The stamp is not optional by design — see the module docstring.
     """
+    # Reserve room at the foot of the figure before stamping. Placing the
+    # stamp below the axes without doing this lets it collide with an x-label
+    # or a two-line tick label, which is easy to miss until it is published.
+    fig.tight_layout(rect=(0, 0.10, 1, 1))
     fig.text(
         0.0,
-        -0.02,
+        0.012,
         stamp.render(),
         fontsize=7,
         color=MUTED,
-        va="top",
+        va="bottom",
         ha="left",
         transform=fig.transFigure,
     )
