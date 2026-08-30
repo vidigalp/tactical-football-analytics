@@ -32,6 +32,9 @@ dev = [
 requires = ["uv_build>=0.11.20,<0.12.0"]
 build-backend = "uv_build"
 
+[tool.uv.build-backend]
+module-name = ["tfa", "evidence"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py313"
