@@ -263,17 +263,20 @@ gradient correlates at +0.61, but the association does not survive controlling f
 stronger, stable under leave-one-out, and survives correcting for having tried seven league-level
 covariates.
 
-It is also an artifact of aggregation. Splitting the same data into three-season blocks and asking
-whether a league's own gradient moves when its own home advantage moves gives **−0.168, p = 0.21**,
-with the sign negative in five of the six leagues that have enough blocks to check. The test can
-detect a correlation of 0.40 at 80% power, so it is not simply underpowered against a claimed 0.79.
-The same data, three levels:
+It is also an artifact of aggregation.
+
+![Two levels of aggregation](figures/fig5-aggregation-levels.png)
+
+Splitting the same data into three-season blocks and asking whether a league's own gradient moves
+when its own home advantage moves gives **−0.107, p = 0.41**, with the slope running the other way
+in four of the six leagues that have enough blocks to fit one. The test can detect a correlation of
+0.35 at 80% power, so it is not simply underpowered against a claimed 0.79.
 
 | Unit | n | correlation |
 |---|---|---|
 | League averages | 11 | **+0.791** |
-| Three-season blocks, pooled | 57 | +0.195 |
-| Three-season blocks, within league | 57 | **−0.168** |
+| Three-season blocks, pooled | 62 | +0.231 |
+| Three-season blocks, within league | 62 | **−0.107** |
 
 Home advantage fell across the panel from 0.349 goals per match in 2001 to 0.220 in 2025, with the
 crowd-free seasons visible as a trough. The gradient did not follow it.
@@ -291,6 +294,7 @@ foul-level video coding. That is the honest limit here.
 
 ```bash
 uv run python scripts/build_discipline_story.py   # figures 1-4, and the club table
+uv run python scripts/aggregation_levels.py       # figure 5, the aggregation test
 uv run python scripts/strength_effect.py          # the cross-league association
 uv run python scripts/referee_decomposition.py
 uv run python scripts/manager_travel.py
