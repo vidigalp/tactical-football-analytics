@@ -52,10 +52,27 @@ has a dedicated regression test against synthetic data with known `τ`.
 For a beta-binomial, reliability is `r(n) = n/(n + n₀)` where `n₀ = α+β` — so **the stabilisation
 point is the prior sample size**, obtained free from the model already fitted.
 
-There is **no peer-reviewed football-specific stabilisation table**. We compute our own by
-randomised split-half correlation, stratified on home/away and opponent strength (an odd/even
-split confounds reliability with the fixture calendar), cross-checked against the model-based
-variance decomposition. Disagreement beyond 25% indicates misspecification and fails a test.
+**Correction, 2026-08-30.** An earlier version of this document claimed there is no peer-reviewed
+football-specific stabilisation work. That was wrong, and it is exactly the error this project
+exists to prevent — a novelty claim made from not having found something rather than from having
+looked properly.
+
+The question has been asked. O'Donoghue and Ponting, *Equations for the Number of Matches Required
+for Stable Performance Profiles* (2005), is literally it. Johnson, Murphy and Bower (2010),
+[doi:10.1016/j.jsams.2009.10.244](https://doi.org/10.1016/j.jsams.2009.10.244), do it for A-League
+football. Both are barely cited, and both pre-date event data entirely — but they exist, and any
+reviewer in this field will know them.
+
+What is defensible is the **method**, not the question: split-half reliability with empirical-Bayes
+shrinkage, applied to modern rate metrics and to referee-level decision rates. Those searches do
+come back empty. We compute our own table by randomised split-half correlation, stratified on
+home/away and opponent strength (an odd/even split confounds reliability with the fixture
+calendar), cross-checked against the model-based variance decomposition. Disagreement beyond 25%
+indicates misspecification and fails a test.
+
+The general rule this cost us: **absence of evidence in your own search is not evidence of absence
+in the literature.** A novelty claim needs a positive search that found the neighbours, not a
+negative one that found nothing.
 
 ## 5. Multiple comparisons
 
