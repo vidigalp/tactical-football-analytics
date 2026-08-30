@@ -42,6 +42,13 @@ handled.
 
 ## Latest
 
+**[Week 2 — A club that fouls with impunity, and the three ways I was wrong about it](reports/2026-W36/report.md)**
+
+A viral post implied a club was being favoured by referees. Checking it produced a striking
+result — and then three attempts to destroy that result, two of which succeeded. The effect turned
+out to belong to the *fixture*, not the club: cards per foul scale with match quality, for both
+teams. Being a heavy favourite is worth a 32% swing in booking rate on its own.
+
 **[Week 1 — What free football data can still tell you](reports/2026-W35/report.md)**
 
 FBref lost its Opta licence in January 2026. I audited what remains: 286 league-season files

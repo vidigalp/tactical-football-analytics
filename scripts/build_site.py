@@ -45,6 +45,11 @@ def main() -> None:
             shutil.copytree(report.parent / "figures", figures, dirs_exist_ok=True)
         text = report.read_text()
         text = re.sub(r"\(figures/", f"({week}/figures/", text)
+        # Reports link to repo-root policy docs with ../../; inside the site
+        # those pages sit one level up from weekly/.
+        text = text.replace("](../../EDITORIAL.md)", "](../editorial.md)")
+        text = text.replace("](../../METHODS.md)", "](../methods.md)")
+        text = text.replace("](../../DATA_SOURCES.md)", "](../data-sources.md)")
         (DOCS / "weekly" / f"{week}.md").write_text(text)
 
     index = ROOT / "README.md"
@@ -55,7 +60,8 @@ def main() -> None:
     home = home.replace("](EDITORIAL.md)", "](editorial.md)")
     home = home.replace("](AI_WORKFLOW.md)", "](ai-workflow.md)")
     home = home.replace("](ACKNOWLEDGEMENTS.md)", "](acknowledgements.md)")
-    home = home.replace("](reports/2026-W35/report.md)", "](weekly/2026-W35.md)")
+    for week in sorted(p.parent.name for p in (ROOT / "reports").glob("*/report.md")):
+        home = home.replace(f"](reports/{week}/report.md)", f"](weekly/{week}.md)")
     home = home.replace(
         "](reports/)",
         "](weekly/2026-W35.md)",

@@ -31,6 +31,7 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Weekly:
+      - "Week 2 — A club that fouls with impunity, and three ways I was wrong": weekly/2026-W36.md
       - "Week 1 — What free football data can still tell you": weekly/2026-W35.md
   - Method:
       - Methods: methods.md
