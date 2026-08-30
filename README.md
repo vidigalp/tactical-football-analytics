@@ -28,6 +28,7 @@ errors are checkable.
 | [`DATA_SOURCES.md`](DATA_SOURCES.md) | Provenance, licensing boundaries, and what we measured versus what is documented |
 | [`EDITORIAL.md`](EDITORIAL.md) | Neutrality policy. Football is tribal; this project is about measurement |
 | [`AI_WORKFLOW.md`](AI_WORKFLOW.md) | Where AI is used, and where it is structurally distrusted |
+| [`ACKNOWLEDGEMENTS.md`](ACKNOWLEDGEMENTS.md) | The people and projects whose freely-given data makes this possible |
 | [`reports/`](reports/) | Weekly findings, each reproducible from a committed snapshot |
 | [`references/`](references/) | Bibliography. Every DOI is resolved in CI; unverified entries are quarantined |
 
@@ -57,6 +58,17 @@ fouls or cards, foul location, foul timing, offsides, woodwork, free kicks conce
 event-level data.
 
 **Referee identity** is available in England and Scotland only.
+
+## Standing on other people's work
+
+This project is built on data other people collected, maintained and gave away for free —
+[football-data.co.uk](https://www.football-data.co.uk/) for twenty-five years of match data,
+Wikipedia's contributors for manager histories, [zerozero.pt](https://www.zerozero.pt/) for
+Portuguese match officials, and the statisticians who solved these estimation problems decades
+before football analytics existed.
+
+Proper thanks, and an honest note on what each licence does and does not permit, is in
+[`ACKNOWLEDGEMENTS.md`](ACKNOWLEDGEMENTS.md).
 
 ## Licence
 

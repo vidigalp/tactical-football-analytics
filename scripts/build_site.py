@@ -19,6 +19,7 @@ PAGES = {
     "DATA_SOURCES.md": "data-sources.md",
     "AI_WORKFLOW.md": "ai-workflow.md",
     "NOTES/learning-log.md": "learning-log.md",
+    "ACKNOWLEDGEMENTS.md": "acknowledgements.md",
 }
 
 
@@ -27,7 +28,15 @@ def main() -> None:
     (DOCS / "weekly").mkdir(exist_ok=True)
 
     for source, target in PAGES.items():
-        shutil.copyfile(ROOT / source, DOCS / target)
+        text = (ROOT / source).read_text()
+        # Repo-relative links to files outside docs/ have to point at GitHub
+        # once rendered as a site, or mkdocs --strict rejects them.
+        text = text.replace(
+            "](references/references.bib)",
+            "](https://github.com/vidigalp/tactical-football-analytics"
+            "/blob/main/references/references.bib)",
+        )
+        (DOCS / target).write_text(text)
 
     for report in sorted((ROOT / "reports").glob("*/report.md")):
         week = report.parent.name
@@ -45,6 +54,7 @@ def main() -> None:
     home = home.replace("](DATA_SOURCES.md)", "](data-sources.md)")
     home = home.replace("](EDITORIAL.md)", "](editorial.md)")
     home = home.replace("](AI_WORKFLOW.md)", "](ai-workflow.md)")
+    home = home.replace("](ACKNOWLEDGEMENTS.md)", "](acknowledgements.md)")
     home = home.replace("](reports/2026-W35/report.md)", "](weekly/2026-W35.md)")
     home = home.replace(
         "](reports/)",
