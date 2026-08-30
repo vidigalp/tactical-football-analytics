@@ -19,6 +19,9 @@ from tfa.viz import discipline_story as story
 from tfa.viz import theme
 
 ROOT = Path(__file__).resolve().parents[1]
+
+#: The study these figures belong to.
+REPORT = "2026-W36"
 BANDS = [-np.inf, -1.0, -0.35, 0.35, 1.0, np.inf]
 NAMES = ["heavy\nunderdog", "underdog", "even", "favourite", "heavy\nfavourite"]
 
@@ -44,7 +47,10 @@ def load_matches(directory: Path, comp: str | None = None) -> pd.DataFrame:
 def main() -> None:
     theme.apply()
     directory = sorted((ROOT / "data" / "snapshots").glob("*-W*"))[-1]
-    out = ROOT / "reports" / directory.name / "figures"
+    # The report is dated later than the snapshot it reads, so the output
+    # directory cannot be derived from the snapshot name. Writing there put
+    # week 2's figures in week 1's folder and left week 2's untouched.
+    out = ROOT / "reports" / REPORT / "figures"
     stamp = directory.name
     written = []
 

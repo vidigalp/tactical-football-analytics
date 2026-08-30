@@ -99,19 +99,15 @@ def main() -> None:
         text = re.sub(r"\(figures/", f"({slug}/figures/", text)
         # Reports link to repo-root policy docs with ../../; inside the site
         # those pages sit one level up from weekly/.
-        text = text.replace("](../../EDITORIAL.md)", "](../editorial.md)")
-        text = text.replace("](../../METHODS.md)", "](../methods.md)")
-        text = text.replace("](../../DATA_SOURCES.md)", "](../data-sources.md)")
+        for source_page, target_page in PAGES.items():
+            text = text.replace(f"](../../{source_page})", f"](../{target_page})")
         (DOCS / "studies" / f"{slug}.md").write_text(text)
 
     index = ROOT / "README.md"
     home = index.read_text()
     # Repo-relative links resolve differently once rendered as a site.
-    home = home.replace("](METHODS.md)", "](methods.md)")
-    home = home.replace("](DATA_SOURCES.md)", "](data-sources.md)")
-    home = home.replace("](EDITORIAL.md)", "](editorial.md)")
-    home = home.replace("](AI_WORKFLOW.md)", "](ai-workflow.md)")
-    home = home.replace("](ACKNOWLEDGEMENTS.md)", "](acknowledgements.md)")
+    for source_page, target_page in PAGES.items():
+        home = home.replace(f"]({source_page})", f"]({target_page})")
     for week, slug in STUDY_SLUGS.items():
         home = home.replace(f"](reports/{week}/report.md)", f"](studies/{slug}.md)")
     # Point at the newest study, not at a redirect stub: mkdocs-redirects

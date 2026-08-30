@@ -7,7 +7,7 @@
 ## The question, registered before the data was pulled
 
 > Of the free, public football data that exists today, how much can actually support an
-> analytical claim — and how much only looks like it can?
+> analytical claim, and how much only looks like it can?
 
 I wanted to start this project by measuring fouls and cards. Before writing any model, I checked
 what data was available. That check turned out to be the more interesting result, so it is Week 1.
@@ -17,7 +17,7 @@ what data was available. That check turned out to be the more interesting result
 Two things changed recently and neither is widely understood.
 
 **FBref lost its Opta licence on 20 January 2026.** Expected goals, possession, passing,
-progressive actions and defensive actions were removed site-wide — including from historical
+progressive actions and defensive actions were removed site-wide, including from historical
 archives. Pressures had already gone in the October 2022 provider switch. For years FBref was the
 default free source for anyone doing public football analysis. Most of what made it useful is gone.
 
@@ -30,7 +30,7 @@ So rather than assume, I measured.
 ## Data
 
 I probed the CSV header of every league-season file across **11 European top divisions** and
-**26 seasons** (2000-01 to 2025-26) — **286 league-season files**. Each probe streams only the
+**26 seasons** (2000-01 to 2025-26): **286 league-season files**. Each probe streams only the
 first line, so the whole audit costs kilobytes.
 
 The result is committed as a Parquet snapshot with a manifest recording the source URL, fetch
@@ -87,10 +87,9 @@ happened in the match went from 0 to **12**, and have not moved since 2007.
 
 Everything else is betting odds.
 
-There is no conspiracy here — the site is explicitly a betting-data resource and has never claimed
-otherwise. But it is a precise illustration of a general pattern: **a data source grows in the
-direction its users pull it**, and if you are not the paying use case, your columns are the ones
-that stop being maintained. Offsides, woodwork and bookings points were all present in 2000-01 and
+The site is explicitly a betting-data resource and has never claimed otherwise, so this is not a
+complaint. It is an illustration of how a data source grows in the direction its users pull it. If
+you are not the paying use case, your columns are the ones that stop being maintained. Offsides, woodwork and bookings points were all present in 2000-01 and
 dropped. Free-kicks-conceded survived to 2017-18. All four are still in the documentation today.
 
 ## What this means for the project
@@ -98,12 +97,12 @@ dropped. Free-kicks-conceded survived to 2017-18. All four are still in the docu
 - The analytic window is **per league, not global**. Portugal supports nine seasons of discipline
   analysis, England twenty-six.
 - Referee effects can be estimated directly in England and Scotland only. Everywhere else they
-  must be *conditioned out* — which is possible, because both teams in a match face the same
+  must be *conditioned out*. That is possible because both teams in a match face the same
   referee, so a within-match comparison removes referee strictness exactly without ever observing
   it. That is the model this project will use, and it exists because of a data constraint rather
   than a statistical preference.
 - Any metric depending on possession, pressures, passing or event location is **not available**
-  from free sources for current seasons. Not difficult — unavailable. That list is in the README
+  from free sources for current seasons. Not difficult to obtain: absent. That list is in the README
   so no future contributor builds on a column that does not exist.
 
 ## Confounders and limits
@@ -118,27 +117,35 @@ I have not verified row-level completeness within files. That is a separate audi
 
 ## The data lesson
 
-**A file that downloads is not a file that answers your question, and nothing in your pipeline will
-tell you the difference.**
+A file that downloads is not a file that answers your question, and nothing in your pipeline will
+tell you the difference.
 
 Every one of those 107 empty league-seasons returns HTTP 200, parses without warning, and yields a
-DataFrame. The failure is silent, and it is silent in exactly the way that matters: you get a
-result, it looks plausible, and it is built on nothing.
+DataFrame. You get a result, it looks plausible, and it is built on nothing.
 
-The general form of this is a dependency you did not know you had, maintained by someone with no
-obligation to your use case, changing on a schedule you do not control. FBref's users discovered
-this in January. This is why provenance metadata is not bureaucracy: a schema hash and a row count
-per fetch turn a silent failure into a loud one.
+The general form is a dependency you did not know you had, maintained by someone with no obligation
+to your use case, changing on a schedule you do not control. FBref's users discovered this in
+January. Provenance metadata is what turns that from a silent failure into a loud one: a schema
+hash and a row count per fetch would have caught every case above on the first run.
 
-**A worked example from this very report.** The bibliography below is checked in CI by resolving
-every DOI through content negotiation and comparing the registered title against the one claimed.
-On its first run it failed — on a reference I had written myself. I had recorded the DOI for the
-Phatak et al. paper by construction rather than by looking it up, and `10.2478/hukin-2021-0102`
-registers a paper about circuit training in prepubertal boys. The real one is `-0095`.
+## Where the machine got it wrong
 
-A fabricated citation is easy to catch. A **real** identifier pointing at the wrong work is not,
-and it is precisely what you get from any process that half-remembers a reference instead of
-checking it. The check stays in CI.
+This project uses language models for literature search, code drafting and hypothesis generation,
+and distrusts them structurally for anything that is a number, a citation or a claim. The reasoning
+is in [`AI_WORKFLOW.md`](../../AI_WORKFLOW.md). Week 1 produced the first worked example, and it
+went exactly the way that document predicts.
+
+The bibliography below is checked in CI by resolving every DOI through content negotiation and
+comparing the registered title against the title claimed. On its first run it failed, on a
+reference written for this report. The DOI for the Phatak et al. paper had been recorded by
+construction rather than by lookup, and `10.2478/hukin-2021-0102` registers a paper about circuit
+training in prepubertal boys. The real one is `-0095`.
+
+That failure mode is worth being precise about. A fabricated citation is easy to catch, because
+nothing resolves. A real identifier pointing at the wrong work resolves perfectly, looks correct in
+every rendered bibliography, and is what any process that half-remembers a reference will produce.
+Checking that a DOI exists is not enough. The check has to compare what came back against what was
+claimed, and it stays in CI for that reason.
 
 ## Tri-anchor
 
@@ -149,6 +156,7 @@ Nothing is published here without all three.
 | **Data** | This project's own audit of 286 league-season files, snapshot `2026-W35`, committed |
 | **Football** | Dawson et al. (2007) on referee inconsistency; Phatak et al. (2021) on why discipline metrics are inseparable from league context |
 | **Data science** | Gebru et al. (2021), *Datasheets for Datasets*; Wilkinson et al. (2016), FAIR principles |
+| **AI practice** | [`AI_WORKFLOW.md`](../../AI_WORKFLOW.md), and the CI citation check described above |
 
 ## References
 
@@ -176,6 +184,6 @@ uv run python scripts/run_audit.py --from 2000 --to 2025
 
 ## Next
 
-The row-level completeness audit, then the first properly powered discipline model — England and
+The row-level completeness audit, then the first properly powered discipline model: England and
 Scotland with referee effects estimated directly, everywhere else with referee conditioned out
 within match.
