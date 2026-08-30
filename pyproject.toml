@@ -26,6 +26,7 @@ dev = [
     "pytest>=8",
     "ruff>=0.6",
     "mkdocs-material>=9.5",
+    "mkdocs-redirects>=1.2.3",
 ]
 
 [build-system]

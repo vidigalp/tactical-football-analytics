@@ -13,6 +13,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 
+#: Report directory -> durable study slug. Numbered so a citation stays valid.
+STUDY_SLUGS = {
+    "2026-W35": "01-free-football-data",
+    "2026-W36": "02-fouling-with-impunity",
+}
+
 PAGES = {
     "METHODS.md": "methods.md",
     "EDITORIAL.md": "editorial.md",
@@ -25,7 +31,11 @@ PAGES = {
 
 def main() -> None:
     DOCS.mkdir(exist_ok=True)
-    (DOCS / "weekly").mkdir(exist_ok=True)
+    (DOCS / "studies").mkdir(exist_ok=True)
+
+    # Custom domain. Written on every build so it cannot drift out of the
+    # published site, which would silently break the apex.
+    (DOCS / "CNAME").write_text("pedrovidigal.com\n")
 
     for source, target in PAGES.items():
         text = (ROOT / source).read_text()
@@ -38,19 +48,24 @@ def main() -> None:
         )
         (DOCS / target).write_text(text)
 
+    # Studies are numbered, not dated. A number is a stable citable handle;
+    # a week number tells a reader the work is stale and advertises a schedule.
     for report in sorted((ROOT / "reports").glob("*/report.md")):
         week = report.parent.name
-        figures = DOCS / "weekly" / week / "figures"
+        slug = STUDY_SLUGS.get(week)
+        if slug is None:
+            continue
+        figures = DOCS / "studies" / slug / "figures"
         if (report.parent / "figures").exists():
             shutil.copytree(report.parent / "figures", figures, dirs_exist_ok=True)
         text = report.read_text()
-        text = re.sub(r"\(figures/", f"({week}/figures/", text)
+        text = re.sub(r"\(figures/", f"({slug}/figures/", text)
         # Reports link to repo-root policy docs with ../../; inside the site
         # those pages sit one level up from weekly/.
         text = text.replace("](../../EDITORIAL.md)", "](../editorial.md)")
         text = text.replace("](../../METHODS.md)", "](../methods.md)")
         text = text.replace("](../../DATA_SOURCES.md)", "](../data-sources.md)")
-        (DOCS / "weekly" / f"{week}.md").write_text(text)
+        (DOCS / "studies" / f"{slug}.md").write_text(text)
 
     index = ROOT / "README.md"
     home = index.read_text()
@@ -60,8 +75,8 @@ def main() -> None:
     home = home.replace("](EDITORIAL.md)", "](editorial.md)")
     home = home.replace("](AI_WORKFLOW.md)", "](ai-workflow.md)")
     home = home.replace("](ACKNOWLEDGEMENTS.md)", "](acknowledgements.md)")
-    for week in sorted(p.parent.name for p in (ROOT / "reports").glob("*/report.md")):
-        home = home.replace(f"](reports/{week}/report.md)", f"](weekly/{week}.md)")
+    for week, slug in STUDY_SLUGS.items():
+        home = home.replace(f"](reports/{week}/report.md)", f"](studies/{slug}.md)")
     home = home.replace(
         "](reports/)",
         "](weekly/2026-W35.md)",

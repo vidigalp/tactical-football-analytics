@@ -1,12 +1,19 @@
-site_name: tactical-football-analytics
-site_description: Learning football tactics through statistics — reproducibly, with citations.
-site_url: https://vidigalp.github.io/tactical-football-analytics/
+site_name: Pedro Vidigal
+site_description: Applied statistics and machine learning on datasets people argue about.
+site_url: https://pedrovidigal.com/
 repo_url: https://github.com/vidigalp/tactical-football-analytics
 repo_name: vidigalp/tactical-football-analytics
+extra:
+  # Set once from the Cloudflare dashboard; cookie-free, so no consent
+  # banner is required. Left empty until then rather than shipping a
+  # broken beacon.
+  cf_analytics_token: ""
+
 copyright: Code MIT · Text, figures and derived data CC BY 4.0
 
 theme:
   name: material
+  custom_dir: overrides
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -21,6 +28,16 @@ theme:
     - navigation.top
     - content.code.copy
 
+plugins:
+  - search
+  - redirects:
+      redirect_maps:
+        # The site launched on a GitHub Pages path with week-numbered URLs.
+        # Those are kept resolvable: a project whose premise is that cited
+        # artifacts stay reachable does not get to break its own links.
+        weekly/2026-W35.md: studies/01-free-football-data.md
+        weekly/2026-W36.md: studies/02-fouling-with-impunity.md
+
 markdown_extensions:
   - admonition
   - attr_list
@@ -30,9 +47,9 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Weekly:
-      - "Week 2 — A club that fouls with impunity, and three ways I was wrong": weekly/2026-W36.md
-      - "Week 1 — What free football data can still tell you": weekly/2026-W35.md
+  - Studies:
+      - "02 — A club that fouls with impunity, and three ways I was wrong": studies/02-fouling-with-impunity.md
+      - "01 — What free football data can still tell you": studies/01-free-football-data.md
   - Method:
       - Methods: methods.md
       - Editorial policy: editorial.md
