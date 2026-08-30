@@ -102,11 +102,16 @@ The week's question and analysis choices are written into the report file **befo
 pulled. This prevents fishing, and it means any paper drawn from this work has a genuine
 pre-registration trail rather than a reconstructed one.
 
-## 10. Null results
+## 10. Null results, and why there is no cadence promise
 
-The weekly format must be able to return nothing, and does so by design. The expected null rate is
-pre-registered so a quiet week reads as the method working rather than the author failing. A
+The format must be able to return nothing, and does so by design. The expected null rate is
+pre-registered so a quiet period reads as the method working rather than the author failing. A
 running counter is published.
+
+**Publication is gated on evidence, not on the calendar.** No weekly commitment is made, because a
+schedule and a standard eventually conflict, and the schedule wins — quietly, by lowering the bar
+on a slow week. Every safeguard in this document exists to stop exactly that, so promising a
+frequency would undermine all of them at once.
 
 A format that can only ever say "look at this" is indistinguishable from the thing this repo was
 built to correct.

@@ -3,7 +3,11 @@
 **LOVE your DATA / Learn with data**
 
 Learning football tactics through statistics — reproducibly, with citations, and honest about
-uncertainty. One finding a week, or an explicit *nothing this week*.
+uncertainty.
+
+Findings are published when they survive their own tests, not on a schedule. Some weeks that means
+a result; some weeks it means an explicit *nothing cleared the bar*, with the near-misses shown.
+A cadence promise would eventually be met by lowering the bar, and the bar is the point.
 
 Every published claim rests on three anchors: **our own committed data**, **football literature**,
 and **data-science literature**. A claim missing any one of them is a watchlist candidate, not a
