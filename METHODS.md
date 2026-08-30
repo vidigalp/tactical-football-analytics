@@ -196,9 +196,10 @@ gradients differ genuinely between the eleven leagues, and across those eleven l
 gradient correlates with home advantage at +0.79. It has every mark of a result: a plausible
 mechanism, stability under leave-one-out, and survival of a Bonferroni correction for the seven
 covariates tried. Splitting the same data into three-season blocks and asking whether a league's
-own gradient moves when its own home advantage moves gives -0.11, sloping the other way in four of six
-leagues, against a test able to detect 0.35 at 80% power. Pooled at block level it is +0.23. One dataset,
-three levels of aggregation, and the association is manufactured by the coarsest one.
+own gradient moves when its own home advantage moves gives -0.11, sloping the other way in four
+of the six leagues with enough blocks to fit a line, against a test able to detect 0.35 at 80%
+power. Pooled at block level it is +0.23. One dataset, three levels of aggregation, and the
+association is manufactured by the coarsest one.
 
 The prompt that exposed it is worth recording too, because it was not a statistical objection: the
 covariate varies from year to year, so why was it being used as a fixed league property? Asking
