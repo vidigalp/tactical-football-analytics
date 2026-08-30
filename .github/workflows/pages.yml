@@ -1,8 +1,9 @@
 name: pages
 
+# Cloudflare Pages is the publisher; this is a manual fallback only.
+# Two hosts deploying the same domain on push is a good way to spend an
+# afternoon wondering which one served the stale page.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

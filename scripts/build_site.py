@@ -33,8 +33,8 @@ def main() -> None:
     DOCS.mkdir(exist_ok=True)
     (DOCS / "studies").mkdir(exist_ok=True)
 
-    # Custom domain. Written on every build so it cannot drift out of the
-    # published site, which would silently break the apex.
+    # Only GitHub Pages reads this; Cloudflare takes the domain from its own
+    # dashboard. Written anyway so the GitHub fallback stays one click away.
     (DOCS / "CNAME").write_text("pedrovidigal.com\n")
 
     for source, target in PAGES.items():
