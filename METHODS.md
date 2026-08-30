@@ -111,7 +111,37 @@ running counter is published.
 A format that can only ever say "look at this" is indistinguishable from the thing this repo was
 built to correct.
 
-## 11. Corrections
+## 11. Pressure-testing: try to kill your own finding first
+
+A result is not ready because it is significant. It is ready when a genuine attempt to destroy it
+has failed. Before publication, every finding is attacked on four fronts, and the attempt is
+reported whether or not it succeeded.
+
+**Specification.** What does the model assume that the data might not support? Assumptions that
+look like arithmetic are the dangerous ones — this project shipped an expectation of
+`cards = rate x fouls`, a proportional model through the origin, and only later measured that the
+intercept is 13% to 47% of mean cards depending on the league. Cards per foul falls monotonically
+from 0.195 at six fouls to 0.127 at eighteen. Because dominant clubs foul *less*, that
+misspecification mechanically inflated precisely the clubs the finding was about.
+
+**Aggregation.** At what level does the effect actually live? A club-level average will happily
+attribute a match-level regularity to one of the two participants. The test is cheap: compute the
+same index for the *opponents*. If they move with it, the effect is not the club's.
+
+**Adjustment coarseness.** Does a coarse control leave a gradient inside its own bins? Five
+strength bands under-corrected the strongest clubs, so the analysis was redone with a continuous
+fit. That one survived; the point is that it had to be tried.
+
+**Prior work.** Has someone already found this? A gradient in cards by team strength was published
+by Dawson, Dobson, Goddard and Wilson in 2007. Rediscovering a known result on more data is a
+contribution; presenting it as new is not.
+
+**Independent replication is the strongest form of this.** Where a finding matters, it is re-derived
+by a separate pipeline on a different subsample before publication. Twice in this project that
+process reversed the conclusion — and a reversal found before publishing is a success of the
+method, not a failure of it.
+
+## 12. Corrections
 
 Errata are published, never silently edited. Reports are versioned; the tracker is append-only and
 git-diffable; a correction appends a row and marks the superseded one. Retracting a finding in
