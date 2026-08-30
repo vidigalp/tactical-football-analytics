@@ -189,3 +189,78 @@ def check_no_double_attribution(frame: pd.DataFrame) -> pd.DataFrame:
     key = ["season_start", "date", "home", "away"]
     counts = frame.groupby(key)["referee"].nunique()
     return counts[counts > 1].reset_index(name="distinct_referees")
+
+
+#: zerozero club name -> the short form football-data.co.uk uses.
+#: Built by hand and validated by scoreline, not by fuzzy matching: 'Vitória FC'
+#: is Setúbal while 'Vitória SC' is Guimarães, and no string metric gets that
+#: right. A wrong alias here would attribute matches to the wrong club silently.
+CLUB_ALIASES: dict[str, str] = {
+    "FC Porto": "Porto",
+    "Sporting": "Sp Lisbon",
+    "SC Braga": "Sp Braga",
+    "Vitória SC": "Guimaraes",
+    "Vitória FC": "Setubal",
+    "B SAD": "Belenenses",
+    "CD Aves": "Aves",
+    "CD Tondela": "Tondela",
+    "Boavista FC": "Boavista",
+    "Casa Pia AC": "Casa Pia",
+    "Est. Amadora": "Estrela",
+    "Estoril Praia": "Estoril",
+    "FC Alverca": "Alverca",
+    "FC Arouca": "Arouca",
+    "FC Famalicão": "Famalicao",
+    "FC Vizela": "Vizela",
+    "GD Chaves": "Chaves",
+    "Marítimo": "Maritimo",
+    "Paços de Ferreira": "Pacos Ferreira",
+    "Académico": "Academico Viseu",
+    "AFS": "AVS",
+}
+
+
+def to_match_data_names(frame: pd.DataFrame) -> pd.DataFrame:
+    """Translate zerozero club names into football-data's short forms."""
+    out = frame.copy()
+    for column in ("home", "away"):
+        out[column] = out[column].map(lambda c: CLUB_ALIASES.get(c, c))
+    return out
+
+
+def join_to_matches(
+    referees: pd.DataFrame, matches: pd.DataFrame
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Attach officials to matches, verifying the scoreline agrees.
+
+    Returns (joined, unmatched). The scoreline check is the point: joining on
+    date and club names alone would quietly accept a wrong alias, whereas a
+    mismatched score proves the two rows are different matches. Anything that
+    fails is returned for inspection rather than dropped.
+    """
+    left = matches.copy()
+    left["date"] = pd.to_datetime(left["Date"]).dt.strftime("%Y-%m-%d")
+
+    right = to_match_data_names(referees).rename(
+        columns={"home": "HomeTeam", "away": "AwayTeam"}
+    )
+
+    merged = left.merge(
+        right[["date", "HomeTeam", "AwayTeam", "home_goals", "away_goals",
+               "referee", "referee_id"]],
+        on=["date", "HomeTeam", "AwayTeam"],
+        how="left",
+    )
+
+    scored = merged["referee"].notna()
+    agrees = (
+        (merged["FTHG"] == merged["home_goals"])
+        & (merged["FTAG"] == merged["away_goals"])
+    )
+    # A joined row whose score disagrees is a bad join, not a usable label.
+    merged.loc[scored & ~agrees, ["referee", "referee_id"]] = pd.NA
+
+    unmatched = merged[merged["referee"].isna()][
+        ["date", "Div", "season", "HomeTeam", "AwayTeam", "FTHG", "FTAG"]
+    ]
+    return merged, unmatched
