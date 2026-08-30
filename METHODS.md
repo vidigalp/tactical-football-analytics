@@ -158,6 +158,35 @@ fit. That one survived; the point is that it had to be tried.
 by Dawson, Dobson, Goddard and Wilson in 2007. Rediscovering a known result on more data is a
 contribution; presenting it as new is not.
 
+**Baseline sufficiency — what does a model with no team property already predict?**
+Before asking whether a pattern reflects something about a team, compute what it would look like
+if teams differed only in the means already known. Twice this has been the attack that killed a
+finding, and in both cases the earlier four attacks had all been passed.
+
+A second-half "swing" — a team's second-half goal difference minus its first-half — correlated with
+strength at r = +0.22, in the same direction in all eleven leagues. It is an identity. About 55.9%
+of goals are scored after half-time, a constant across every league (0.549-0.562) and 26 seasons.
+If a team's goals for and against both split at that constant `s`, then
+`swing = s(GF-GA) - (1-s)(GF-GA) = (2s-1)(GF-GA)`, so the swing is season goal difference rescaled
+by 0.118 and carries no team property at all. Subtracting exactly what the identity predicts leaves
+r = -0.04. The observed slope, 0.095, sits slightly *below* the arithmetic 0.118.
+
+Draw rate is genuinely non-monotone in strength — an inverted U, quadratic term negative in 11/11
+leagues. A Skellam distribution built only from each team's season goal means reproduces the same
+curve. Excess over that baseline: r = -0.048. Blowout rate, clean-sheet rate, failure-to-score rate
+and within-one-goal rate are all likewise fully accounted for by the means.
+
+The generalisation worth carrying: **any "share of X in period P" metric is algebraically exposed
+whenever the period split is near-constant across teams**, and any distributional-shape metric is
+exposed to the moments it is built from. Report the excess over the matched null, never the raw
+correlation. A cheap standing screen — resplit each team's totals under the league constant, or
+simulate from the fitted means, and compare — catches both.
+
+Note which attack *failed* here. Stratifying the swing by half-time score state inflated r from
++0.22 to +0.82, which reads as strong confirmation; the mechanical null reproduces the
+within-stratum values to two decimals. A control that conditions on a post-treatment outcome can
+manufacture the appearance of an effect, so a stratified result needs its own null.
+
 **Independent replication is the strongest form of this.** Where a finding matters, it is re-derived
 by a separate pipeline on a different subsample before publication. Twice in this project that
 process reversed the conclusion — and a reversal found before publishing is a success of the
