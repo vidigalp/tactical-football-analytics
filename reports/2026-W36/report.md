@@ -251,10 +251,37 @@ slices. The arithmetic is identical and so is the error.
 **Sporting.** The one club still separating, at 1.183 across three managers and with no unusual
 referee draw. Nobody was arguing about Sporting, which is part of why it is interesting.
 
-**Absolute versus relative quality.** Our strength measure is standardised within league, so a
-Celtic–St Mirren fixture scores as "high quality" on the same scale as Barcelona–Getafe. If the
-real driver is absolute quality, that would explain why the gradient varies as much as it does
-between leagues. Testable with UEFA country coefficients, and next.
+**Absolute versus relative quality: tested, and still open.** Our strength measure is standardised
+within league, so a Celtic–St Mirren fixture scores as "high quality" on the same scale as
+Barcelona–Getafe. The gradient does vary a lot between leagues, from −0.040 in Spain to −0.110 in
+Belgium, and that variation is real rather than noise: 91% of it survives correcting for how
+precisely each league's gradient is estimated.
+
+Absolute quality looked like the explanation and is not. Against UEFA association coefficients the
+gradient correlates at +0.61, but the association does not survive controlling for home advantage
+(+0.50, p = 0.14). Home advantage itself correlates at +0.79 across the eleven leagues, which is
+stronger, stable under leave-one-out, and survives correcting for having tried seven league-level
+covariates.
+
+It is also an artifact of aggregation. Splitting the same data into three-season blocks and asking
+whether a league's own gradient moves when its own home advantage moves gives **−0.168, p = 0.21**,
+with the sign negative in five of the six leagues that have enough blocks to check. The test can
+detect a correlation of 0.40 at 80% power, so it is not simply underpowered against a claimed 0.79.
+The same data, three levels:
+
+| Unit | n | correlation |
+|---|---|---|
+| League averages | 11 | **+0.791** |
+| Three-season blocks, pooled | 57 | +0.195 |
+| Three-season blocks, within league | 57 | **−0.168** |
+
+Home advantage fell across the panel from 0.349 goals per match in 2001 to 0.220 in 2025, with the
+crowd-free seasons visible as a trough. The gradient did not follow it.
+
+So the question stays open, and the aggregation lesson is the same one as Wrong (3) above: a
+correlation across eleven leagues is a correlation between eleven things that differ in many ways
+at once. This is exploratory rather than pre-registered, and it is recorded here as a question not
+answered rather than as a finding.
 
 **What we cannot resolve at all.** Whether the same foul is punished more harshly in a bigger
 match, or whether bigger matches simply contain more cardable fouls. Distinguishing those requires

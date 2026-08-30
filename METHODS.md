@@ -187,6 +187,23 @@ Note which attack *failed* here. Stratifying the swing by half-time score state 
 within-stratum values to two decimals. A control that conditions on a post-treatment outcome can
 manufacture the appearance of an effect, so a stratified result needs its own null.
 
+**Cross-sectional associations across few units.** A correlation computed across a handful of
+aggregate units is a correlation between things that differ in many ways at once, and it will
+often not survive being asked at a finer grain. Test it within units before believing it.
+
+The worked example cost nothing to find and would have cost a great deal to publish. Booking
+gradients differ genuinely between the eleven leagues, and across those eleven league averages the
+gradient correlates with home advantage at +0.79. It has every mark of a result: a plausible
+mechanism, stability under leave-one-out, and survival of a Bonferroni correction for the seven
+covariates tried. Splitting the same data into three-season blocks and asking whether a league's
+own gradient moves when its own home advantage moves gives -0.17, negative in five of six leagues,
+against a test able to detect 0.40 at 80% power. Pooled at block level it is +0.20. One dataset,
+three levels of aggregation, and the association is manufactured by the coarsest one.
+
+The prompt that exposed it is worth recording too, because it was not a statistical objection: the
+covariate varies from year to year, so why was it being used as a fixed league property? Asking
+whether something moves over time is often the cheapest route to asking whether the effect is real.
+
 **Independent replication is the strongest form of this.** Where a finding matters, it is re-derived
 by a separate pipeline on a different subsample before publication. Twice in this project that
 process reversed the conclusion — and a reversal found before publishing is a success of the
