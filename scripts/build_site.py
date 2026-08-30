@@ -97,6 +97,14 @@ def main() -> None:
             shutil.copytree(report.parent / "figures", figures, dirs_exist_ok=True)
         text = report.read_text()
         text = re.sub(r"\(figures/", f"({slug}/figures/", text)
+
+        # numbers.json is the provenance a study points at, so it has to be
+        # reachable from the published page and not only from the repository.
+        provenance = report.parent / "numbers.json"
+        if provenance.exists():
+            (DOCS / "studies" / slug).mkdir(parents=True, exist_ok=True)
+            shutil.copy2(provenance, DOCS / "studies" / slug / "numbers.json")
+            text = text.replace("](numbers.json)", f"]({slug}/numbers.json)")
         # Reports link to repo-root policy docs with ../../; inside the site
         # those pages sit one level up from weekly/.
         text = text.replace("](../../EDITORIAL.md)", "](../editorial.md)")
