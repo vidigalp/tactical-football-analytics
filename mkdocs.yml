@@ -58,6 +58,7 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Studies:
+      - "03 — The lever nobody pulls": studies/03-the-lever-nobody-pulls.md
       - "02 — A club that fouls with impunity, and three ways I was wrong": studies/02-fouling-with-impunity.md
       - "01 — What free football data can still tell you": studies/01-free-football-data.md
   - Method:

@@ -17,6 +17,7 @@ DOCS = ROOT / "docs"
 STUDY_SLUGS = {
     "2026-W35": "01-free-football-data",
     "2026-W36": "02-fouling-with-impunity",
+    "2026-W37": "03-the-lever-nobody-pulls",
 }
 
 PAGES = {
