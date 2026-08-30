@@ -8,6 +8,16 @@ extra:
   # banner is required. Left empty until then rather than shipping a
   # broken beacon.
   cf_analytics_token: ""
+  social:
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/pvidigal/
+      name: Pedro Vidigal on LinkedIn
+    - icon: fontawesome/brands/x-twitter
+      link: https://x.com/PedroCAVidigal
+      name: Pedro Vidigal on X
+    - icon: fontawesome/brands/github
+      link: https://github.com/vidigalp
+      name: Pedro Vidigal on GitHub
 
 copyright: Code MIT · Text, figures and derived data CC BY 4.0
 

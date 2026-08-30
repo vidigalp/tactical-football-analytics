@@ -66,9 +66,18 @@ What remains are three costs that compound:
 
 Both mechanisms for keeping the original week-numbered URLs alive are present, deliberately.
 `mkdocs-redirects` writes an HTML meta-refresh at each old path; `_redirects` declares a
-server-side 301. Cloudflare serves an existing static asset in preference to a redirect rule, so
-in practice the meta-refresh is what fires today — the rules are the fallback if those stubs are
-ever pruned from the build.
+server-side 301.
+
+**Corrected against the live site.** An earlier version of this document claimed Cloudflare serves
+an existing static asset in preference to a redirect rule, so the meta-refresh would be what fires.
+Testing the deployed site showed the opposite: the 301 fires and the static stub is never reached.
+
+The same test found the rules themselves were wrong. Cloudflare matched only the broad trailing
+splats — `/weekly/*` and `/*` worked, while `/weekly/2026-W36/*` and `/studies/*/figures/*` never
+did. Every archived week-numbered URL was landing on the studies index rather than its own study,
+and figures were served `max-age=0` rather than the intended year. Both files are now generated
+from `STUDY_SLUGS` with explicit paths and no wildcard except the final catch-all, and two tests
+assert it.
 
 A project whose premise is that cited artifacts stay reachable does not get to break its own
 links, so the old `figures/` directories are left in place too. `tests/test_site.py` asserts every

@@ -31,31 +31,39 @@ PAGES = {
 
 #: Server-side rules, emitted into ``docs/`` so mkdocs copies them verbatim.
 #:
-#: ``_redirects`` keeps URLs that were published under the old week numbering
-#: resolvable. ``mkdocs-redirects`` already writes an HTML meta-refresh at each
-#: of those paths, and Cloudflare serves an existing static asset in preference
-#: to a redirect rule, so today the meta-refresh is what fires; these are the
-#: fallback if those stubs are ever pruned. A project whose premise is that
-#: cited artifacts stay reachable does not get to break its own links.
-REDIRECTS = """\
-/weekly/2026-W35/*  /studies/01-free-football-data/  301
-/weekly/2026-W36/*  /studies/02-fouling-with-impunity/  301
-/weekly/*           /studies/  301
-"""
+#: Both files are generated from STUDY_SLUGS rather than written by hand, because
+#: the first hand-written version silently did nothing. Cloudflare matched only
+#: the broad trailing splats: ``/weekly/*`` and ``/*`` fired, while
+#: ``/weekly/2026-W36/*`` and ``/studies/*/figures/*`` never did. Every archived
+#: week-numbered URL therefore landed on the studies index instead of its own
+#: study, and figures were served ``max-age=0`` instead of the intended year.
+#: Explicit paths, no wildcard except the final catch-all, verified live.
 
-#: Figures are rewritten only by a rebuild, so they cache for a year. Nothing
-#: here is authenticated, so the header set is about not being framed or
-#: sniffed rather than about protecting a session.
-HEADERS = """\
-/*
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-  X-Frame-Options: DENY
-  Permissions-Policy: geolocation=(), microphone=(), camera=()
 
-/studies/*/figures/*
-  Cache-Control: public, max-age=31536000, immutable
-"""
+def _server_rules() -> tuple[str, str]:
+    """Return (redirects, headers) for the current set of studies."""
+    redirects = []
+    for week, slug in sorted(STUDY_SLUGS.items()):
+        target = f"/studies/{slug}/"
+        # Both forms: Cloudflare does not treat these as the same path.
+        redirects.append(f"/weekly/{week}   {target}  301")
+        redirects.append(f"/weekly/{week}/  {target}  301")
+    redirects.append("/weekly/*  /studies/  301")
+
+    headers = [
+        "/*",
+        "  X-Content-Type-Options: nosniff",
+        "  Referrer-Policy: strict-origin-when-cross-origin",
+        "  X-Frame-Options: DENY",
+        "  Permissions-Policy: geolocation=(), microphone=(), camera=()",
+        "",
+        "# Figures change only when a study is rebuilt, so they cache for a year.",
+    ]
+    for slug in sorted(STUDY_SLUGS.values()):
+        headers += [f"/studies/{slug}/figures/*",
+                    "  Cache-Control: public, max-age=31536000, immutable",
+                    ""]
+    return "\n".join(redirects) + "\n", "\n".join(headers) + "\n"
 
 
 def main() -> None:
@@ -119,8 +127,9 @@ def main() -> None:
     )
     (DOCS / "index.md").write_text(home)
 
-    (DOCS / "_redirects").write_text(REDIRECTS)
-    (DOCS / "_headers").write_text(HEADERS)
+    redirects, headers = _server_rules()
+    (DOCS / "_redirects").write_text(redirects)
+    (DOCS / "_headers").write_text(headers)
 
     print(f"site source assembled in {DOCS.relative_to(ROOT)}")
 

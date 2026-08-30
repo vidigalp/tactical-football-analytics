@@ -94,3 +94,40 @@ def test_server_rules_are_emitted_by_the_python_build() -> None:
     """Cloudflare reads these from the site root; mkdocs copies them from docs/."""
     body = (ROOT / "scripts" / "build_site.py").read_text()
     assert '"_redirects"' in body and '"_headers"' in body
+
+
+def _rules() -> tuple[str, str]:
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "build_site", ROOT / "scripts" / "build_site.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod._server_rules()
+
+
+def test_every_study_has_its_own_redirect_not_the_catch_all() -> None:
+    """The first version of these rules silently did nothing.
+
+    Cloudflare matched only the broad trailing splats, so every archived
+    week-numbered URL landed on the studies index rather than on its own study.
+    Anything published under an old URL has to reach the actual page.
+    """
+    redirects, _ = _rules()
+    for old in PUBLISHED_PATHS:
+        week = old.removeprefix("weekly/").removesuffix(".md")
+        target = redirect_maps()[old].removeprefix("studies/").removesuffix(".md")
+        for path in (f"/weekly/{week} ", f"/weekly/{week}/ "):
+            line = next((r for r in redirects.splitlines() if r.startswith(path)), None)
+            assert line, f"no redirect for {path.strip()}"
+            assert f"/studies/{target}/" in line, f"{path.strip()} does not reach its study"
+
+
+def test_figure_caching_uses_explicit_paths() -> None:
+    """A mid-path wildcard never matched, so figures were served max-age=0."""
+    _, headers = _rules()
+    assert "/studies/*/figures/*" not in headers, "mid-path wildcards do not match"
+    assert headers.count("max-age=31536000") >= 1
+    for slug in ("01-free-football-data", "02-fouling-with-impunity"):
+        assert f"/studies/{slug}/figures/*" in headers
