@@ -11,14 +11,22 @@ publication, and the report builder enforces that.
 
 ## Why this exists
 
-This project started from an AI-generated analysis of Portuguese league discipline. It contained
-an invented league table, a metric the model had coined but presented as established literature,
-and a discussion forum offered as a citation. Its headline statistic — a team at 31 fouls per card
-— came from a single card in four matches.
+It started with a viral post implying a club was being favoured by referees. Rather than argue, I
+went to check — and found the question was harder and more interesting than either side of the
+argument assumed.
+
+The first attempt, using an AI assistant, produced an invented league table, a metric the model had
+coined but presented as established literature, and a discussion forum offered as a citation. Its
+headline statistic — a team at 31 fouls per card — came from a single card in four matches.
+
+So there are two problems here, and the repo addresses both. Football arguments are a good source
+of research questions: current, widely cared about, and usually unchecked. And the tooling now
+available to answer them will confidently invent an answer if you let it.
 
 The interesting question is not whether models hallucinate. It is **what verification layer makes
-their output safe to act on**. This repo is one worked answer, applied to a subject where the
-errors are checkable.
+their output safe to act on** — and whether a partisan question can be answered neutrally enough
+to be worth reading. See [`EDITORIAL.md`](EDITORIAL.md) for how claims from controversies are
+handled.
 
 ## What's here
 
