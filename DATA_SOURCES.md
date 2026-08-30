@@ -121,12 +121,71 @@ a reason to hold a second source to a lower standard than the first.
 Anything unverifiable is left out and reported as a gap. A missing row costs coverage; an invented
 one costs the project its premise.
 
+## Event data — open, licensed, and historical only
+
+Foul location, foul timing and player-level cards were recorded here as unavailable. That was
+right about *current* seasons and wrong as a blanket claim, and the correction matters because it
+changes what the project can attempt.
+
+### Pappalardo et al. (2019) — CC BY 4.0
+
+The best-licensed football data this project has found, better than the primary source.
+
+- **Licence: CC BY 4.0**, confirmed through the figshare API on the Events, Matches and Referees
+  files individually rather than inferred from the collection page. Attribution is the only
+  condition; building a database, redistributing derived data and commercial use are all permitted.
+- **Coverage:** complete 2017-18 seasons of the Italian, English, Spanish, French and German first
+  divisions, plus Euro 2016 and the 2018 World Cup.
+- **Contents:** spatio-temporal events with pitch coordinates. Cards are tagged `1701` red, `1702`
+  yellow and `1703` second yellow — the separate second-yellow tag resolves the counting problem
+  study 01 documented, where English and Scottish totals fold the first yellow of a second-bookable
+  offence into the red.
+- **Referee identity is included**, which is the confounder we had to assemble from zerozero.pt for
+  Portugal.
+- Documented in a peer-reviewed data paper, [doi:10.1038/s41597-019-0247-7](https://doi.org/10.1038/s41597-019-0247-7),
+  itself CC BY 4.0. Cited as `pappalardo2019events`.
+
+**No Portugal**, and a single season, so it cannot answer club-level questions: 85% of the spread
+in a one-season booking index is sampling noise. It can answer whether foul context drives card
+probability at all, on roughly 48,000 fouls.
+
+### StatsBomb Open Data — free, but read the coverage carefully
+
+- **Terms:** the repository README states that anyone publishing research based on the data should
+  state StatsBomb as the source. A `LICENSE.pdf` accompanies it and is **image-only with no
+  extractable text**, so it has not been read here and no claim is made about what it contains.
+  Anyone relying on this source should read it first.
+- **Contents:** fouls carry `location`, `minute` and `second`, `player`, `position`, `card`, foul
+  `type`, plus `play_pattern` and a `counterpress` flag. The last two bear directly on tactical
+  fouling.
+- **Coverage is narrower than the season counts imply.** Measured from the repository:
+
+  | Competition | Seasons | Matches per season |
+  |---|---|---|
+  | La Liga | 18 | 48 — one club's fixtures, not a league |
+  | Champions League | 18 | 1 — finals only |
+  | Premier League | 2 | 209 |
+  | Serie A | 2 | 190, all twenty clubs |
+  | Ligue 1 | 3 | 145 |
+
+  A full domestic season is about 380 matches. Serie A, the Premier League and Ligue 1 are the
+  parts with broad team coverage; the La Liga series is built around a single player's career and
+  is not a sample of a league.
+
+Neither source covers Portugal, so the question that started this project stays out of reach.
+
 ## Not available at all
 
 Published in the README as a permanent guard, so no future contributor builds on a column that
 does not exist: pressures, tackles, interceptions, possession %, pass completion, progressive
-passes or carries, aerial duels, touches by zone, player-level fouls or cards, foul location, foul
-timing, offsides, woodwork, free kicks conceded, and any event-level data for current seasons.
+passes or carries, aerial duels, touches by zone, offsides, woodwork and free kicks conceded.
+
+**Corrected.** This list previously also claimed player-level fouls and cards, foul location and
+foul timing were unavailable outright. They are unavailable *from the sources this project ingests*
+and for *current* seasons and for Portugal, which is not the same statement. The open event data
+described above carries all three for the five largest leagues in 2017-18. The original wording was
+a claim about the world made from a search of a handful of sources, which is the error recorded in
+`METHODS.md` §4: absence of evidence in your own search is not evidence of absence.
 
 ## Attribution
 

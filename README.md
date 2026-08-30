@@ -72,9 +72,12 @@ uv run pytest                           # includes live DOI resolution
 
 Published here as a standing guard, because the documentation still implies otherwise.
 **Unavailable from free sources for current seasons:** possession %, pass completion, pressures,
-tackles, interceptions, progressive passes or carries, aerial duels, touches by zone, player-level
-fouls or cards, foul location, foul timing, offsides, woodwork, free kicks conceded, and any
-event-level data.
+tackles, interceptions, progressive passes or carries, aerial duels, touches by zone, offsides,
+woodwork and free kicks conceded.
+
+**Player-level fouls and cards, foul location and foul timing** are unavailable for current seasons
+and for Portugal, but not unavailable outright: Pappalardo et al. (2019) publish them under CC BY
+4.0 for the five largest leagues in 2017-18. See [`DATA_SOURCES.md`](DATA_SOURCES.md).
 
 **Referee identity** is available in England and Scotland only.
 
