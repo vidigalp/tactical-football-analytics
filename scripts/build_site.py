@@ -29,6 +29,35 @@ PAGES = {
 }
 
 
+#: Server-side rules, emitted into ``docs/`` so mkdocs copies them verbatim.
+#:
+#: ``_redirects`` keeps URLs that were published under the old week numbering
+#: resolvable. ``mkdocs-redirects`` already writes an HTML meta-refresh at each
+#: of those paths, and Cloudflare serves an existing static asset in preference
+#: to a redirect rule, so today the meta-refresh is what fires; these are the
+#: fallback if those stubs are ever pruned. A project whose premise is that
+#: cited artifacts stay reachable does not get to break its own links.
+REDIRECTS = """\
+/weekly/2026-W35/*  /studies/01-free-football-data/  301
+/weekly/2026-W36/*  /studies/02-fouling-with-impunity/  301
+/weekly/*           /studies/  301
+"""
+
+#: Figures are rewritten only by a rebuild, so they cache for a year. Nothing
+#: here is authenticated, so the header set is about not being framed or
+#: sniffed rather than about protecting a session.
+HEADERS = """\
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+/studies/*/figures/*
+  Cache-Control: public, max-age=31536000, immutable
+"""
+
+
 def main() -> None:
     DOCS.mkdir(exist_ok=True)
     (DOCS / "studies").mkdir(exist_ok=True)
@@ -85,6 +114,9 @@ def main() -> None:
         "](https://github.com/vidigalp/tactical-football-analytics/tree/main/references)",
     )
     (DOCS / "index.md").write_text(home)
+
+    (DOCS / "_redirects").write_text(REDIRECTS)
+    (DOCS / "_headers").write_text(HEADERS)
 
     print(f"site source assembled in {DOCS.relative_to(ROOT)}")
 

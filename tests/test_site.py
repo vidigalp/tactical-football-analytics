@@ -54,9 +54,29 @@ def test_cname_is_written_by_the_build() -> None:
 
 def test_cloudflare_build_script_matches_documented_settings() -> None:
     """DEPLOY.md tells a human what to type into the dashboard; keep it true."""
-    script = ROOT / "scripts" / "cf_build.sh"
-    assert script.exists()
-    body = script.read_text()
-    assert "mkdocs build --strict" in body, "a warning must fail the deploy, not ship"
-    assert "site/_redirects" in body and "site/_headers" in body
+    body = (ROOT / "scripts" / "cf_build.sh").read_text()
     assert "bash scripts/cf_build.sh" in (ROOT / "DEPLOY.md").read_text()
+    assert "mkdocs build --strict" in body, "a warning must fail the deploy, not ship"
+
+
+def test_deploy_is_gated_on_the_test_suite() -> None:
+    """The only thing making Git integration safe here.
+
+    Cloudflare builds independently of CI, so without this line a deploy ships
+    on a red test suite. Losing it would be silent, hence the test.
+    """
+    body = (ROOT / "scripts" / "cf_build.sh").read_text()
+    assert "set -euo pipefail" in body, "a failing test must abort the build"
+
+    # Commands only: the header comment names `mkdocs build` while explaining
+    # why this gate exists, and ordering must be judged on what actually runs.
+    commands = [ln for ln in body.splitlines() if ln.strip() and not ln.lstrip().startswith("#")]
+    ran = "\n".join(commands)
+    assert 'pytest -m "not network"' in ran
+    assert ran.index("pytest") < ran.index("mkdocs build"), "gate must precede the build"
+
+
+def test_server_rules_are_emitted_by_the_python_build() -> None:
+    """Cloudflare reads these from the site root; mkdocs copies them from docs/."""
+    body = (ROOT / "scripts" / "build_site.py").read_text()
+    assert '"_redirects"' in body and '"_headers"' in body

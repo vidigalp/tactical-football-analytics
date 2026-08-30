@@ -15,9 +15,17 @@ reliable way to lose an afternoon to a stale page.
 | Build output directory | `site` |
 | Root directory | `/` |
 
-No environment variables are needed. The build script installs `uv`, which downloads the pinned
-Python itself, so the site builds against the same interpreter as local and CI rather than
-whatever the build image ships.
+No environment variables and no repository secrets are needed — Git integration authorises
+Cloudflare directly, so there is no API token to store or rotate.
+
+`scripts/cf_build.sh` installs `uv`, which downloads the pinned Python itself, so the site builds
+against the same interpreter as local and CI rather than whatever the build image ships.
+
+**The test suite runs inside the build command**, before `mkdocs`. A failure exits non-zero and
+Cloudflare fails the deployment. This is the whole reason the build is a script: a repository whose
+premise is that claims are verified before publication should not have a publish path that
+bypasses its own verification. Network-marked tests, which resolve live DOIs, are excluded so a
+registrar outage cannot block a deploy; `ci.yml` runs those on their own schedule.
 
 Then **Custom domains → Set up a domain → `pedrovidigal.com`**, and add `www` as a redirect to the
 apex. Because the domain is already in this Cloudflare account, DNS and TLS are configured
@@ -33,6 +41,24 @@ Not capacity. The site is about 10 MB against a 1 GB ceiling either way.
 - **No DNS-only compromise.** GitHub Pages needs the Cloudflare proxy off, which means the CDN,
   caching and DDoS protection sit unused.
 - **One vendor** for domain, DNS, hosting and analytics.
+
+## Why Git integration rather than Direct Upload
+
+Direct Upload deploys from a GitHub Actions job with `wrangler`, which is fully scriptable and
+needs no dashboard step. It was rejected, and the reasoning is recorded because the first pass got
+it wrong.
+
+The argument for Direct Upload was that it puts the deploy downstream of `pytest`. That argument
+is void: the same gate works here by running the tests inside the build command, as above.
+
+What remains are three costs that compound:
+
+- Direct Upload is a **one-way door** — Cloudflare's documentation states a project created that
+  way can never switch to Git integration. Git integration is the reversible choice.
+- It requires a **`CLOUDFLARE_API_TOKEN` and account ID stored as repository secrets**, in
+  perpetuity, with rotation.
+- **Fork pull requests cannot read repository secrets**, so previews would fail silently for
+  outside contributors — which `CONTRIBUTING.md` invites.
 
 ## Redirects and headers
 
