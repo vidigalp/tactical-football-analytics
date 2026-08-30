@@ -1,0 +1,59 @@
+name: weekly
+
+# Refreshes data, re-runs the scan, and opens a PR with a draft.
+#
+# It deliberately does NOT publish. METHODS.md requires human corroboration for
+# a strong claim and a human interpretability review before anything ships, and
+# an automated post is precisely how this project would end up publishing the
+# kind of unchecked claim it exists to correct. The machine prepares; a person
+# decides.
+#
+# Only football-data.co.uk is touched here. FBref and Understat are barred from
+# CI on licensing grounds, and zerozero is harvested manually and rarely.
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"   # Mondays, after the weekend's matches are published
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --all-extras --dev
+
+      - name: Refresh match data
+        run: uv run python scripts/ingest_matches.py --to 2026
+
+      - name: Guard against a bad refresh
+        # A shrunken dataset or a broken schema must stop the run rather than
+        # quietly land in a PR.
+        run: uv run pytest -m "not network" -q
+
+      - name: Scan for candidates
+        run: |
+          uv run python scripts/scan_outliers.py | tee scan.txt
+          uv run python scripts/strength_effect.py >> scan.txt
+
+      - name: Rebuild figures
+        run: |
+          uv run python scripts/build_week01.py
+          uv run python scripts/build_discipline_story.py
+
+      - name: Open a draft PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: weekly/auto-refresh
+          title: "Weekly refresh: new data, rescanned candidates"
+          commit-message: "Weekly data refresh and candidate scan"
+          body-path: scan.txt
+          labels: weekly, needs-human-review
+          draft: true
