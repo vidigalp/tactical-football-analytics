@@ -43,6 +43,16 @@ def test_published_url_has_a_redirect(old: str) -> None:
 
 @pytest.mark.parametrize("old,new", sorted(redirect_maps().items()))
 def test_redirect_target_exists(old: str, new: str) -> None:
+    """Requires docs/ to have been assembled first.
+
+    docs/ is generated and gitignored, so on a clean checkout this cannot run
+    until `scripts/build_site.py` has been executed. A Cloudflare deploy failed
+    on exactly that, passing locally only because docs/ was already populated
+    from an earlier run.
+    """
+    assert DOCS.exists(), (
+        "docs/ has not been generated -- run `python scripts/build_site.py` first"
+    )
     assert (DOCS / new).exists(), f"{old} redirects to {new}, which does not exist"
 
 
@@ -74,6 +84,10 @@ def test_deploy_is_gated_on_the_test_suite() -> None:
     ran = "\n".join(commands)
     assert 'pytest -m "not network"' in ran
     assert ran.index("pytest") < ran.index("mkdocs build"), "gate must precede the build"
+    # docs/ is generated, so assembly has to happen before the tests read it.
+    assert ran.index("build_site.py") < ran.index("pytest"), (
+        "build_site.py must run before pytest, or tests that read docs/ fail on a clean clone"
+    )
 
 
 def test_server_rules_are_emitted_by_the_python_build() -> None:

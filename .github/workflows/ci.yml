@@ -17,6 +17,11 @@ jobs:
         with:
           enable-cache: true
       - run: uv sync --all-extras --dev
+      # docs/ is generated and gitignored, so a fresh checkout has none. Tests
+      # that inspect the site cannot run until it is assembled, and this must
+      # mirror scripts/cf_build.sh or CI and the deploy disagree about what
+      # passing means -- which is how six red builds went unnoticed.
+      - run: uv run python scripts/build_site.py
       - run: uv run ruff check .
       - run: uv run pytest -m "not network"
 

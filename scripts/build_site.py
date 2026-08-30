@@ -106,9 +106,13 @@ def main() -> None:
     home = home.replace("](ACKNOWLEDGEMENTS.md)", "](acknowledgements.md)")
     for week, slug in STUDY_SLUGS.items():
         home = home.replace(f"](reports/{week}/report.md)", f"](studies/{slug}.md)")
+    # Point at the newest study, not at a redirect stub: mkdocs-redirects
+    # synthesises weekly/* at build time, so they are not source pages and
+    # --strict rejects a link to one.
+    newest = STUDY_SLUGS[max(STUDY_SLUGS)]
     home = home.replace(
         "](reports/)",
-        "](weekly/2026-W35.md)",
+        f"](studies/{newest}.md)",
     ).replace(
         "](references/)",
         "](https://github.com/vidigalp/tactical-football-analytics/tree/main/references)",

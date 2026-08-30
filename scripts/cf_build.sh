@@ -16,12 +16,16 @@ export PATH="$HOME/.local/bin:$PATH"
 
 uv sync --all-extras --dev
 
+# docs/ is generated and gitignored, so it must be assembled before any test
+# that inspects it -- on a clean clone it does not exist. This is pure file
+# assembly from reports/; the publishing step still runs after the gate below.
+uv run python scripts/build_site.py
+
 # Network-marked tests resolve live DOIs. They are excluded here so a registrar
 # outage cannot block a deploy; ci.yml runs them on their own schedule.
 uv run ruff check .
 uv run pytest -m "not network"
 
-uv run python scripts/build_site.py
 uv run mkdocs build --strict
 
 echo "built $(find site -type f | wc -l | tr -d ' ') files"
