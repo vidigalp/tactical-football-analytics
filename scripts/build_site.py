@@ -98,6 +98,15 @@ def main() -> None:
             shutil.copytree(report.parent / "figures", figures, dirs_exist_ok=True)
         text = report.read_text()
         text = re.sub(r"\(figures/", f"({slug}/figures/", text)
+
+        # Any JSON sidecar a study links to as its provenance has to be
+        # reachable from the published page, not only from the repository.
+        # Copied by glob rather than by name so a new one cannot be forgotten:
+        # a missing sidecar fails mkdocs --strict and blocks the deploy.
+        for sidecar in sorted(report.parent.glob("*.json")):
+            (DOCS / "studies" / slug).mkdir(parents=True, exist_ok=True)
+            shutil.copy2(sidecar, DOCS / "studies" / slug / sidecar.name)
+            text = text.replace(f"]({sidecar.name})", f"]({slug}/{sidecar.name})")
         # Reports link to repo-root policy docs with ../../; inside the site
         # those pages sit one level up from weekly/.
         for source_page, target_page in PAGES.items():

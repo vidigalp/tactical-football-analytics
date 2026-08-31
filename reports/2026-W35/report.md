@@ -107,6 +107,12 @@ dropped. Free-kicks-conceded survived to 2017-18. All four are still in the docu
   from free sources for current seasons. Not difficult to obtain: absent. That list is in the README
   so no future contributor builds on a column that does not exist.
 
+**Added 2026-08-31.** That last point held for current seasons and was overstated as a general
+claim, which is worth marking here rather than only in the file it pointed at. Foul location, foul
+timing and player-level cards do exist for the five largest leagues in 2017-18, under CC BY 4.0,
+and study 03 is built on them. The audit above is still an accurate account of what
+football-data.co.uk carries; it was never an account of what exists.
+
 ## Confounders and limits
 
 This is an audit of **column presence**, not data quality. A column being present does not mean it
@@ -186,6 +192,6 @@ uv run python scripts/run_audit.py --from 2000 --to 2025
 
 ## Next
 
-The row-level completeness audit, then the first properly powered discipline model: England and
-Scotland with referee effects estimated directly, everywhere else with referee conditioned out
-within match.
+The discipline model came next and became study 02, built the way this audit forced: referee
+effects estimated directly where the column exists, and conditioned out within match everywhere
+else. The row-level completeness audit promised here has not been done, and is still owed.

@@ -194,6 +194,29 @@ silent on it and should not be quoted as though it were not.
 A high index is also not misconduct. Sporting commit fouls that draw cards more often than their
 foul count predicts. Why is a separate question this data cannot answer.
 
+## Is the index a property of the club at all?
+
+Sporting separating and Porto not raises a prior question. If the booking index were mostly noise,
+one club of twenty-six would separate anyway and it would be a different club next year.
+
+It is not mostly noise. Taking every pair of consecutive seasons a club played in the same league,
+2,528 pairs across all eleven, the index in one season correlates with the index in the next at
+**r = +0.324**, positive in **11 of 11 leagues** and ranging from +0.173 in Scotland to +0.427 in
+Italy. Something club-level carries over.
+
+The size is the caveat. Of the spread in club-season index values, **15% is a real club property**
+and the rest is the Poisson noise of one season's cards. The true between-club standard deviation
+is **0.051**, so a club one standard deviation better than average is booked about 5% below
+expectation.
+
+Both halves of that matter. A real, repeatable club effect exists, which is why it is worth
+measuring at all. It is small and it is buried in noise, which is why a single season's raw ratio is
+a bad way to find it — and why figure 4 above shows that raw ratio being beaten by ignoring the club
+entirely. A noisy estimate of a real quantity is still an estimate that should be pulled toward the
+mean.
+
+Produced by `scripts/booking_persistence.py`, alongside [`persistence.json`](persistence.json).
+
 ## The data lesson
 
 A result is not ready because it is significant. It is ready when a serious attempt to destroy it

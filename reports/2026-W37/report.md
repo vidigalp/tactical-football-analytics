@@ -174,6 +174,9 @@ out of reach at foul level.
 
 ## Reproduce this
 
+Every number above is written to [`facts.json`](facts.json) by the second command, so nothing here
+is typed by hand.
+
 ```bash
 uv run python scripts/ingest_events.py    # downloads and reduces the event logs
 uv run python scripts/build_week03.py     # figures and facts, offline
