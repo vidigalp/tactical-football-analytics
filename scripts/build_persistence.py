@@ -13,6 +13,9 @@ from tfa.viz import persistence, theme
 
 ROOT = Path(__file__).resolve().parents[1]
 
+#: The study these figures belong to.
+REPORT = "2026-W36"
+
 
 def main() -> None:
     directory = sorted((ROOT / "data" / "snapshots").glob("*-W*"))[-1]

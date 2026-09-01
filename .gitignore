@@ -17,8 +17,11 @@ data/understat/
 # Scratch
 scratch/
 *.tmp
-site/
 
 # Third-party bulk caches. CC BY 4.0 permits redistribution, but a 950 MB
 # extract does not belong in git; scripts/ingest_events.py re-fetches it.
 data/external/
+
+# Cloudflare tool cache. Holds the account id and the account's email
+# address, neither of which belongs in a public repository.
+.wrangler/

@@ -20,6 +20,12 @@ REPORTS = ROOT / "reports"
 #: ``![alt](figures/name.png)`` as written in a report.
 FIGURE = re.compile(r"!\[[^\]]*\]\((figures/[^)]+)\)")
 
+#: A script named anywhere in a report or the README.
+SCRIPT = re.compile(r"\b(scripts/[A-Za-z0-9_]+\.py)\b")
+
+#: A JSON provenance sidecar a study links to as the source of its numbers.
+SIDECAR = re.compile(r"\]\((facts|persistence|numbers|chart)\.json\)")
+
 
 def reports() -> list[Path]:
     return sorted(REPORTS.glob("*/report.md"))
@@ -60,3 +66,44 @@ def test_report_shows_at_least_one_figure(report: Path) -> None:
     answered its own central question.
     """
     assert FIGURE.findall(report.read_text()), f"{report.parent.name} shows no figures"
+
+
+def documents() -> list[Path]:
+    """Every file that tells a reader how to reproduce something."""
+    return [ROOT / "README.md", *reports()]
+
+
+def script_references() -> list[tuple[Path, str]]:
+    return [
+        (doc, match)
+        for doc in documents()
+        for match in dict.fromkeys(SCRIPT.findall(doc.read_text()))
+    ]
+
+
+@pytest.mark.parametrize(
+    "document,script", script_references(), ids=lambda v: getattr(v, "name", v)
+)
+def test_named_script_exists(document: Path, script: str) -> None:
+    """A reproduce block naming a deleted script fails silently.
+
+    The repository shipped a workflow that called ``scripts/build_site.py`` for
+    days after that script was removed. It never ran, so nothing complained.
+    Instructions rot the same way and are read by people rather than machines.
+    """
+    assert (ROOT / script).exists(), (
+        f"{document.name} names {script}, which does not exist"
+    )
+
+
+def test_there_are_script_references() -> None:
+    """Guard the guards: a broken regex would make the test above vacuous."""
+    assert len(script_references()) >= 4
+
+
+@pytest.mark.parametrize("report", reports(), ids=lambda p: p.parent.name)
+def test_linked_sidecar_exists(report: Path) -> None:
+    """A study pointing at its own provenance should point at a file."""
+    for name in SIDECAR.findall(report.read_text()):
+        path = report.parent / f"{name}.json"
+        assert path.exists(), f"{report.parent.name} links {name}.json, which does not exist"

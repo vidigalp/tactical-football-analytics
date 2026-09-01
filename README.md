@@ -60,6 +60,14 @@ handled.
 
 ## Latest
 
+**[Week 3 — The lever nobody pulls](reports/2026-W37/report.md)**
+
+Whether a foul is punished depends enormously on where and when it happens: 31.4% carded in a
+team's own defensive fifth against 8.9% in the attacking fifth, and 6.5% in the opening quarter of
+an hour against 25.6% after ninety minutes. Across 98 clubs in five leagues, nobody exploits it.
+Club average foul positions span 48 to 58 on a hundred-point pitch, a tenth of the range the
+gradient covers, and where a club fouls does not predict how often it is carded.
+
 **[Week 2 — A club that fouls with impunity, and the three ways I was wrong about it](reports/2026-W36/report.md)**
 
 A viral post implied a club was being favoured by referees. Checking it produced a striking
@@ -76,10 +84,18 @@ while the columns describing the match went from 0 to 12 and stopped moving in 2
 
 ## Reproduce it
 
+Everything runs offline from the committed snapshot. Only the test suite touches the network, to
+confirm every citation still resolves to the paper it claims.
+
 ```bash
 uv sync --all-extras --dev
-uv run python scripts/build_week01.py   # offline, from the committed snapshot
-uv run pytest                           # includes live DOI resolution
+
+uv run python scripts/build_week01.py            # study 01: the data audit
+uv run python scripts/build_discipline_story.py  # study 02: figures and the club table
+uv run python scripts/booking_persistence.py     # study 02: season-to-season persistence
+uv run python scripts/build_week03.py            # study 03: figures, facts and chart series
+
+uv run pytest                                    # includes live DOI resolution
 ```
 
 ## What free football data cannot do (2026)

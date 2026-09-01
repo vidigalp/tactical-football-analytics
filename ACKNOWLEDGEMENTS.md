@@ -54,7 +54,7 @@ Full references, each with a resolvable DOI, are in [`references/references.bib`
 
 ## Open-source tooling
 
-pandas, NumPy, SciPy, matplotlib, Arrow, `uv`, ruff, pytest and MkDocs — all maintained by people
+pandas, NumPy, SciPy, matplotlib, Arrow, `uv`, ruff and pytest — all maintained by people
 who mostly are not paid for it.
 
 ## Sources we deliberately did not use
