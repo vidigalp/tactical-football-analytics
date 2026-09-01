@@ -52,10 +52,9 @@ has a dedicated regression test against synthetic data with known `τ`.
 For a beta-binomial, reliability is `r(n) = n/(n + n₀)` where `n₀ = α+β` — so **the stabilisation
 point is the prior sample size**, obtained free from the model already fitted.
 
-**Correction, 2026-08-30.** An earlier version of this document claimed there is no peer-reviewed
-football-specific stabilisation work. That was wrong, and it is exactly the error this project
-exists to prevent — a novelty claim made from not having found something rather than from having
-looked properly.
+There is peer-reviewed football-specific stabilisation work, and this project spent a fortnight
+believing there was not. The claim came from not having found it rather than from having looked
+properly, which is exactly the error the rest of this document exists to prevent.
 
 The question has been asked. O'Donoghue and Ponting, *Equations for the Number of Matches Required
 for Stable Performance Profiles* (2005), is literally it. Johnson, Murphy and Bower (2010),
@@ -212,6 +211,22 @@ method, not a failure of it.
 
 ## 12. Corrections
 
-Errata are published, never silently edited. Reports are versioned; the tracker is append-only and
-git-diffable; a correction appends a row and marks the superseded one. Retracting a finding in
-public is treated as a credibility asset.
+**A report presents the current analysis, and the repository holds every version it has had.**
+
+Corrections are not silent, and they are not footnotes either. This repository is public, every
+change is a commit, and each commit message states what the number was, what it became, and how the
+error was found. That record is complete, permanent and far more informative than an inline note,
+and it is the reason a report does not need to carry its own changelog.
+
+What a report must not do is accumulate. A page that reads as a sequence of revisions asks the
+reader to reconstruct the argument from its own history, and the version they are shown should be
+the one that survived. So a corrected figure is simply the figure, and `git log -p` on the file is
+the erratum.
+
+Two things this does not license. A conclusion that reversed is stated as a reversal in the report
+itself, because that is part of the analysis rather than a change to it: study 02 is built around
+three of them and says so in its title. And a retraction is published as a retraction, prominently,
+never absorbed into a rewrite.
+
+Retracting a finding in public remains a credibility asset. Presenting a finding as though it had
+never been wrong, when the wrongness is itself the lesson, is not.

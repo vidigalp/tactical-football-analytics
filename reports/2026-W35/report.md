@@ -103,15 +103,13 @@ dropped. Free-kicks-conceded survived to 2017-18. All four are still in the docu
   referee, so a within-match comparison removes referee strictness exactly without ever observing
   it. That is the model this project will use, and it exists because of a data constraint rather
   than a statistical preference.
-- Any metric depending on possession, pressures, passing or event location is **not available**
-  from free sources for current seasons. Not difficult to obtain: absent. That list is in the README
-  so no future contributor builds on a column that does not exist.
-
-**Added 2026-08-31.** That last point held for current seasons and was overstated as a general
-claim, which is worth marking here rather than only in the file it pointed at. Foul location, foul
-timing and player-level cards do exist for the five largest leagues in 2017-18, under CC BY 4.0,
-and study 03 is built on them. The audit above is still an accurate account of what
-football-data.co.uk carries; it was never an account of what exists.
+- Any metric depending on possession, pressures or passing is **not available** from free sources
+  for current seasons. Not difficult to obtain: absent. That list is in the README so no future
+  contributor builds on a column that does not exist.
+- **Foul location, foul timing and player-level cards** are absent here and from every current
+  season, but they are not absent from the world. Pappalardo et al. publish them for the five
+  largest leagues in 2017-18 under CC BY 4.0, and study 03 is built on them. This audit is an
+  account of what football-data.co.uk carries, which is not the same as an account of what exists.
 
 ## Confounders and limits
 
@@ -124,11 +122,9 @@ dissent, time-wasting, bench cards — while the natural denominator for a card 
 I have not verified row-level completeness within files. That is a separate audit, and it is still
 owed.
 
-**Added 2026-09-01.** The snapshot has since been extended through the 2026-27 season, giving 190
-usable league-seasons against the 179 reported above. The audit's figures are unchanged because
-they are scoped to 2000-01 through 2025-26, and re-probing that window reproduces 286 files and 179
-usable with no per-cell differences. The 2026-27 files carry 113 columns against 2025's 131, so the
-widening trend in finding 4 gains a data point rather than losing one.
+The figures above cover 2000-01 through 2025-26. The committed snapshot now runs one season
+further, to 190 usable league-seasons, and the 2026-27 files carry 113 columns against 2025's 131.
+The widening in finding 4 therefore gains a data point rather than losing one.
 
 ## The data lesson
 

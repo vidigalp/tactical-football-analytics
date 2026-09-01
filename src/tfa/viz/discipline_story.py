@@ -224,3 +224,156 @@ def shrinkage_validation(scores: dict[str, float], path: Path, *,
         sample=f"{n_pairs:,} consecutive club-season pairs, 11 leagues",
         source="football-data.co.uk", snapshot=snapshot,
     ))
+
+
+def context_all_leagues(profile: pd.DataFrame, path: Path, *, snapshot: str,
+                        highlight: str = "P1") -> list[Path]:
+    """The same gradient in every league, with the one under discussion picked out.
+
+    The Portugal-only version invites the obvious objection that Portugal is
+    peculiar. Eleven lines answer it in a way a sentence claiming monotonicity
+    cannot: the reader can see every one of them slope the same way.
+
+    ``profile`` is indexed by league with one column per strength band.
+    """
+    bands = list(profile.columns)
+    x = np.arange(len(bands))
+
+    fig, ax = plt.subplots(figsize=(theme.DOUBLE_COLUMN, 4.2))
+    ax.axhline(1.0, color=theme.MUTED, linewidth=0.8, linestyle="--", zorder=1)
+
+    for league in profile.index:
+        if league == highlight:
+            continue
+        ax.plot(x, profile.loc[league].to_numpy(float), color=theme.PALETTE[0],
+                alpha=0.34, linewidth=1.3, zorder=2)
+
+    median = profile.median(axis=0).to_numpy(float)
+    ax.plot(x, median, color=theme.INK, linewidth=2.0, zorder=4,
+            marker="o", markersize=4, label="median of eleven leagues")
+
+    if highlight in profile.index:
+        ax.plot(x, profile.loc[highlight].to_numpy(float), color=theme.PALETTE[1],
+                linewidth=2.2, zorder=5, marker="s", markersize=4.5,
+                label="Portugal, the league in question")
+
+    monotone = int(sum(profile.loc[i].is_monotonic_decreasing for i in profile.index))
+    ends = int(sum(profile.loc[i].iloc[0] > profile.loc[i].iloc[-1] for i in profile.index))
+    # Both numbers, because they differ and the weaker one is the honest headline.
+    ax.annotate(
+        f"underdog end above favourite end in {ends} of {len(profile)}\n"
+        f"strictly monotone across all five bands in {monotone}\n"
+        f"median {median[0]:.3f} to {median[-1]:.3f}",
+        xy=(0.03, 0.05), xycoords="axes fraction", fontsize=7.5,
+        color=theme.MUTED, va="bottom")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([b.replace(" ", "\n") for b in bands], fontsize=8)
+    ax.set_xlabel("Pre-match position, from the betting odds")
+    ax.set_ylabel("Yellows received\n÷ yellows expected")
+    ax.set_title("Every league punishes the underdog more, not just Portugal")
+    theme.grid(ax, axis="y")
+    ax.legend(loc="upper right", frameon=False, fontsize=7.5)
+
+    return theme.save(fig, path, theme.Stamp(
+        metric="Booking index by strength band, one line per league",
+        sample=f"{len(profile)} divisions, all clubs pooled within each",
+        source="football-data.co.uk",
+        snapshot=snapshot))
+
+
+def cards_per_foul(curve: pd.DataFrame, path: Path, *, snapshot: str) -> list[Path]:
+    """Why an expectation proportional to fouls misprices the teams in question.
+
+    ``expected = rate x fouls`` looks like a definition. Drawn against the data
+    it is visibly a claim: the observed rate falls as fouls rise, so a flat line
+    through the origin overprices the low-foul teams and underprices the rest.
+
+    ``curve`` has columns fouls, rate, lo, hi.
+    """
+    fig, ax = plt.subplots(figsize=(theme.DOUBLE_COLUMN, 3.8))
+
+    ax.fill_between(curve.fouls, curve.lo, curve.hi, color=theme.PALETTE[0],
+                    alpha=0.16, zorder=2)
+    ax.plot(curve.fouls, curve.rate, color=theme.PALETTE[0], linewidth=2.0,
+            marker="o", markersize=3.6, zorder=4, label="observed")
+
+    # The proportional model asserts one rate for every foul count.
+    flat = float((curve.rate * curve.weight).sum() / curve.weight.sum())
+    ax.axhline(flat, color=theme.PALETTE[1], linewidth=1.8, linestyle="--",
+               zorder=3, label="what a proportional model assumes")
+
+    # Offsets in points, not data units: the first version put one label behind
+    # the title and the other below the x-axis.
+    low = curve.iloc[0]
+    high = curve.iloc[-1]
+    ax.annotate(
+        f"{low.rate:.3f} per foul\nat {low.fouls:.0f} fouls",
+        xy=(low.fouls, low.rate), xytext=(14, -6), textcoords="offset points",
+        ha="left", va="top", fontsize=7.5, color=theme.MUTED)
+    ax.annotate(
+        f"{high.rate:.3f} at {high.fouls:.0f}",
+        xy=(high.fouls, high.rate), xytext=(-10, 14), textcoords="offset points",
+        ha="right", va="bottom", fontsize=7.5, color=theme.MUTED)
+
+    ax.set_xlabel("Fouls committed in the match")
+    ax.set_ylabel("Cards received\nper foul")
+    ax.set_title("Cards are not proportional to fouls, so the flat line misprices both ends")
+    theme.grid(ax, axis="y")
+    ax.legend(loc="upper right", frameon=False, fontsize=7.5)
+
+    return theme.save(fig, path, theme.Stamp(
+        metric="Cards per foul by the team's foul count in that match, 95% Poisson intervals",
+        sample="Eleven divisions, 2000-2026, all clubs pooled",
+        source="football-data.co.uk",
+        snapshot=snapshot))
+
+
+def opponent_test(terciles: pd.DataFrame, path: Path, *, snapshot: str,
+                  highlight: str = "P1") -> list[Path]:
+    """Hold the club fixed, split its own matches by who it played.
+
+    The cheapest way to show the effect belongs to the fixture rather than the
+    club: club identity is differenced out, and the index still rises with the
+    quality of the opposition in every league.
+
+    ``terciles`` is indexed by league with columns weak, mid, strong.
+    """
+    labels = ["weakest third", "middle third", "strongest third"]
+    x = np.arange(3)
+
+    fig, ax = plt.subplots(figsize=(theme.SINGLE_COLUMN + 2.6, 3.8))
+    ax.axhline(1.0, color=theme.MUTED, linewidth=0.8, linestyle="--", zorder=1)
+
+    for league in terciles.index:
+        if league == highlight:
+            continue
+        ax.plot(x, terciles.loc[league].to_numpy(float), color=theme.PALETTE[0],
+                alpha=0.34, linewidth=1.3, zorder=2)
+
+    median = terciles.median(axis=0).to_numpy(float)
+    ax.plot(x, median, color=theme.INK, linewidth=2.0, marker="o", markersize=4,
+            zorder=4, label="median of eleven leagues")
+    if highlight in terciles.index:
+        ax.plot(x, terciles.loc[highlight].to_numpy(float), color=theme.PALETTE[1],
+                linewidth=2.2, marker="s", markersize=4.5, zorder=5, label="Portugal")
+
+    rising = int(sum(terciles.loc[i].is_monotonic_increasing for i in terciles.index))
+    ax.annotate(f"rises in {rising} of {len(terciles)} leagues\n"
+                f"median {median[0]:.3f} to {median[-1]:.3f}",
+                xy=(0.03, 0.86), xycoords="axes fraction", fontsize=7.5,
+                color=theme.MUTED, va="top")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([label.replace(" ", "\n") for label in labels], fontsize=8)
+    ax.set_xlabel("Quality of the opponent")
+    ax.set_ylabel("The club's own\nbooking index")
+    ax.set_title("The same club is booked more against better opposition")
+    theme.grid(ax, axis="y")
+    ax.legend(loc="lower right", frameon=False, fontsize=7.5)
+
+    return theme.save(fig, path, theme.Stamp(
+        metric="Booking index within club, by opponent-strength tercile",
+        sample=f"{len(terciles)} divisions, terciles taken within each season",
+        source="football-data.co.uk",
+        snapshot=snapshot))

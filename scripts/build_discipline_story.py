@@ -70,6 +70,77 @@ def main() -> None:
     ctx["lo"], ctx["hi"] = [b[0] for b in bounds], [b[1] for b in bounds]
     written += story.context_effect(ctx, out / "fig1-context-effect", snapshot=stamp)
 
+    # The same gradient across every division, so the Portugal figure above
+    # cannot be read as a quirk of one league. Names are scoped to this block:
+    # `tm` and `rows` below belong to the Portuguese figures and reassigning
+    # them here silently emptied figures 2 and 3.
+    def league_profile(directory: Path) -> pd.DataFrame:
+        per_league = []
+        for code, group in load_matches(directory).groupby("Div"):
+            side = to_team_match(group)
+            era = side.groupby("season", as_index=False).agg(
+                f=("fouls", "sum"), y=("yellows", "sum"))
+            era["lg_ypf"] = era.y / era.f
+            side = side.merge(era[["season", "lg_ypf"]], on="season")
+            side["exp_era"] = side.fouls * side.lg_ypf
+            side["band"] = pd.cut(side.strength_diff, BANDS, labels=NAMES)
+            per_league.append(
+                side.groupby("band", observed=True)
+                .apply(lambda g: g.yellows.sum() / g.exp_era.sum(), include_groups=False)
+                .rename(code)
+            )
+        return pd.DataFrame(per_league).reindex(columns=NAMES).dropna()
+
+    written += story.context_all_leagues(
+        league_profile(directory), out / "fig6-context-all-leagues", snapshot=stamp)
+
+    def cards_per_foul_curve(directory: Path) -> pd.DataFrame:
+        """Observed cards per foul against the team's foul count in that match."""
+        side = to_team_match(load_matches(directory))
+        band = pd.cut(side.fouls, [0, 6, 8, 10, 12, 14, 16, 18, 20, 40],
+                      include_lowest=True)
+        grouped = side.groupby(band, observed=True).agg(
+            fouls=("fouls", "mean"), n=("fouls", "size"),
+            cards=("yellows", "sum"), total=("fouls", "sum"))
+        grouped = grouped[grouped.n >= 200]
+        grouped["rate"] = grouped.cards / grouped.total
+        lo, hi = [], []
+        for cards, total in zip(grouped.cards, grouped.total, strict=True):
+            bounds = ci(cards, total)
+            lo.append(bounds[0])
+            hi.append(bounds[1])
+        grouped["lo"], grouped["hi"] = lo, hi
+        grouped["weight"] = grouped.total
+        return grouped.reset_index(drop=True)
+
+    written += story.cards_per_foul(
+        cards_per_foul_curve(directory), out / "fig7-cards-per-foul", snapshot=stamp)
+
+    def opponent_terciles(directory: Path) -> pd.DataFrame:
+        """A club's own index, split by the strength of who it faced."""
+        per_league = []
+        for code, group in load_matches(directory).groupby("Div"):
+            side = to_team_match(group)
+            era = side.groupby("season", as_index=False).agg(
+                f=("fouls", "sum"), y=("yellows", "sum"))
+            era["lg_ypf"] = era.y / era.f
+            side = side.merge(era[["season", "lg_ypf"]], on="season")
+            side["exp_era"] = side.fouls * side.lg_ypf
+            # Opponent quality is the opponent's own season strength, so the
+            # split is about who they played and not about that one match.
+            quality = side.groupby(["season", "team"])["strength_diff"].mean().rename("oq")
+            side = side.merge(quality, left_on=["season", "opponent"], right_index=True)
+            side["tercile"] = side.groupby("season")["oq"].transform(
+                lambda s: pd.qcut(s, 3, labels=["weak", "mid", "strong"], duplicates="drop"))
+            row = side.groupby("tercile", observed=True).apply(
+                lambda g: g.yellows.sum() / g.exp_era.sum(), include_groups=False)
+            per_league.append(row.rename(code))
+        return pd.DataFrame(per_league).reindex(
+            columns=["weak", "mid", "strong"]).dropna()
+
+    written += story.opponent_test(
+        opponent_terciles(directory), out / "fig8-opponent-test", snapshot=stamp)
+
     tm = tm.merge(ctx[["band", "multiplier"]], on="band", how="left")
     tm["expected"] = tm.exp_era * tm.multiplier.fillna(1.0)
 

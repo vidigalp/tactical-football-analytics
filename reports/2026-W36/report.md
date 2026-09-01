@@ -54,8 +54,14 @@ match. In Portugal, the league the question was about and the one the figure sho
 underdog is booked at **1.122** times its foul count and a heavy favourite at **0.851**. A 32%
 swing, with no club identity involved.
 
-The pattern is not Portuguese. It is monotone in all eleven leagues, median heavy underdog 1.112
-against median heavy favourite 0.865.
+![The same gradient in every league](figures/fig6-context-all-leagues.png)
+
+The pattern is not Portuguese. The underdog end sits above the favourite end in **all eleven
+leagues**, median 1.098 against 0.857.
+
+Strict monotonicity across all five bands holds in seven of them. Germany, France, Italy and Spain
+each tick up by less than 0.01 between the two underdog bands, which are also their smallest
+samples. The direction is everywhere; the perfectly clean staircase is not.
 
 Dominant clubs are favourites most weeks. So roughly half of Porto's apparent leniency was being
 the better side, which they share with every strong club in Europe.
@@ -63,6 +69,8 @@ the better side, which they share with every strong club in Europe.
 ## Wrong (2): the expectation model was misspecified
 
 The expectation assumed cards are proportional to fouls: *expected = rate × fouls*. They are not.
+
+![Cards per foul against foul count](figures/fig7-cards-per-foul.png)
 
 Fitting `cards = a + b × fouls` per league-season gives an intercept worth 13% to 47% of mean
 cards, depending on the competition. Observed cards per foul falls monotonically from 0.195 at six
@@ -93,17 +101,19 @@ index for the **opponents**.
 When a dominant club plays, the other team is booked more per foul too, and the two are close to
 independent. A club-level story predicts the second correlation is zero. It is not.
 
-The within-club version is cleaner still. Holding the club fixed and splitting its matches by
+The within-club version is cleaner still. Holding the club fixed and splitting its own matches by
 opponent quality:
 
-| Opponent | Booking index |
-|---|---|
-| Weakest third | 0.984 |
-| Middle third | 0.993 |
-| **Strongest third** | **1.025** |
+![Booking index by opponent quality](figures/fig8-opponent-test.png)
 
-65% of 246 clubs are booked more per foul when they face better opposition. Porto's opponents run
-at 1.155, Celtic's at 1.057.
+| Opponent | Portugal | Median of eleven leagues |
+|---|---|---|
+| Weakest third | 0.937 | 0.937 |
+| Middle third | 0.974 | 0.994 |
+| **Strongest third** | **1.092** | **1.088** |
+
+It rises in **11 of 11** leagues. Club identity is differenced out here, so this is the same side,
+playing the same way, booked differently according to who is at the other end of it.
 
 So the correct statement is not *"dominant clubs are booked more."* It is:
 
@@ -165,13 +175,6 @@ Adjusting for era, match situation and the actual official on the pitch:
 Produced by `scripts/portugal_referee_table.py`, with all 26 clubs in
 [`referee_table.json`](referee_table.json).
 
-**Corrected 2026-09-01.** This table was first published from analysis never committed as code, and
-the figures moved by up to 0.010 when it was rebuilt as a script: Porto read 0.989 and now reads
-0.999, Sporting read 1.183 and now reads 1.179. No conclusion changes, and the two
-diagnostics above reproduce exactly. A headline nobody can re-derive is the same failure that put a
-wrong-signed correlation into Wrong (3) below, so the script is the authority and these are its
-numbers.
-
 Porto sit at 0.999, indistinguishable from average. One club of twenty-six separates from
 expectation, and it is not the one in the original claim.
 
@@ -208,20 +211,16 @@ silent on it and should not be quoted as though it were not.
 A high index is also not misconduct. Sporting commit fouls that draw cards more often than their
 foul count predicts. Why is a separate question this data cannot answer.
 
-## The season in progress, as of 2026-08-31
+## The season being played
 
-**Added 2026-09-01. Claim level L1, and it does not resolve the pre-registered test below.**
+Everything above measures ten completed seasons. The season in progress is a separate question, and
+worth asking separately, because four matchweeks cannot revise a ten-season estimate but they can
+still be extraordinary.
 
-Everything above measures ten completed seasons. This is the season being played, which is a
-different thing and is reported separately for that reason. Snapshot `2026-W36`,
-33 matches, produced by `scripts/season_status.py` alongside
-[`season_status.json`](season_status.json) with all 18 clubs. Study 02's own analysis still rests
-on snapshot `2026-W35` and is unchanged; snapshots are dated and additive, so both remain
-reproducible.
-
-The situation multiplier is taken from completed seasons and not refitted on four matchweeks:
-heavy favourites 0.830, favourites 0.941, even 1.036, underdogs 1.085, heavy underdogs 1.103.
-Letting four matches set their own baseline would defeat the point.
+Portugal through matchweek 4, snapshot `2026-W36`, 33 matches. The situation multiplier comes from
+the completed seasons and is deliberately not refitted here: heavy favourites 0.830, favourites
+0.941, even 1.036, underdogs 1.085, heavy underdogs 1.103. Letting four matches set their own
+baseline would defeat the point of having one.
 
 | Club | Matches | Fouls | Yellows | Expected | Index | 95% interval | BH |
 |---|---|---|---|---|---|---|---|
@@ -237,14 +236,16 @@ Note how close that is to the threshold. The era-only model gives an adjusted p 
 for the fact that Porto are favourites nearly quadruples it. Both numbers are reported because the
 difference between them is the entire subject of Wrong (1) above.
 
-**What this is not.** Four matches. The interval on Porto's index runs from 0.003 to 0.668, and
-this project's own finding is that 85% of the spread in a single season's booking index is sampling
-noise. A striking early number arriving and feeling conclusive is exactly the situation the
-pre-registered test was sealed to handle, and it is not resolved here. The test counts matchweeks 4
-to 10; one is in.
+So it is not an ordinary early-season fluctuation. It survives the screen built to dismiss those.
 
-**What it is.** No longer dismissable as an ordinary early-season fluctuation. It survives the
-multiplicity screen designed to kill exactly that, which was not true a fortnight ago.
+It is also four matches. The interval on Porto's index runs from 0.003 to 0.668, which admits
+almost anything, and the finding two sections below is that 85% of the spread in a single season's
+booking index is sampling noise. A striking number arriving early and feeling conclusive is the
+exact situation
+[the pre-registered test](https://github.com/vidigalp/tactical-football-analytics/blob/main/preregistrations/2026-08-30-porto-booking-index.md)
+was written to handle, on 30 August, before this data existed. It counts Porto's yellows across
+matchweeks 4 to 10: seven or fewer reads as real, twelve or more as noise. One matchweek is in and
+the count is zero. It resolves on 15 November, whichever way that falls.
 
 ## Is the index a property of the club at all?
 
