@@ -1,0 +1,200 @@
+{
+  "clubs": 18,
+  "latest_date": "2026-08-31",
+  "matches": 33,
+  "naive_significant": 1,
+  "season": "2627",
+  "situation_multiplier": {
+    "even": 1.036,
+    "favourite": 0.941,
+    "heavy favourite": 0.83,
+    "heavy underdog": 1.103,
+    "underdog": 1.085
+  },
+  "snapshot": "2026-W36",
+  "survive_bh": [
+    "Porto"
+  ],
+  "table": {
+    "Academico Viseu": {
+      "bh": 1.0,
+      "expected": 10.35,
+      "fouls": 53,
+      "hi": 1.901,
+      "index": 1.063,
+      "lo": 0.53,
+      "matches": 4,
+      "yellows": 11
+    },
+    "Alverca": {
+      "bh": 1.0,
+      "expected": 9.83,
+      "fouls": 51,
+      "hi": 1.87,
+      "index": 1.017,
+      "lo": 0.488,
+      "matches": 4,
+      "yellows": 10
+    },
+    "Arouca": {
+      "bh": 1.0,
+      "expected": 7.77,
+      "fouls": 33,
+      "hi": 2.367,
+      "index": 1.287,
+      "lo": 0.617,
+      "matches": 4,
+      "yellows": 10
+    },
+    "Benfica": {
+      "bh": 1.0,
+      "expected": 6.05,
+      "fouls": 41,
+      "hi": 1.193,
+      "index": 0.33,
+      "lo": 0.04,
+      "matches": 3,
+      "yellows": 2
+    },
+    "Casa Pia": {
+      "bh": 1.0,
+      "expected": 10.02,
+      "fouls": 50,
+      "hi": 1.439,
+      "index": 0.698,
+      "lo": 0.281,
+      "matches": 4,
+      "yellows": 7
+    },
+    "Estoril": {
+      "bh": 1.0,
+      "expected": 9.36,
+      "fouls": 48,
+      "hi": 1.541,
+      "index": 0.748,
+      "lo": 0.301,
+      "matches": 4,
+      "yellows": 7
+    },
+    "Estrela": {
+      "bh": 1.0,
+      "expected": 7.13,
+      "fouls": 34,
+      "hi": 2.023,
+      "index": 0.982,
+      "lo": 0.395,
+      "matches": 3,
+      "yellows": 7
+    },
+    "Famalicao": {
+      "bh": 1.0,
+      "expected": 8.97,
+      "fouls": 50,
+      "hi": 1.758,
+      "index": 0.892,
+      "lo": 0.385,
+      "matches": 4,
+      "yellows": 8
+    },
+    "Gil Vicente": {
+      "bh": 1.0,
+      "expected": 7.31,
+      "fouls": 44,
+      "hi": 1.786,
+      "index": 0.82,
+      "lo": 0.301,
+      "matches": 3,
+      "yellows": 6
+    },
+    "Guimaraes": {
+      "bh": 1.0,
+      "expected": 10.77,
+      "fouls": 66,
+      "hi": 1.828,
+      "index": 1.022,
+      "lo": 0.51,
+      "matches": 4,
+      "yellows": 11
+    },
+    "Maritimo": {
+      "bh": 1.0,
+      "expected": 10.08,
+      "fouls": 57,
+      "hi": 1.431,
+      "index": 0.695,
+      "lo": 0.279,
+      "matches": 4,
+      "yellows": 7
+    },
+    "Moreirense": {
+      "bh": 1.0,
+      "expected": 7.92,
+      "fouls": 42,
+      "hi": 2.485,
+      "index": 1.389,
+      "lo": 0.693,
+      "matches": 3,
+      "yellows": 11
+    },
+    "Nacional": {
+      "bh": 1.0,
+      "expected": 9.56,
+      "fouls": 47,
+      "hi": 1.509,
+      "index": 0.732,
+      "lo": 0.294,
+      "matches": 4,
+      "yellows": 7
+    },
+    "Porto": {
+      "bh": 0.0806,
+      "expected": 8.34,
+      "fouls": 58,
+      "hi": 0.668,
+      "index": 0.12,
+      "lo": 0.003,
+      "matches": 4,
+      "yellows": 1
+    },
+    "Rio Ave": {
+      "bh": 1.0,
+      "expected": 8.15,
+      "fouls": 31,
+      "hi": 1.432,
+      "index": 0.614,
+      "lo": 0.199,
+      "matches": 4,
+      "yellows": 5
+    },
+    "Santa Clara": {
+      "bh": 1.0,
+      "expected": 9.96,
+      "fouls": 56,
+      "hi": 1.582,
+      "index": 0.803,
+      "lo": 0.347,
+      "matches": 4,
+      "yellows": 8
+    },
+    "Sp Braga": {
+      "bh": 1.0,
+      "expected": 4.57,
+      "fouls": 31,
+      "hi": 2.242,
+      "index": 0.876,
+      "lo": 0.239,
+      "matches": 2,
+      "yellows": 4
+    },
+    "Sp Lisbon": {
+      "bh": 1.0,
+      "expected": 7.94,
+      "fouls": 53,
+      "hi": 1.986,
+      "index": 1.008,
+      "lo": 0.435,
+      "matches": 4,
+      "yellows": 8
+    }
+  }
+}

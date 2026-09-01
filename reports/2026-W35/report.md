@@ -121,7 +121,14 @@ identified: English and Scottish yellow-card counts exclude the first yellow of 
 offence, while other countries count both; and the yellow-card column counts *all* yellows —
 dissent, time-wasting, bench cards — while the natural denominator for a card rate is fouls alone.
 
-I have not verified row-level completeness within files. That is a separate audit, and it is next.
+I have not verified row-level completeness within files. That is a separate audit, and it is still
+owed.
+
+**Added 2026-09-01.** The snapshot has since been extended through the 2026-27 season, giving 190
+usable league-seasons against the 179 reported above. The audit's figures are unchanged because
+they are scoped to 2000-01 through 2025-26, and re-probing that window reproduces 286 files and 179
+usable with no per-cell differences. The 2026-27 files carry 113 columns against 2025's 131, so the
+widening trend in finding 4 gains a data point rather than losing one.
 
 ## The data lesson
 

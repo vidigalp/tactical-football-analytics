@@ -208,6 +208,44 @@ silent on it and should not be quoted as though it were not.
 A high index is also not misconduct. Sporting commit fouls that draw cards more often than their
 foul count predicts. Why is a separate question this data cannot answer.
 
+## The season in progress, as of 2026-08-31
+
+**Added 2026-09-01. Claim level L1, and it does not resolve the pre-registered test below.**
+
+Everything above measures ten completed seasons. This is the season being played, which is a
+different thing and is reported separately for that reason. Snapshot `2026-W36`,
+33 matches, produced by `scripts/season_status.py` alongside
+[`season_status.json`](season_status.json) with all 18 clubs. Study 02's own analysis still rests
+on snapshot `2026-W35` and is unchanged; snapshots are dated and additive, so both remain
+reproducible.
+
+The situation multiplier is taken from completed seasons and not refitted on four matchweeks:
+heavy favourites 0.830, favourites 0.941, even 1.036, underdogs 1.085, heavy underdogs 1.103.
+Letting four matches set their own baseline would defeat the point.
+
+| Club | Matches | Fouls | Yellows | Expected | Index | 95% interval | BH |
+|---|---|---|---|---|---|---|---|
+| **Porto** | 4 | **58** | **1** | 8.34 | **0.120** | [0.003, 0.668] | **0.081** |
+| Benfica | 3 | 41 | 2 | 6.05 | 0.330 | [0.040, 1.193] | 1.000 |
+
+Porto were heavy favourites in all four matches, so the situation adjustment already works in their
+favour and takes the expectation from 10.04 down to 8.34. One yellow against that is still
+far out. Across all 18 clubs, **1 survives a Benjamini-Hochberg screen at FDR 0.10**, and it is
+Porto at an adjusted p of 0.081.
+
+Note how close that is to the threshold. The era-only model gives an adjusted p of 0.017; adjusting
+for the fact that Porto are favourites nearly quadruples it. Both numbers are reported because the
+difference between them is the entire subject of Wrong (1) above.
+
+**What this is not.** Four matches. The interval on Porto's index runs from 0.003 to 0.668, and
+this project's own finding is that 85% of the spread in a single season's booking index is sampling
+noise. A striking early number arriving and feeling conclusive is exactly the situation the
+pre-registered test was sealed to handle, and it is not resolved here. The test counts matchweeks 4
+to 10; one is in.
+
+**What it is.** No longer dismissable as an ordinary early-season fluctuation. It survives the
+multiplicity screen designed to kill exactly that, which was not true a fortnight ago.
+
 ## Is the index a property of the club at all?
 
 Sporting separating and Porto not raises a prior question. If the booking index were mostly noise,
@@ -334,6 +372,7 @@ uv run python scripts/build_discipline_story.py   # figures 1-4, and the club ta
 uv run python scripts/aggregation_levels.py       # figure 5, the aggregation test
 uv run python scripts/strength_effect.py          # the cross-league association
 uv run python scripts/portugal_referee_table.py  # the club table above
+uv run python scripts/season_status.py            # the season in progress
 uv run python scripts/referee_decomposition.py
 uv run python scripts/manager_travel.py
 ```
