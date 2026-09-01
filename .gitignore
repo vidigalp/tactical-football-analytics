@@ -17,7 +17,6 @@ data/understat/
 # Scratch
 scratch/
 *.tmp
-docs/
 site/
 
 # Third-party bulk caches. CC BY 4.0 permits redistribution, but a 950 MB

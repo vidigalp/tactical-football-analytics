@@ -83,6 +83,39 @@ def main() -> None:
     }
     (ROOT / "reports" / REPORT / "facts.json").write_text(
         json.dumps(facts, indent=2, sort_keys=True) + "\n")
+
+    # Series for the interactive chart on the site. Emitted here rather than
+    # computed in the browser so the figure and the chart cannot disagree.
+    def series(column: str, edges: list[float], labels: list[str]) -> list[dict]:
+        binned = pd.cut(fouls[column], edges, labels=labels, include_lowest=True)
+        grouped = fouls.groupby(binned, observed=True).agg(
+            fouls=("carded", "size"), carded=("carded", "sum"))
+        rows = []
+        for label, row in grouped.iterrows():
+            n, k = int(row.fouls), int(row.carded)
+            rate = k / n
+            # Wilson bounds: the tails are sparse and a normal interval there
+            # can run below zero.
+            z, centre = 1.96, (k / n + 1.96 ** 2 / (2 * n)) / (1 + 1.96 ** 2 / n)
+            half = z * np.sqrt(rate * (1 - rate) / n + z * z / (4 * n * n)) / (1 + z * z / n)
+            rows.append({"band": str(label), "fouls": n,
+                         "rate": round(100 * rate, 2),
+                         "lo": round(100 * max(centre - half, 0), 2),
+                         "hi": round(100 * min(centre + half, 1), 2)})
+        return rows
+
+    chart = {
+        "position": series("x", [0, 20, 35, 50, 65, 80, 100],
+                           ["0-20", "20-35", "35-50", "50-65", "65-80", "80-100"]),
+        "minute": series("minute", [0, 15, 30, 45, 60, 75, 90, 130],
+                         ["0-15", "15-30", "30-45", "45-60", "60-75", "75-90", "90+"]),
+        "lateral": series("lat", [0, 10, 20, 30, 40, 50],
+                          ["0-10", "10-20", "20-30", "30-40", "40-50"]),
+        "baseRate": round(100 * float(fouls.carded.mean()), 2),
+        "totalFouls": int(len(fouls)),
+    }
+    (ROOT / "reports" / REPORT / "chart.json").write_text(
+        json.dumps(chart, indent=2) + "\n")
     for key, value in facts.items():
         print(f"  {key:<22}{value:.4f}" if isinstance(value, float) else f"  {key:<22}{value}")
 

@@ -5,6 +5,20 @@
 Learning football tactics through statistics — reproducibly, with citations, and honest about
 uncertainty.
 
+**This repository is the research: data, analysis, figures and prose.** It does not build a
+website. The studies are published at [pedrovidigal.com](https://pedrovidigal.com), whose source
+lives in [vidigalp/pedrovidigal.com](https://github.com/vidigalp/pedrovidigal.com) and which reads
+this repository as a pinned submodule. That pin is deliberate: the site records the exact commit of
+the research it published, so a page and the script behind its numbers can never drift apart.
+
+Everything needed to reproduce a study is here and needs no part of the site:
+
+```bash
+uv sync --all-extras --dev
+uv run pytest
+uv run python scripts/build_week03.py    # figures and facts for study 03
+```
+
 Findings are published when they survive their own tests, not on a schedule. Some weeks that means
 a result; some weeks it means an explicit *nothing cleared the bar*, with the near-misses shown.
 A cadence promise would eventually be met by lowering the bar, and the bar is the point.
