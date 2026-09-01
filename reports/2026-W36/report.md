@@ -147,18 +147,32 @@ On this measure, no.
 Portugal has no referee data in the standard source, so we assembled it. 2,737 match-official rows
 across ten seasons, 98.4% joined to our matches and validated on scorelines rather than names.
 Portuguese referees vary as much as English ones, with booking multipliers from 0.76 to 1.32 among
-those with 40+ matches, but that variation is not concentrated on anyone. Every club's mean referee
-draw falls between 0.979 and 1.019.
+the 32 with 40+ matches, but that variation is not concentrated on anyone. Every club's mean
+referee draw falls between 0.969 and 1.020.
+
+Each club is judged against officials measured without that club. Otherwise a side that draws one
+official often helps set the baseline it is being judged against, and a real effect partly cancels
+itself.
 
 Adjusting for era, match situation and the actual official on the pitch:
 
 | Club | Booking index | 95% interval |
 |---|---|---|
-| **Sporting** | **1.183** | [1.100, 1.271] |
-| Benfica | 1.001 | [0.923, 1.084] |
-| Porto | 0.989 | [0.916, 1.067] |
+| **Sporting** | **1.179** | [1.097, 1.267] |
+| Benfica | 1.003 | [0.926, 1.084] |
+| Porto | 0.999 | [0.927, 1.076] |
 
-Porto sit at 0.989, indistinguishable from average. One club of twenty-six separates from
+Produced by `scripts/portugal_referee_table.py`, with all 26 clubs in
+[`referee_table.json`](referee_table.json).
+
+**Corrected 2026-09-01.** This table was first published from analysis never committed as code, and
+the figures moved by up to 0.010 when it was rebuilt as a script: Porto read 0.989 and now reads
+0.999, Sporting read 1.183 and now reads 1.179. No conclusion changes, and the two
+diagnostics above reproduce exactly. A headline nobody can re-derive is the same failure that put a
+wrong-signed correlation into Wrong (3) below, so the script is the authority and these are its
+numbers.
+
+Porto sit at 0.999, indistinguishable from average. One club of twenty-six separates from
 expectation, and it is not the one in the original claim.
 
 ![Clubs before and after adjustment](figures/fig2-clubs-adjusted.png)
@@ -271,7 +285,7 @@ slices. The arithmetic is identical and so is the error.
 
 ## Open questions
 
-**Sporting.** The one club still separating, at 1.183 across three managers and with no unusual
+**Sporting.** The one club still separating, at 1.179 across three managers and with no unusual
 referee draw. Nobody was arguing about Sporting, which is part of why it is interesting.
 
 **Absolute versus relative quality: tested, and still open.** Our strength measure is standardised
@@ -319,6 +333,7 @@ foul-level video coding. That is the honest limit here.
 uv run python scripts/build_discipline_story.py   # figures 1-4, and the club table
 uv run python scripts/aggregation_levels.py       # figure 5, the aggregation test
 uv run python scripts/strength_effect.py          # the cross-league association
+uv run python scripts/portugal_referee_table.py  # the club table above
 uv run python scripts/referee_decomposition.py
 uv run python scripts/manager_travel.py
 ```

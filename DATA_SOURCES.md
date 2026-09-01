@@ -174,6 +174,27 @@ probability at all, on roughly 48,000 fouls.
 
 Neither source covers Portugal, so the question that started this project stays out of reach.
 
+## zerozero.pt is currently returning 403
+
+**Checked 2026-09-01.** Every request returns HTTP 403: the homepage, the referee endpoints, and
+`robots.txt` itself, under both this project's user agent and a browser one. This is site-wide
+rather than a rate limit.
+
+The committed referee data is unaffected and stays where it is: 2,737 rows through 2026-08-29,
+harvested when access was permitted, joined on scorelines and validated. Study 02 rests on it and
+remains reproducible.
+
+What it costs going forward is the ability to extend that coverage. The pre-registered test in
+`preregistrations/2026-08-30-porto-booking-index.md` specifies a secondary referee analysis over
+matchweeks 4 to 10; unless access returns, that part cannot be run and the resolution will say so
+rather than quietly dropping it.
+
+There is a compliance point here that matters more than the access one. This project's position was
+that zerozero's `robots.txt` permitted the endpoints we used. **That file is now unreadable, so the
+claim can no longer be checked, and an assertion about someone's crawl policy that cannot be
+verified is not one to keep making.** No further harvesting will be attempted until the terms can be
+read again.
+
 ## Not available at all
 
 Published in the README as a permanent guard, so no future contributor builds on a column that
