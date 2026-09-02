@@ -106,7 +106,7 @@ never tried cannot pass as one tried and survived.
 | Specification | **run — survived** | The variance decomposition assumes cards are Poisson given expectation. That is the assumption the matched null then tests directly rather than asserting, which is why the null is the load-bearing part of this report. |
 | Aggregation | **run — survived** | The unit is the club-season, which is the unit the claim is about. The pairing is within club and within division, so no part of the correlation comes from comparing clubs across leagues — forbidden here by §8 and by Phatak et al. |
 | Adjustment coarseness | **run — survived** | The expectation behind the index is a continuous fit in pre-match strength rather than banded, after study 02 established that five bands under-correct the strongest clubs. |
-| Prior work | **run — landed** | Split-half reliability and empirical-Bayes shrinkage are old. O'Donoghue and Ponting (2005) and Johnson, Murphy and Bower (2010) ask the stabilisation question for football directly. This project spent a fortnight believing that literature did not exist; §4 of `METHODS.md` records the error. |
+| Prior work | **run — landed** | Split-half reliability and empirical-Bayes shrinkage are old, and Johnson, Murphy and Bower (2010) ask the stabilisation question for association football directly — though that record is a two-page conference abstract, so it establishes the question was asked rather than answered. This project spent a fortnight asserting no such literature existed; §4 of `METHODS.md` records the error. A second precedent, O'Donoghue and Ponting (2005), is named in `METHODS.md` but sits in `references/unverified.bib` because no DOI has been located, so it is not cited in support of anything here. |
 | Baseline sufficiency | **run — survived** | The matched Poisson null above. Observed +0.324 against a null maximum of +0.056 over 2,000 draws. |
 | Cross-sectional, few units | **not applicable** | The correlation is across 2,528 club-season pairs, not across a handful of aggregate units. The per-league breakdown is reported as eleven separate estimates rather than pooled. |
 
@@ -115,7 +115,7 @@ never tried cannot pass as one tried and survived.
 | Leg | Source |
 |---|---|
 | **Data** | 58,013 completed-season matches across 11 leagues, 2000–2025, committed snapshot `2026-W35` |
-| **Football literature** | Phatak, Rein and Memmert (2021) on Simpson's paradox in discipline ratios; O'Donoghue and Ponting (2005) on stable performance profiles |
+| **Football literature** | Phatak, Rein and Memmert (2021) on Simpson's paradox in discipline ratios; Johnson, Murphy and Bower (2010) on stable performance profiles in football |
 | **Data-science literature** | Efron and Morris (1975) on empirical Bayes; Brown (2008) on out-of-sample shrinkage in sport; Gelman et al. on partial pooling |
 
 ## References

@@ -56,11 +56,19 @@ There is peer-reviewed football-specific stabilisation work, and this project sp
 believing there was not. The claim came from not having found it rather than from having looked
 properly, which is exactly the error the rest of this document exists to prevent.
 
-The question has been asked. O'Donoghue and Ponting, *Equations for the Number of Matches Required
-for Stable Performance Profiles* (2005), is literally it. Johnson, Murphy and Bower (2010),
-[doi:10.1016/j.jsams.2009.10.244](https://doi.org/10.1016/j.jsams.2009.10.244), do it for A-League
-football. Both are barely cited, and both pre-date event data entirely — but they exist, and any
-reviewer in this field will know them.
+The question has been asked. Johnson, Murphy and Bower (2010),
+[doi:10.1016/j.jsams.2009.10.244](https://doi.org/10.1016/j.jsams.2009.10.244), ask it for A-League
+football; the record has since been confirmed against Crossref, which corrected the first author's
+initial and established that it is a two-page conference abstract in a supplement rather than a
+full paper. O'Donoghue and Ponting, *Equations for the Number of Matches Required for Stable
+Performance Profiles* (2005), is the closer precedent, and it remains in
+[`references/unverified.bib`](references/unverified.bib) because no DOI or stable record has been
+located — so it is named here as a work this project has not verified, and it may not be cited in
+support of a claim.
+
+Both are barely cited and both pre-date event data entirely. The honest summary is therefore
+narrower than "the literature exists": the question was asked, thinly, twenty years ago, and one of
+the two references cannot yet be confirmed at all.
 
 What is defensible is the **method**, not the question: split-half reliability with empirical-Bayes
 shrinkage, applied to modern rate metrics and to referee-level decision rates. Those searches do
