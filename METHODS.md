@@ -146,7 +146,8 @@ A result is not ready because it is significant. It is ready when a genuine atte
 has failed. Before publication, every finding is attacked on the six fronts below, and each
 attempt is reported in the study whether or not it succeeded. A study carries a table naming every
 attack with a status of run, skipped or not-applicable, so an attack that was never tried cannot
-pass as one that was tried and survived.
+pass as one that was tried and survived. `test_every_attack_has_a_status` asserts that every report
+carries a row for all six with an account attached, so a report cannot go quiet about one.
 
 **Specification.** What does the model assume that the data might not support? Assumptions that
 look like arithmetic are the dangerous ones — this project shipped an expectation of
@@ -240,3 +241,38 @@ never absorbed into a rewrite.
 
 Retracting a finding in public remains a credibility asset. Presenting a finding as though it had
 never been wrong, when the wrongness is itself the lesson, is not.
+
+## 13. Numeral provenance
+
+**Every number in a report traces to a committed artifact written by a script, not to a terminal.**
+
+This is the rule that most of the errors in this repository's history violated. A number was
+computed once, read off a screen, typed into prose, and then the code moved and the prose did not.
+That produced a published `1.183` against a table's `1.179`, a p-value nobody could reproduce, a
+correlation quoted at `+0.486` after it had become `+0.484`, and a provenance claim that was itself
+false.
+
+So `test_every_numeral_is_bound` requires each claim-carrying numeral in a report to round-match a
+value in one of that report's own JSON sidecars, at the precision the numeral is written to — a
+report saying `0.051` is bound by a stored `0.05128`, and one saying `15%` by `0.1516`. Anything
+that genuinely cannot be bound goes in `reports/unbound.toml` with a written reason, and the size of
+that allowlist is itself asserted, because a growing allowlist means the check is being evaded
+rather than satisfied.
+
+`test_named_script_writes_a_sidecar` closes the other half: a script a report tells the reader to
+run must leave its numbers behind in a file. Ingest scripts are exempt through an explicit map with
+reasons, since their artifact is the snapshot itself.
+
+**A report binds against its own sidecars only.** Letting reports bind against each other's would
+mean a stale cross-reference still passes, which is exactly how one study came to quote `0.989` for
+a value another had moved to `1.002`. Cross-study references are allow-listed and therefore visible.
+
+Two limitations, stated because a check whose blind spots are undocumented invites false confidence:
+
+- Only decimals and thousands-grouped numbers are checked. A bare small integer cannot be bound
+  against a bag of values without matching one by coincidence, and a check that passes numbers
+  having no source is worse than no check at all. Study 01, whose numerals are all bare counts, is
+  therefore unguarded by this.
+- Matching is on magnitude, so a sign flip passes. The sign error this project published would not
+  have been caught here; it was caught by re-deriving the quantity in a separate script, which
+  remains the only real defence against getting a number's meaning wrong rather than its digits.

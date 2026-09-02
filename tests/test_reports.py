@@ -358,3 +358,71 @@ def test_named_script_writes_a_sidecar(report: Path, script: str) -> None:
 def test_there_are_script_cases() -> None:
     """Guard the guards."""
     assert len(report_script_cases()) >= 10
+
+
+# ---------------------------------------------------------------------------
+# Pressure tests
+# ---------------------------------------------------------------------------
+
+#: The six attacks METHODS.md section 11 requires. Named here so that adding a
+#: seventh to the contract fails every report until each one answers it.
+ATTACKS = (
+    "Specification",
+    "Aggregation",
+    "Adjustment coarseness",
+    "Prior work",
+    "Baseline sufficiency",
+    "Cross-sectional, few units",
+)
+
+#: A status a report may declare for an attack. "skipped" is deliberately
+#: available: the purpose of the table is that an attack nobody tried reads as
+#: untried rather than as survived.
+STATUSES = ("run", "skipped", "not applicable")
+
+
+def pressure_section(report: Path) -> str:
+    text = report.read_text()
+    match = re.search(r"^## Pressure tests\n(.*?)^## ", text, re.S | re.M)
+    return match.group(1) if match else ""
+
+
+@pytest.mark.parametrize("report", reports(), ids=lambda p: p.parent.name)
+def test_report_has_a_pressure_test_table(report: Path) -> None:
+    """Section 11 lists six attacks. Applying four and staying quiet about the
+    other two is indistinguishable, to a reader, from applying six.
+
+    That was the live state: baseline sufficiency was absent from both findings,
+    and section 11 says it is the attack that killed two earlier ones.
+    """
+    assert pressure_section(report), (
+        f"{report.parent.name} has no '## Pressure tests' section"
+    )
+
+
+@pytest.mark.parametrize(
+    "report,attack",
+    [(r, a) for r in reports() for a in ATTACKS],
+    ids=lambda v: getattr(v, "name", v),
+)
+def test_every_attack_has_a_status(report: Path, attack: str) -> None:
+    section = pressure_section(report)
+    row = next(
+        (line for line in section.splitlines() if line.startswith(f"| {attack} ")),
+        None,
+    )
+    assert row is not None, (
+        f"{report.parent.name} names no row for the '{attack}' attack"
+    )
+    assert any(status in row for status in STATUSES), (
+        f"{report.parent.name}'s '{attack}' row declares no status from {STATUSES}"
+    )
+    # A status with nothing after it is the silence this table exists to remove.
+    # The bar is low on purpose: "Nothing is adjusted for." is the complete and
+    # honest account for a report that fits no model, and demanding more would
+    # buy padding rather than substance.
+    cells = [c.strip() for c in row.strip().strip("|").split("|")]
+    assert len(cells) >= 3, f"{report.parent.name}'s '{attack}' row is malformed"
+    assert len(cells[2]) >= 20, (
+        f"{report.parent.name}'s '{attack}' row gives no account of what happened"
+    )

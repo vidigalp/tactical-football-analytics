@@ -159,6 +159,20 @@ every rendered bibliography, and is what any process that half-remembers a refer
 Checking that a DOI exists is not enough. The check has to compare what came back against what was
 claimed, and it stays in CI for that reason.
 
+## Pressure tests
+
+Per `METHODS.md` §11. This report audits what a source publishes rather than asserting a property
+of a football team, so four of the six attacks have nothing to attack.
+
+| Attack | Status | What happened |
+|---|---|---|
+| Specification | **not applicable** | No model is fitted. Every number is a count of files, columns or seasons. |
+| Aggregation | **run — survived** | The unit is the league-season file, which is the unit the claim is about. Counting at the league level instead would hide that coverage arrived league by league over seventeen years. |
+| Adjustment coarseness | **not applicable** | Nothing is adjusted for. |
+| Prior work | **run — survived** | No published audit of this source's coverage was found. The site's own `notes.txt` over-advertises several columns, which is why the audit reads live headers instead. |
+| Baseline sufficiency | **not applicable** | No team property is claimed, so there is no matched null to compare against. |
+| Cross-sectional, few units | **not applicable** | No correlation across aggregate units is reported. |
+
 ## Tri-anchor
 
 Nothing is published here without all three.

@@ -140,6 +140,22 @@ The general form: before attributing an outcome gap to a behaviour, measure the 
 behaviour. Pricing tiers, staffing patterns, model thresholds, retry policies. A steep response
 curve is worth nothing if everyone is standing on the same point of it.
 
+## Pressure tests
+
+Per `METHODS.md` §11. Two of the six were not run, and saying so is the point of the table.
+
+| Attack | Status | What happened |
+|---|---|---|
+| Specification | **run — survived** | Card probability is modelled as logistic in position, minute and score state rather than as a rate per foul, so the intercept problem that broke study 02 cannot arise. The model is still additive in those terms and would miss an interaction between them. |
+| Aggregation | **run — landed** | This *is* the study. The gradient is enormous at the level of the individual foul and absent at the level of the club, and the whole finding is that the two do not meet. |
+| Adjustment coarseness | **skipped** | Position enters as a quadratic in `x` and a linear term in lateral distance. A finer basis, or the pitch as a surface, might recover a club effect the quadratic cannot see. Not attempted. |
+| Prior work | **run — survived** | Searched for published work on club-level exploitation of the card-position gradient and found none. Absence in one search is not absence in the literature, which §4 of `METHODS.md` records this project learning the hard way. |
+| Baseline sufficiency | **skipped** | The central null result, r = −0.14 for mean foul position against card rate, has no matched null. What r would arise if clubs differed *only* in the placement ranges they actually occupy, 48 to 58 on a hundred-point pitch, is not computed. Until it is, "no club exploits this" is not separated from "the spread is too narrow for any club to exploit it". |
+| Cross-sectional, few units | **not applicable** | No claim rests on a correlation across a handful of aggregate units. The 98-club correlation is the finding being reported as null, not evidence for a mechanism. |
+
+The two gaps are recorded rather than repaired because repairing them changes what the study
+claims, and this study's claim is already a null.
+
 ## Tri-anchor
 
 | Anchor | Source |

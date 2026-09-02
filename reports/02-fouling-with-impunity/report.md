@@ -269,6 +269,11 @@ It is not mostly noise. Taking every pair of consecutive seasons a club played i
 **r = +0.324**, positive in **11 of 11 leagues** and ranging from +0.172 in Scotland to +0.427 in
 Italy. Something club-level carries over.
 
+Before reading anything into that, the correlation needs a null. Resampling every club-season's
+cards from Poisson(expected), holding each club's expectations and fixtures exactly as they were, a
+world in which clubs differ in nothing produces a correlation of **+0.056 at its most extreme over
+2,000 draws**, against the observed +0.324. The carry-over is not arithmetic.
+
 The size is the caveat. Of the spread in club-season index values, **15% is a real club property**
 and the rest is the Poisson noise of one season's cards. The true between-club standard deviation
 is **0.051**, so a club one standard deviation better than average is booked about 5% below
@@ -314,6 +319,23 @@ response to a noisy estimate is to pull it toward the mean rather than to rank o
 The version that transfers: when a metric is an average over a group, ask whether the effect
 belongs to the group or to the situations the group is in. Cohorts, segments, cost centres, model
 slices. The arithmetic is identical and so is the error.
+
+## Pressure tests
+
+`METHODS.md` §11 attacks a finding on six fronts before it is published. The point of tabulating
+them is that an attack never tried cannot pass as one tried and survived.
+
+| Attack | Status | What happened |
+|---|---|---|
+| Specification | **run — landed** | The expectation was `cards = rate x fouls`, proportional through the origin. Measured, the intercept is 13% to 47% of mean cards by league. Because dominant clubs foul *less*, that misspecification inflated exactly the clubs the finding was about. |
+| Aggregation | **run — landed** | Recomputed the index for the *opponents*. It moves with the club's, so the effect belongs to the fixture. This is Wrong (3). |
+| Adjustment coarseness | **run — survived** | Five strength bands under-corrected the strongest clubs. Redone as a continuous fit; the association strengthened. |
+| Prior work | **run — landed** | Dawson, Dobson, Goddard and Wilson (2007) published a strength gradient in cards. What may be new here is conditioning on fouls, not the gradient. |
+| Baseline sufficiency | **run — survived** | The persistence correlation was resampled from Poisson(expected) with every expectation and fixture list held fixed. Across 2,000 draws the null reaches +0.056 at most against an observed +0.324, so the carry-over is not arithmetic. |
+| Cross-sectional, few units | **run — landed** | The home-advantage explanation correlates at +0.782 across eleven league averages and −0.086 within leagues over time. One dataset, three aggregation levels, and the coarsest one manufactured it. |
+
+Two of the six killed something. Both deaths are in the body of this report rather than in a
+footnote, because the deaths are the finding.
 
 ## Tri-anchor
 

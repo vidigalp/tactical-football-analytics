@@ -30,6 +30,9 @@ MIN_MATCHES = 25
 #: strongest clubs, so the adjustment is continuous.
 STRENGTH_DEGREE = 4
 
+#: Poisson draws for the matched null behind the persistence correlation.
+NULL_DRAWS = 2000
+
 
 def load(snapshot: Path) -> pd.DataFrame:
     frames = []
@@ -109,6 +112,7 @@ def main() -> None:
     seasons = seasons.sort_values(["lg", "team", "yr"])
     seasons["previous"] = seasons.groupby(["lg", "team"])["index"].shift(1)
     seasons["previous_yr"] = seasons.groupby(["lg", "team"])["yr"].shift(1)
+    seasons["previous_expected"] = seasons.groupby(["lg", "team"])["expected"].shift(1)
     pairs = seasons[seasons.previous.notna() & (seasons.yr - seasons.previous_yr == 1)]
 
     r, p = stats.pearsonr(pairs.previous, pairs["index"])
@@ -118,6 +122,25 @@ def main() -> None:
     observed = float(seasons["index"].var(ddof=1))
     sampling = float((seasons.y / seasons.expected ** 2).mean())
     true = max(observed - sampling, 0.0)
+
+    # Baseline sufficiency, the sixth pressure test. The variance decomposition
+    # above already nets out Poisson noise from the SPREAD, but the correlation
+    # itself had no matched null: r = +0.324 is only evidence of a club property
+    # if a world where clubs differ in nothing carries a smaller one. So resample
+    # each club-season's cards from Poisson(expected), holding every expectation
+    # and every club's fixture list fixed, and recompute the same correlation.
+    # Any r the null reproduces is arithmetic rather than a club trait.
+    rng = np.random.default_rng(20260829)
+    expected_pairs = pairs[["expected", "previous_expected"]].to_numpy(float)
+    null_r = []
+    for _ in range(NULL_DRAWS):
+        drawn = rng.poisson(expected_pairs)
+        with np.errstate(invalid="ignore", divide="ignore"):
+            a = drawn[:, 1] / expected_pairs[:, 1]
+            b = drawn[:, 0] / expected_pairs[:, 0]
+        null_r.append(stats.pearsonr(a, b)[0])
+    null_r = np.asarray(null_r)
+    null_p = float(np.mean(null_r >= r))
 
     per_league = []
     for lg, group in pairs.groupby("lg"):
@@ -136,6 +159,11 @@ def main() -> None:
         "true_share": true / observed,
         "true_sd": float(np.sqrt(true)),
         "positive_leagues": int(sum(1 for x in per_league if x["r"] > 0)),
+        "null_r_mean": float(null_r.mean()),
+        "null_r_p95": float(np.percentile(null_r, 95)),
+        "null_r_max": float(null_r.max()),
+        "null_p": null_p,
+        "null_draws": NULL_DRAWS,
         "per_league": per_league,
     }
     (ROOT / "reports" / REPORT / "persistence.json").write_text(
@@ -144,6 +172,9 @@ def main() -> None:
     print(f"{len(pairs):,} consecutive club-season pairs, {pairs.lg.nunique()} leagues")
     print(f"  r = {r:+.3f}  p = {p:.2e}   positive in "
           f"{facts['positive_leagues']}/{pairs.lg.nunique()} leagues")
+    print(f"  matched Poisson null: mean r = {null_r.mean():+.3f}, "
+          f"95th pct {np.percentile(null_r, 95):+.3f}, max {null_r.max():+.3f}, "
+          f"p = {null_p:.4f}")
     print(f"  true between-club share of variance: {facts['true_share']:.0%}"
           f"   true SD {facts['true_sd']:.3f}")
     for row in sorted(per_league, key=lambda x: x["lg"]):
