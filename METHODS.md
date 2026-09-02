@@ -79,15 +79,23 @@ Scanning many teams across many metrics weekly manufactures findings by chance. 
 
 - Partial pooling handles teams-within-metric.
 - The metric set is **pre-registered and frozen**; adding one after seeing a week's data is a
-  pipeline failure with a test to catch it.
+  pipeline failure. **No test enforces this yet.**
 - **One publication per week maximum**, selected by a pre-registered priority order.
 - Bayesian FDR `E[FD] = Σ(1−S)` logged every week, published set capped at 0.10.
-- A **shadow Benjamini–Hochberg screen** is computed and published alongside. Where it disagrees
-  with the pooled result, the disagreement is the story.
+- A **shadow Benjamini–Hochberg screen** is published alongside any club that is named. It is
+  computed per study rather than logged centrally; where it disagrees with the pooled result, the
+  disagreement is the story.
 
 ## 6. Claim levels
 
-Language is bound to evidence, and the binding is linted.
+Language is bound to evidence. **The lint that would enforce this does not exist yet** — the
+banned phrases below are a standard the author holds to, not a check the build runs. Written down
+because a stated standard is auditable by a reader and a private intention is not.
+
+The obstacle is scope rather than effort: all three studies use "because" methodologically, as in
+"possible because both teams in a match face the same referee", so a token ban would be mostly
+false positives. A workable version lints only the block between the title and the first section
+heading, and only sentences naming a club or the metric.
 
 | Level | Meaning | Permitted | Forbidden |
 |---|---|---|---|
@@ -122,7 +130,7 @@ pre-registration trail rather than a reconstructed one.
 
 The format must be able to return nothing, and does so by design. The expected null rate is
 pre-registered so a quiet period reads as the method working rather than the author failing. A
-running counter is published.
+running counter is **planned and not yet published**.
 
 **Publication is gated on evidence, not on the calendar.** No weekly commitment is made, because a
 schedule and a standard eventually conflict, and the schedule wins — quietly, by lowering the bar
@@ -135,8 +143,10 @@ built to correct.
 ## 11. Pressure-testing: try to kill your own finding first
 
 A result is not ready because it is significant. It is ready when a genuine attempt to destroy it
-has failed. Before publication, every finding is attacked on four fronts, and the attempt is
-reported whether or not it succeeded.
+has failed. Before publication, every finding is attacked on the six fronts below, and each
+attempt is reported in the study whether or not it succeeded. A study carries a table naming every
+attack with a status of run, skipped or not-applicable, so an attack that was never tried cannot
+pass as one that was tried and survived.
 
 **Specification.** What does the model assume that the data might not support? Assumptions that
 look like arithmetic are the dangerous ones — this project shipped an expectation of

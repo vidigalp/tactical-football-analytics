@@ -103,7 +103,8 @@ claims chosen for examination skew toward one club, one country, one political d
 kind of target, the project reads as partisan no matter how even-handed each individual analysis
 is. Good intentions do not fix this, and self-assessment will not detect it.
 
-So selection is logged rather than trusted. A public ledger records every claim taken up — what was
+So selection will be logged rather than trusted. **The ledger does not exist yet**; what follows
+describes what it must record. A public ledger records every claim taken up — what was
 examined, why it was selected, the pre-registered threshold, and how it resolved — including the
 ones abandoned before publication. The distribution of *what gets checked* is published alongside
 the distribution of *how it resolved*. If that distribution turns out to be lopsided, that is a
@@ -149,8 +150,10 @@ someone else's post. And **suspension of judgment is a legitimate and frequently
 "The data does not settle this" is not a failed investigation; it is the honest answer to most
 interesting questions, and a project that never reaches it is not looking hard enough.
 
-The public accountability mechanism is calibration, not reputation. Stated confidence is logged
-against realised outcomes and the curve is published. Being right often matters less than the
+The public accountability mechanism is calibration, not reputation. Stated confidence is to be
+logged against realised outcomes and the curve published. **Neither the log nor the curve exists
+yet** — with three studies there is nothing to calibrate against, and a curve drawn from three
+points would be decoration. It is recorded here as the commitment it is. Being right often matters less than the
 claimed certainty matching the hit rate — a project that says "probably" and is right 70% of the
 time is working; one that is never wrong has simply stopped saying anything falsifiable.
 
@@ -165,7 +168,10 @@ than an archive of corrections.
 
 ## Corrections
 
-Published, never silently edited. Reports are versioned and an errata page is maintained. A
+Published, never silently edited. Every correction is a commit in a public repository whose
+message states what the number was, what it became, and how the error was found, which is the
+record `METHODS.md` §12 describes. **An errata page rendering that history on the site is planned
+and not yet built.** A
 retraction is a credibility asset, not an embarrassment.
 
 ## Conflicts of interest
