@@ -46,6 +46,11 @@ def interval(observed: float, expected: float) -> tuple[float, float]:
     return low / expected, high / expected
 
 
+#: Row count of the harvested referee file, recorded so the report's "2,737
+#: match-official rows" is bound rather than remembered.
+_harvest_rows: list[int] = []
+
+
 def load() -> pd.DataFrame:
     """Portuguese team-matches with the official attached where known."""
     snapshot = sorted((ROOT / "data" / "snapshots").glob("*-W*"))[-1]
@@ -58,6 +63,7 @@ def load() -> pd.DataFrame:
     matches = matches[matches["season"].map(is_completed)]
 
     referees = pd.read_csv(ROOT / "data" / "managers" / "primeira_liga_referees.csv")
+    _harvest_rows.append(len(referees))
     joined, _unmatched = join_to_matches(referees, matches)
 
     home = pd.DataFrame({
@@ -202,6 +208,7 @@ def main() -> None:
 
     facts = {
         "team_matches": int(len(teams)),
+        "referee_rows_harvested": int(_harvest_rows[0]),
         "referee_known_share": float(teams.referee.notna().mean()),
         "officials": int(len(multipliers)),
         "referee_multiplier_min": float(multipliers.min()),

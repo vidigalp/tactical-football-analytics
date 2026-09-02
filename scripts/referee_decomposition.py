@@ -17,6 +17,7 @@ baseline it is judged against, and a real effect would partly cancel itself.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
@@ -28,6 +29,7 @@ from tfa.ingest.matches import to_team_match
 from tfa.snapshot import read_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
+REPORT = "02-fouling-with-impunity"
 pd.set_option("display.width", 240)
 
 BANDS = [-np.inf, -1.0, -0.35, 0.35, 1.0, np.inf]
@@ -150,9 +152,32 @@ def analyse(tm: pd.DataFrame, label: str) -> pd.DataFrame:
 
 def main() -> None:
     directory = sorted((ROOT / "data" / "snapshots").glob("*-W*"))[-1]
+    facts = {"snapshot": directory.name, "leagues": {}}
     for code in ("E0", "SC0"):
         comp = COMPETITIONS[code]
-        analyse(prepare(directory, code), f"{comp.name} ({comp.country})")
+        tm = prepare(directory, code)
+        club = analyse(tm, f"{comp.name} ({comp.country})")
+        refs = tm.groupby("Referee", as_index=False).agg(
+            n=("fouls", "size"), y=("yellows", "sum"), e=("exp_ctx", "sum"))
+        busy = refs[refs.n >= MIN_REF_MATCHES]
+        multiplier = busy.y / busy.e
+        facts["leagues"][code] = {
+            "country": comp.country,
+            "team_matches": int(len(tm)),
+            "referees": int(tm.Referee.nunique()),
+            "officials_over_threshold": int(len(multiplier)),
+            "min_referee_matches": MIN_REF_MATCHES,
+            "multiplier_min": float(multiplier.min()),
+            "multiplier_max": float(multiplier.max()),
+            "multiplier_median": float(multiplier.median()),
+            "multiplier_spread": float(multiplier.max() - multiplier.min()),
+            "clubs": int(len(club)),
+            "separating_after_situation": int(club.sep_situation.sum()),
+            "separating_after_referee": int(club.sep_referee.sum()),
+        }
+    sidecar = ROOT / "reports" / REPORT / "referee_decomposition.json"
+    sidecar.write_text(json.dumps(facts, indent=2, sort_keys=True) + "\n")
+    print(f"\nwrote {sidecar.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

@@ -13,6 +13,7 @@ with a log-offset removes that objection.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
@@ -24,6 +25,7 @@ from tfa.ingest.matches import to_team_match
 from tfa.snapshot import read_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
+REPORT = "02-fouling-with-impunity"
 pd.set_option("display.width", 200)
 MIN_MATCHES = 150
 
@@ -104,8 +106,25 @@ def main() -> None:
     club = club[club.n >= MIN_MATCHES].copy()
     club["adjusted"] = club.y / club.e
 
+    # The aggregation attack, in one table. If the association belonged to the
+    # club, the OPPONENTS a club faces would not carry it too. Computed here
+    # because the report has been quoting all three of these from nowhere.
+    opp = tm.groupby(["league", "opponent"], as_index=False).agg(
+        opp_y=("yellows", "sum"), opp_e=("exp_adj", "sum"))
+    opp["opponents_index"] = opp.opp_y / opp.opp_e
+    club = club.merge(
+        opp.rename(columns={"opponent": "team"})[["league", "team", "opponents_index"]],
+        on=["league", "team"], how="left")
+
     r, p = stats.pearsonr(club.strength, club.adjusted)
     rho, prho = stats.spearmanr(club.strength, club.adjusted)
+    paired = club.dropna(subset=["opponents_index"])
+    r_opp, p_opp = stats.pearsonr(paired.strength, paired.opponents_index)
+    r_both, p_both = stats.pearsonr(paired.adjusted, paired.opponents_index)
+    print(f"\n=== Aggregation attack ({len(paired)} clubs) ===")
+    print(f"  corr(strength, own index)        = {r:+.3f}  p = {p:.2e}")
+    print(f"  corr(strength, opponents' index) = {r_opp:+.3f}  p = {p_opp:.2e}")
+    print(f"  corr(own index, opponents')      = {r_both:+.3f}  p = {p_both:.3f}")
     print(f"\n=== Residual association with club strength ({len(club)} clubs) ===")
     print(f"  Pearson  r = {r:+.3f}   p = {p:.2e}")
     print(f"  Spearman r = {rho:+.3f}   p = {prho:.2e}")
@@ -138,6 +157,40 @@ def main() -> None:
     ranked = club.sort_values("adjusted", ascending=False)
     print(ranked.head(10)[["league", "team", "n", "strength", "adjusted"]]
           .round(3).to_string(index=False))
+
+    facts = {
+        "snapshot": directory.name,
+        "team_matches": int(len(tm)),
+        "clubs": int(len(club)),
+        "leagues": int(club.league.nunique()),
+        "pearson_r": float(r),
+        "pearson_p": float(p),
+        "spearman_r": float(rho),
+        "spearman_p": float(prho),
+        "opponents": {
+            "clubs": int(len(paired)),
+            "r_strength_vs_opponents_index": float(r_opp),
+            "p_strength_vs_opponents_index": float(p_opp),
+            "r_own_vs_opponents_index": float(r_both),
+            "p_own_vs_opponents_index": float(p_both),
+        },
+        "within_league_mean_r": float(w.r.mean()),
+        "within_league_positive": int((w.r > 0).sum()),
+        "within_league_fitted": int(len(w)),
+        "within_league_r": {row.league: float(row.r) for row in w.itertuples()},
+        "by_quartile": {
+            str(tier): float(value)
+            for tier, value in tiers.mean_index.items()
+        },
+        "strongest_vs_weakest": {
+            "strongest": float(top.adjusted.mean()),
+            "weakest": float(bot.adjusted.mean()),
+            "p": float(stats.ttest_ind(top.adjusted, bot.adjusted).pvalue),
+        },
+    }
+    sidecar = ROOT / "reports" / REPORT / "strength_effect.json"
+    sidecar.write_text(json.dumps(facts, indent=2, sort_keys=True) + "\n")
+    print(f"\nwrote {sidecar.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

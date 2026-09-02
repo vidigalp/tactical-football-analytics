@@ -40,7 +40,7 @@ a mistake.
 ## The first answer, which looked good and was wrong
 
 Porto's raw booking index comes out at **0.890**. Comfortably below 1.0, interval excluding it.
-Benfica sits at 0.883. On its face, two clubs booked around 12% less than their fouls imply.
+Benfica sits at 0.885. On its face, two clubs booked around 12% less than their fouls imply.
 
 That is roughly the shape the original claim predicted. It is also wrong three times over.
 
@@ -73,8 +73,9 @@ The expectation assumed cards are proportional to fouls: *expected = rate × fou
 ![Cards per foul against foul count](figures/fig7-cards-per-foul.png)
 
 Fitting `cards = a + b × fouls` per league-season gives an intercept worth 13% to 47% of mean
-cards, depending on the competition. Observed cards per foul falls monotonically from 0.195 at six
-fouls to 0.127 at eighteen.
+cards, depending on the competition. Observed cards per foul falls monotonically across the range,
+from 0.197 in matches where a side commits six fouls or fewer to 0.122 where it commits more than
+twenty. Every bin is in [`story.json`](story.json).
 
 That intercept is interpretable. It is the cards that have nothing to do with your foul count:
 dissent, delaying the restart, entering the field of play, simulation, plus whatever the data feed
@@ -94,9 +95,12 @@ index for the **opponents**.
 
 | | |
 |---|---|
-| corr(club strength, **own** adjusted index) | **+0.486** |
-| corr(club strength, **opponents'** index) | **+0.284** (p = 6×10⁻⁶) |
-| corr(own index, opponents' index) | +0.115 (p = 0.07) |
+| corr(club strength, **own** adjusted index) | **+0.484** |
+| corr(club strength, **opponents'** index) | **+0.283** (p = 7×10⁻⁶) |
+| corr(own index, opponents' index) | +0.116 (p = 0.07) |
+
+All three from `scripts/strength_effect.py`, recorded in
+[`strength_effect.json`](strength_effect.json).
 
 When a dominant club plays, the other team is booked more per foul too, and the two are close to
 independent. A club-level story predicts the second correlation is zero. It is not.
@@ -131,14 +135,15 @@ The natural next candidate. Managers set how a side presses and how it fouls, an
 change them often enough to test it: take every manager who worked at two or more clubs, measure
 each spell against that club's own baseline excluding them, and see whether the two spells agree.
 
-They do not. Across 46 spell pairs the correlation is **r = −0.063**, and a permutation test that
-reshuffles which spell belongs to which manager gives **p = 0.673**. The observed value sits in the
+They do not. Across 42 spell pairs the correlation is **r = −0.076**, and a permutation test that
+reshuffles which spell belongs to which manager gives **p = 0.628**. The observed value sits in the
 middle of the null. A manager who runs a disciplined side at one club is no more likely than chance
 to do it at the next.
 
-Between-manager variance accounts for about 8% of the spread in spell effects, which is small
+Between-manager variance accounts for about 12% of the spread in spell effects, which is small
 enough that the honest reading is that this data cannot see a manager effect, rather than that none
-exists. Either way, the club-level story does not become a manager-level story.
+exists. Either way, the club-level story does not become a manager-level story. Every number in this
+section is in [`manager_travel.json`](manager_travel.json).
 
 ## Wrong (4), sort of: someone got there first
 
@@ -156,7 +161,7 @@ On this measure, no.
 
 Portugal has no referee data in the standard source, so we assembled it. 2,737 match-official rows
 across ten seasons, 98.4% joined to our matches and validated on scorelines rather than names.
-Portuguese referees vary as much as English ones, with booking multipliers from 0.76 to 1.32 among
+Portuguese referees vary as much as English ones, with booking multipliers from 0.75 to 1.32 among
 the 32 with 40+ matches, but that variation is not concentrated on anyone. Every club's mean
 referee draw falls between 0.971 and 1.021.
 
@@ -261,7 +266,7 @@ one club of twenty-six would separate anyway and it would be a different club ne
 
 It is not mostly noise. Taking every pair of consecutive seasons a club played in the same league,
 2,528 pairs across all eleven, the index in one season correlates with the index in the next at
-**r = +0.324**, positive in **11 of 11 leagues** and ranging from +0.173 in Scotland to +0.427 in
+**r = +0.324**, positive in **11 of 11 leagues** and ranging from +0.172 in Scotland to +0.427 in
 Italy. Something club-level carries over.
 
 The size is the caveat. Of the spread in club-season index values, **15% is a real club property**
@@ -331,7 +336,7 @@ slices. The arithmetic is identical and so is the error.
 
 ## Open questions
 
-**Sporting.** The one club still separating, at 1.179 across three managers and with no unusual
+**Sporting.** The one club still separating, at 1.177 across three managers and with no unusual
 referee draw. Nobody was arguing about Sporting, which is part of why it is interesting.
 
 **Absolute versus relative quality: tested, and still open.** Our strength measure is standardised

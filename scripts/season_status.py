@@ -117,6 +117,9 @@ def main() -> None:
                 "matches": int(row.matches),
                 "fouls": int(row.fouls),
                 "yellows": int(row.yellows),
+                # Both steps, because the report contrasts them: the era-only
+                # expectation is what the situation adjustment then moves.
+                "expected_era": round(float(row.e_era), 2),
                 "expected": round(float(row.e_situation), 2),
                 "index": round(float(row.index_situation), 3),
                 "lo": round(interval(row.yellows, row.e_situation)[0], 3),

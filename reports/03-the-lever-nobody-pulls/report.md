@@ -121,7 +121,7 @@ committed in those contexts are genuinely different, is not something these data
 
 ### For the club in study 02
 
-Porto's adjusted booking index is 0.989. Their league is not in this data and one season could not
+Porto's adjusted booking index over ten completed seasons is 1.002 (study 02). Their league is not in this data and one season could not
 support a club-level claim if it were. But if no club among 98 in the five largest leagues
 measurably converts foul placement into a lower card rate, the prior that any particular club is
 doing so should be low, and an average index is what that predicts.

@@ -16,18 +16,20 @@ Expected yellows are built in two stages, because both confounds are large:
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from scipy import stats
 
-from tfa.competitions import season_start_year
+from tfa.competitions import is_completed, season_start_year
 from tfa.ingest.matches import to_team_match
 from tfa.managers import attach, load
 from tfa.snapshot import read_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
+REPORT = "02-fouling-with-impunity"
 pd.set_option("display.width", 240)
 
 MIN_SPELL = 15   # matches; below this a spell estimate is mostly noise
@@ -79,6 +81,10 @@ def main() -> None:
     )
     tm = to_team_match(matches)
     tm["yr"] = tm["season"].map(season_start_year)
+    # Retrospective, matching build_discipline_story.py, which computes the same
+    # pair correlation for figure 3. Only one of the two was filtered, so the two
+    # disagreed about a number the report quotes.
+    tm = tm[tm["season"].map(is_completed)]
     tm = build_expectation(tm)
 
     labelled = attach(tm, load("primeira_liga"))
@@ -197,6 +203,27 @@ def main() -> None:
     else:
         share = 1 - within_mgr / overall
         print(f"  -> {share:.0%} of spell variation is between managers rather than within.")
+
+    facts = {
+        "snapshot": directory.name,
+        "spells": int(len(spell)),
+        "pairs": int(len(pairs)),
+        "min_spell_matches": MIN_SPELL,
+        "pearson_r": float(r),
+        "pearson_p": float(p),
+        "spearman_r": float(rho),
+        "spearman_p": float(prho),
+        "permutation_p": float(pct),
+        "permutations": 5000,
+        "null_abs_r_p95": float(np.percentile(np.abs(null), 95)),
+        "same_side_share": float(same_side),
+        "variance_all_spells": float(overall),
+        "variance_within_manager": float(within_mgr),
+        "between_manager_share": float(1 - within_mgr / overall),
+    }
+    sidecar = ROOT / "reports" / REPORT / "manager_travel.json"
+    sidecar.write_text(json.dumps(facts, indent=2, sort_keys=True) + "\n")
+    print(f"\nwrote {sidecar.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

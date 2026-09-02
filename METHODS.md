@@ -152,7 +152,7 @@ pass as one that was tried and survived.
 look like arithmetic are the dangerous ones — this project shipped an expectation of
 `cards = rate x fouls`, a proportional model through the origin, and only later measured that the
 intercept is 13% to 47% of mean cards depending on the league. Cards per foul falls monotonically
-from 0.195 at six fouls to 0.127 at eighteen. Because dominant clubs foul *less*, that
+from 0.197 at six fouls or fewer to 0.122 above twenty. Because dominant clubs foul *less*, that
 misspecification mechanically inflated precisely the clubs the finding was about.
 
 **Aggregation.** At what level does the effect actually live? A club-level average will happily

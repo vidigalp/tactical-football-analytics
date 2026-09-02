@@ -1,0 +1,33 @@
+{
+  "leagues": {
+    "E0": {
+      "clubs": 36,
+      "country": "England",
+      "min_referee_matches": 40,
+      "multiplier_max": 1.1933791133195606,
+      "multiplier_median": 0.9897845777472803,
+      "multiplier_min": 0.5932594916432147,
+      "multiplier_spread": 0.6001196216763459,
+      "officials_over_threshold": 61,
+      "referees": 181,
+      "separating_after_referee": 10,
+      "separating_after_situation": 9,
+      "team_matches": 19580
+    },
+    "SC0": {
+      "clubs": 18,
+      "country": "Scotland",
+      "min_referee_matches": 40,
+      "multiplier_max": 1.2063808142916463,
+      "multiplier_median": 1.0016721068629602,
+      "multiplier_min": 0.6619621650501532,
+      "multiplier_spread": 0.5444186492414932,
+      "officials_over_threshold": 51,
+      "referees": 160,
+      "separating_after_referee": 4,
+      "separating_after_situation": 3,
+      "team_matches": 10756
+    }
+  },
+  "snapshot": "2026-W36"
+}

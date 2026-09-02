@@ -1,0 +1,44 @@
+{
+  "by_quartile": {
+    "strong": 0.982,
+    "strongest": 1.048,
+    "weak": 0.975,
+    "weakest": 0.984
+  },
+  "clubs": 246,
+  "leagues": 11,
+  "opponents": {
+    "clubs": 246,
+    "p_own_vs_opponents_index": 0.06856744078837153,
+    "p_strength_vs_opponents_index": 6.629001155615794e-06,
+    "r_own_vs_opponents_index": 0.11631722515394648,
+    "r_strength_vs_opponents_index": 0.28280038416550896
+  },
+  "pearson_p": 7.803144903809943e-16,
+  "pearson_r": 0.4837536457704671,
+  "snapshot": "2026-W36",
+  "spearman_p": 1.7929112411306365e-08,
+  "spearman_r": 0.34941185716905504,
+  "strongest_vs_weakest": {
+    "p": 7.744861023410462e-08,
+    "strongest": 1.0484908019923296,
+    "weakest": 0.9843746777350021
+  },
+  "team_matches": 115946,
+  "within_league_fitted": 11,
+  "within_league_mean_r": 0.43981818181818183,
+  "within_league_positive": 11,
+  "within_league_r": {
+    "B1": 0.138,
+    "D1": 0.484,
+    "E0": 0.573,
+    "F1": 0.55,
+    "G1": 0.051,
+    "I1": 0.643,
+    "N1": 0.526,
+    "P1": 0.67,
+    "SC0": 0.21,
+    "SP1": 0.662,
+    "T1": 0.331
+  }
+}

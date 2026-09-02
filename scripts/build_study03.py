@@ -144,6 +144,11 @@ def main() -> None:
         "matches": int(fouls.match_id.nunique()),
         "clubs": int(len(clubs)),
         "base_rate": rate(fouls),
+        # Card rate by the fouling team's score state. The report tabulates
+        # these three and they were in no sidecar.
+        "state_behind": rate(fouls[fouls.score_diff < 0]),
+        "state_ahead": rate(fouls[fouls.score_diff > 0]),
+        "state_level": rate(fouls[fouls.score_diff == 0]),
         "own_fifth": rate(fouls[fouls.x <= 20]),
         "attacking_fifth": rate(fouls[fouls.x > 80]),
         "first_quarter_hour": rate(fouls[fouls.minute <= 15]),

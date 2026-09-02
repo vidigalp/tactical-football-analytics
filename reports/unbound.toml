@@ -1,0 +1,33 @@
+# Numerals a report states that no sidecar in its own directory can supply.
+#
+# tests/test_reports.py requires every claim-carrying numeral in a report to
+# round-match a value in one of that report's committed JSON sidecars, at the
+# precision the numeral is written to. Anything that cannot be bound has to be
+# listed here with a reason, so "I could not find a source" is a visible act
+# rather than a silent one.
+#
+# Keep this list short. A growing allowlist means the check is being evaded
+# rather than satisfied, and the count per report is asserted below its current
+# size for exactly that reason.
+
+["03-the-lever-nobody-pulls"]
+"0.32" = """
+Study 02's season-to-season persistence correlation, cited here as the reason a
+club-level property is worth looking for at all. It lives in study 02's
+persistence.json; a report is bound against its own sidecars only, because
+letting reports bind against each other's would mean a stale cross-reference
+still passes.
+"""
+"1.002" = """
+Porto's ten-season adjusted booking index, from study 02's referee_table.json.
+Same cross-study reason as above. This one was 0.989 until the retrospective
+season filter landed, which is precisely why cross-references get listed rather
+than trusted.
+"""
+
+["02-fouling-with-impunity"]
+"2,660" = """
+Premier League matches in Dawson, Dobson, Goddard and Wilson (2007), quoted from
+the paper to say what this study is being compared against. Someone else's
+sample size cannot come out of this repository's own sidecars.
+"""

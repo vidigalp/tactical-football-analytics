@@ -9,7 +9,9 @@ loudly, because a missing image renders as a broken icon rather than an error.
 
 from __future__ import annotations
 
+import json
 import re
+import tomllib
 from pathlib import Path
 
 import pytest
@@ -156,3 +158,203 @@ def test_no_orphan_figures(report: Path, figure: Path) -> None:
 def test_there_are_figures() -> None:
     """Guard the guards: an empty figures glob would vacate the test above."""
     assert len(figure_files()) >= 8
+
+
+# ---------------------------------------------------------------------------
+# Numeral provenance
+#
+# Four of the errors this repository has published shared one shape: a number
+# reached a page with no committed script behind it. The 1.183 that should have
+# been 1.179, a sign error, an understated tercile, a p-value nobody could
+# reproduce. Every one was found by a human rereading prose.
+# ---------------------------------------------------------------------------
+
+#: Only numerals that carry a claim: a decimal, or thousands-grouped. A bare
+#: small integer cannot be bound against a bag of values without matching one by
+#: luck, and a check that passes numbers having no source is worse than none.
+#: Every drift this catches was a decimal or a grouped thousand.
+CLAIM_NUMERAL = re.compile(r"\d{1,3}(?:,\d{3})+|\d+\.\d+")
+
+#: Spans of a report that carry numerals which are not claims about football.
+#:
+#: Order matters, and got this wrong once in a way worth recording. Stripping
+#: ``](target)`` first leaves an image as a dangling ``![alt``, so an alt-text
+#: pattern then runs on to the next ``]`` in the document — which, in study 02,
+#: is the ``[1.094, 1.264]`` of a confidence interval eight lines later. That
+#: silently unchecked the club table this whole test exists to guard. Images and
+#: links are therefore consumed whole, and alt text may not cross a newline.
+MASKS = (
+    re.compile(r"```.*?```", re.S),          # fenced code
+    re.compile(r"!\[[^\]\n]*\]\([^)\n]*\)"),  # images, whole
+    re.compile(r"\[[^\]\n]*\]\([^)\n]*\)"),   # links, whole
+    re.compile(r"`[^`]*`"),                  # inline code, including filenames
+    re.compile(r"CC BY(?:-SA)? \d+\.\d+"),   # licence versions
+    re.compile(r"\b\d+\(\d+\)"),             # journal volume(issue)
+    re.compile(r"\b\d+[-\u2013]\d+\b"),      # page ranges and season codes
+    re.compile(r"\b(?:19|20)\d{2}\b"),       # years
+    re.compile(r"\bstudy \d\d\b", re.I),
+)
+
+UNBOUND = tomllib.loads((REPORTS / "unbound.toml").read_text())
+
+
+def _numeric(obj: object, out: list[float]) -> list[float]:
+    if isinstance(obj, dict):
+        for value in obj.values():
+            _numeric(value, out)
+    elif isinstance(obj, list):
+        for value in obj:
+            _numeric(value, out)
+    elif isinstance(obj, bool):
+        pass
+    elif isinstance(obj, (int, float)):
+        out.append(float(obj))
+    return out
+
+
+def sidecar_values(report: Path) -> list[float]:
+    """Every number this report's own sidecars contain."""
+    values: list[float] = []
+    for path in sorted(report.parent.glob("*.json")):
+        _numeric(json.loads(path.read_text()), values)
+    return values
+
+
+def claim_numerals(report: Path) -> list[str]:
+    text = report.read_text()
+    # The references and tri-anchor sections carry citation numerals only.
+    text = re.split(r"^##+ *(?:References|Tri-anchor)", text, flags=re.M)[0]
+    for mask in MASKS:
+        text = mask.sub(" ", text)
+    return sorted(set(CLAIM_NUMERAL.findall(text)))
+
+
+def rounds_to(numeral: str, values: list[float]) -> bool:
+    """Does any source value equal this numeral at the precision it is written?
+
+    A report saying 0.051 is bound by a sidecar holding 0.05128, and one saying
+    15% is bound by 0.1516. Matching at the displayed precision is what makes
+    the check tight enough to catch 1.183 against 1.179 while still allowing a
+    report to round.
+    """
+    raw = numeral.replace(",", "")
+    target = float(raw)
+    places = len(raw.split(".")[1]) if "." in raw else 0
+    # Compared on magnitude: the regex cannot include a leading minus without
+    # also swallowing en-dashes in ranges, and a report writes "r = -0.076"
+    # against a stored -0.0759. A sign flip is caught by reading, not here.
+    return any(
+        round(abs(value), places) == target
+        or round(abs(value) * 100, places) == target
+        for value in values
+    )
+
+
+def numeral_cases() -> list[tuple[Path, str]]:
+    return [(r, n) for r in reports() for n in claim_numerals(r)]
+
+
+@pytest.mark.parametrize(
+    "report,numeral", numeral_cases(), ids=lambda v: getattr(v, "name", v)
+)
+def test_every_numeral_is_bound(report: Path, numeral: str) -> None:
+    allowed = UNBOUND.get(report.parent.name, {})
+    if numeral in allowed:
+        assert allowed[numeral].strip(), (
+            f"{report.parent.name} allow-lists {numeral} with an empty reason"
+        )
+        return
+    assert rounds_to(numeral, sidecar_values(report)), (
+        f"{report.parent.name} states {numeral}, which no sidecar in "
+        f"{report.parent.name}/ supplies at that precision. Either write it from "
+        f"the script that computes it, or add it to reports/unbound.toml with a "
+        f"reason."
+    )
+
+
+def test_there_are_numerals_to_bind() -> None:
+    """Guard the guards: a broken mask would vacate the test above."""
+    assert len(numeral_cases()) >= 25
+
+
+@pytest.mark.parametrize("report", reports(), ids=lambda p: p.parent.name)
+def test_allowlist_stays_small(report: Path) -> None:
+    """The allowlist is the friction dial, and it only works while it hurts.
+
+    Two entries, both cross-study references. If this number climbs, the check
+    is being evaded rather than satisfied.
+    """
+    assert len(UNBOUND.get(report.parent.name, {})) <= 2
+
+
+def test_allowlist_names_real_reports_and_numerals() -> None:
+    """An allowlist entry for a numeral no longer written is dead weight, and it
+    hides the fact that the numeral stopped being unbindable."""
+    names = {r.parent.name for r in reports()}
+    for name, entries in UNBOUND.items():
+        assert name in names, f"unbound.toml names {name}, which is not a report"
+        report = REPORTS / name / "report.md"
+        stated = claim_numerals(report)
+        for numeral in entries:
+            assert numeral in stated, (
+                f"unbound.toml allow-lists {numeral} for {name}, which no longer "
+                f"states it"
+            )
+
+
+# ---------------------------------------------------------------------------
+# Script provenance
+# ---------------------------------------------------------------------------
+
+#: The sidecar a script declares it writes, e.g. ``REPORT / "story.json"``.
+DECLARED_SIDECAR = re.compile(r'REPORT\s*/\s*"([a-z_]+\.json)"')
+
+#: Scripts a report may name without producing a sidecar beside it, and why.
+#: Both write their output into ``data/``, which is the artifact a reader
+#: reproduces from; a report-local JSON would duplicate the manifest.
+INGEST_ONLY = {
+    "scripts/run_audit.py": "writes the snapshot and its manifest under data/snapshots/",
+    "scripts/ingest_events.py": "writes the foul extract and its manifest under data/events/",
+    "scripts/ingest_matches.py": "writes match parquets into the snapshot",
+}
+
+
+def report_script_cases() -> list[tuple[Path, str]]:
+    """Scripts named inside a report, paired with that report."""
+    return [
+        (report, script)
+        for report in reports()
+        for script in dict.fromkeys(SCRIPT.findall(report.read_text()))
+    ]
+
+
+@pytest.mark.parametrize(
+    "report,script", report_script_cases(), ids=lambda v: getattr(v, "name", v)
+)
+def test_named_script_writes_a_sidecar(report: Path, script: str) -> None:
+    """A script a report tells you to run must leave its numbers behind.
+
+    Fourteen of nineteen scripts printed to stdout and wrote nothing, so their
+    numbers were transcribed from a terminal into prose and then diverged from
+    the code without anything failing. This is the assertion that converts them.
+    """
+    if script in INGEST_ONLY:
+        assert INGEST_ONLY[script].strip()
+        return
+    source = (ROOT / script).read_text()
+    declared = DECLARED_SIDECAR.findall(source)
+    assert declared, (
+        f"{report.parent.name} tells the reader to run {script}, which writes no "
+        f"sidecar. Either write its numbers to a JSON beside the report, or add "
+        f"it to INGEST_ONLY with a reason."
+    )
+    for name in declared:
+        assert (report.parent / name).exists(), (
+            f"{script} declares it writes {name}, which is not committed in "
+            f"{report.parent.name}/"
+        )
+
+
+def test_there_are_script_cases() -> None:
+    """Guard the guards."""
+    assert len(report_script_cases()) >= 10

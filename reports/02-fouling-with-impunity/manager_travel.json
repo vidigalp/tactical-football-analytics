@@ -1,0 +1,17 @@
+{
+  "between_manager_share": 0.11524477030374392,
+  "min_spell_matches": 15,
+  "null_abs_r_p95": 0.30121417672518125,
+  "pairs": 42,
+  "pearson_p": 0.632659908792333,
+  "pearson_r": -0.07594000233674203,
+  "permutation_p": 0.6278,
+  "permutations": 5000,
+  "same_side_share": 0.38095238095238093,
+  "snapshot": "2026-W36",
+  "spearman_p": 0.3869715291797752,
+  "spearman_r": -0.1369946419873356,
+  "spells": 86,
+  "variance_all_spells": 0.01148886387334995,
+  "variance_within_manager": 0.010164832395214754
+}
