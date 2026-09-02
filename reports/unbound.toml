@@ -31,3 +31,10 @@ Premier League matches in Dawson, Dobson, Goddard and Wilson (2007), quoted from
 the paper to say what this study is being compared against. Someone else's
 sample size cannot come out of this repository's own sidecars.
 """
+
+["live-season-portugal"]
+"1.002" = """
+Porto's ten-season referee-adjusted booking index, from study 02's
+referee_table.json. This page binds against its own sidecar only; the historical
+figure it is being contrasted with belongs to the study that computed it.
+"""

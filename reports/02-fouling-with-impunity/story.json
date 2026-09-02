@@ -279,17 +279,6 @@
     },
     "rising_in": 11
   },
-  "shrinkage_validation": {
-    "league_mean_beats_raw": 0.11563225945433431,
-    "min_matches": 30,
-    "pairs": 2432,
-    "rmse": {
-      "ignore the club, use the league mean": 0.02361843360141078,
-      "raw ratio": 0.026706575238529075,
-      "shrunken estimate": 0.023151375478935716
-    },
-    "shrunk_beats_raw": 0.13312076624726998
-  },
   "situation": {
     "bands": {
       "even": 1.0083786247291409,

@@ -222,103 +222,29 @@ silent on it and should not be quoted as though it were not.
 A high index is also not misconduct. Sporting commit fouls that draw cards more often than their
 foul count predicts. Why is a separate question this data cannot answer.
 
-## The season being played
+## What happens next, and what the index is worth
 
-Everything above measures ten completed seasons. The season in progress is a separate question, and
-worth asking separately, because four matchweeks cannot revise a ten-season estimate but they can
-still be extraordinary.
+Two questions this report raises are answered elsewhere, because neither is about Porto.
 
-Portugal through matchweek 4, snapshot `2026-W36`, 33 matches, produced by
-`scripts/season_status.py` alongside [`season_status.json`](season_status.json). The situation multiplier comes from
-the completed seasons and is deliberately not refitted here: heavy favourites 0.830, favourites
-0.941, even 1.036, underdogs 1.085, heavy underdogs 1.103. Letting four matches set their own
-baseline would defeat the point of having one.
+**The season in progress** has its own page, [the Portuguese season as it
+stands](../live-season-portugal/report.md). It is deliberately not part of this report: a live test
+with a resolution date in November would leave a dated document permanently unfinished, and the
+pre-registration deserves a surface that is expected to change.
 
-| Club | Matches | Fouls | Yellows | Expected | Index | 95% interval | BH |
-|---|---|---|---|---|---|---|---|
-| **Porto** | 4 | **58** | **1** | 8.34 | **0.120** | [0.003, 0.668] | **0.081** |
-| Benfica | 3 | 41 | 2 | 6.05 | 0.330 | [0.040, 1.193] | 1.000 |
-
-Porto were heavy favourites in all four matches, so the situation adjustment already works in their
-favour and takes the expectation from 10.04 down to 8.34. One yellow against that is still
-far out. Across all 18 clubs, **1 survives a Benjamini-Hochberg screen at FDR 0.10**, and it is
-Porto at an adjusted p of 0.081.
-
-Note how close that is to the threshold. The era-only model gives an adjusted p of 0.017; adjusting
-for the fact that Porto are favourites nearly quadruples it. Both numbers are reported because the
-difference between them is the entire subject of Wrong (1) above.
-
-So it is not an ordinary early-season fluctuation. It survives the screen built to dismiss those.
-
-It is also four matches. The interval on Porto's index runs from 0.003 to 0.668, which admits
-almost anything, and the finding in the next section is that 85% of the spread in a single season's
-booking index is sampling noise. A striking number arriving early and feeling conclusive is the
-exact situation
-[the pre-registered test](https://github.com/vidigalp/tactical-football-analytics/blob/main/preregistrations/2026-08-30-porto-booking-index.md)
-was written to handle, on 30 August, before this data existed. It counts Porto's yellows across
-matchweeks 4 to 10: seven or fewer reads as real, twelve or more as noise. One matchweek is in and
-the count is zero. It resolves on 15 November, whichever way that falls.
-
-## Is the index a property of the club at all?
-
-Sporting separating and Porto not raises a prior question. If the booking index were mostly noise,
-one club of twenty-six would separate anyway and it would be a different club next year.
-
-It is not mostly noise. Taking every pair of consecutive seasons a club played in the same league,
-2,528 pairs across all eleven, the index in one season correlates with the index in the next at
-**r = +0.324**, positive in **11 of 11 leagues** and ranging from +0.172 in Scotland to +0.427 in
-Italy. Something club-level carries over.
-
-Before reading anything into that, the correlation needs a null. Resampling every club-season's
-cards from Poisson(expected), holding each club's expectations and fixtures exactly as they were, a
-world in which clubs differ in nothing produces a correlation of **+0.056 at its most extreme over
-2,000 draws**, against the observed +0.324. The carry-over is not arithmetic.
-
-The size is the caveat. Of the spread in club-season index values, **15% is a real club property**
-and the rest is the Poisson noise of one season's cards. The true between-club standard deviation
-is **0.051**, so a club one standard deviation better than average is booked about 5% below
-expectation.
-
-Both halves of that matter. A real, repeatable club effect exists, which is why it is worth
-measuring at all. It is small and it is buried in noise, which is why a single season's raw ratio is
-a bad way to find it, and why the shrinkage figure below shows that raw ratio being beaten by
-ignoring the club entirely. A noisy estimate of a real quantity is still an estimate that should be pulled toward the
-mean.
-
-Produced by `scripts/booking_persistence.py`, alongside [`persistence.json`](persistence.json).
+**Whether a one-season booking index means anything at all** is [study
+04](../04-how-much-of-an-index-is-real/report.md). It has to be asked, because Sporting separating
+and Porto not is only interesting if the measure carries a club property in the first place. It
+does, and it is small: 15% of the spread between clubs in a season is real and the rest is the
+Poisson noise of one season's cards.
 
 ## The data lesson
 
-A result is not ready because it is significant. It is ready when a serious attempt to destroy it
-has failed.
+The version that transfers, and the reason this report is in a repository about method rather than
+about football: **when a metric is an average over a group, ask whether the effect belongs to the
+group or to the situations the group is in.** Cohorts, segments, cost centres, model slices. The
+arithmetic is identical and so is the error.
 
-Three attacks were run here. Two landed.
-
-**Aggregation.** Does the effect live at the level you are attributing it to? Computing the same
-metric for the other party takes twenty lines and reframed the entire finding.
-
-**Specification.** What does the model assume that the data might not support? The assumptions that
-look like arithmetic are the dangerous ones. *Expected = rate × fouls* looks like a definition. It
-is a claim, and it is false.
-
-**Adjustment coarseness.** This one did not land. Five strength bands under-corrected the strongest
-clubs, so it was redone as a continuous fit. The association strengthened.
-
-![Shrinkage validation](figures/fig7-shrinkage-validation.png)
-
-There is a harder version of the same lesson. Taking 2,432 consecutive club-season pairs across the
-eleven leagues and asking which estimate best predicts a club's next season, the raw ratio is the
-worst of three. It is beaten by a shrunken estimate by 13%, and it is beaten by ignoring the club
-entirely and using the league mean. A number computed from one season of a club's own matches
-carries less information about that club's next season than not looking at the club at all.
-
-That is the quantitative form of the objection to the original claim. Not that the ratio was
-computed wrongly, but that a ratio on that little data is dominated by noise, and the correct
-response to a noisy estimate is to pull it toward the mean rather than to rank on it.
-
-The version that transfers: when a metric is an average over a group, ask whether the effect
-belongs to the group or to the situations the group is in. Cohorts, segments, cost centres, model
-slices. The arithmetic is identical and so is the error.
+Every attack run against this finding, and the two that killed part of it, are in the table below.
 
 ## Pressure tests
 
@@ -331,7 +257,7 @@ them is that an attack never tried cannot pass as one tried and survived.
 | Aggregation | **run — landed** | Recomputed the index for the *opponents*. It moves with the club's, so the effect belongs to the fixture. This is Wrong (3). |
 | Adjustment coarseness | **run — survived** | Five strength bands under-corrected the strongest clubs. Redone as a continuous fit; the association strengthened. |
 | Prior work | **run — landed** | Dawson, Dobson, Goddard and Wilson (2007) published a strength gradient in cards. What may be new here is conditioning on fouls, not the gradient. |
-| Baseline sufficiency | **run — survived** | The persistence correlation was resampled from Poisson(expected) with every expectation and fixture list held fixed. Across 2,000 draws the null reaches +0.056 at most against an observed +0.324, so the carry-over is not arithmetic. |
+| Baseline sufficiency | **run — survived** | Asked and answered in [study 04](../04-how-much-of-an-index-is-real/report.md), which resamples the booking index from a world where clubs differ in nothing and finds the observed carry-over far outside it. The numbers live there rather than being restated here. |
 | Cross-sectional, few units | **run — landed** | The home-advantage explanation correlates at +0.782 across eleven league averages and −0.086 within leagues over time. One dataset, three aggregation levels, and the coarsest one manufactured it. |
 
 Two of the six killed something. Both deaths are in the body of this report rather than in a
@@ -375,7 +301,7 @@ covariates.
 
 It is also an artifact of aggregation.
 
-![Two levels of aggregation](figures/fig8-aggregation-levels.png)
+![Two levels of aggregation](figures/fig7-aggregation-levels.png)
 
 Splitting the same data into three-season blocks and asking whether a league's own gradient moves
 when its own home advantage moves gives **−0.086, p = 0.50**, with the slope running the other way
@@ -410,7 +336,6 @@ uv run python scripts/build_discipline_story.py   # figures 1-7, and the club ta
 uv run python scripts/aggregation_levels.py       # figure 8, the aggregation test
 uv run python scripts/strength_effect.py          # the cross-league association
 uv run python scripts/portugal_referee_table.py  # the club table above
-uv run python scripts/season_status.py            # the season in progress
 uv run python scripts/referee_decomposition.py
 uv run python scripts/manager_travel.py
 ```

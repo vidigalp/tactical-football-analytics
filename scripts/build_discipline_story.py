@@ -20,9 +20,7 @@ from tfa.competitions import is_completed, season_start_year
 from tfa.ingest.matches import to_team_match
 from tfa.managers import attach
 from tfa.managers import load as load_managers
-from tfa.metrics.discipline import team_season
 from tfa.snapshot import read_manifest
-from tfa.stats.shrinkage import beta_binomial_prior, shrink_beta_binomial
 from tfa.viz import discipline_story as story
 from tfa.viz import theme
 
@@ -203,35 +201,6 @@ def main() -> None:
     written += story.manager_travel(pairs, null, r, out / "fig5-manager-travel",
                                    snapshot=stamp)
 
-    # ---------- shrinkage validation, all leagues ----------
-    every = load_matches(directory)
-    ts = team_season(every)
-    ts["yr"] = ts.season.map(season_start_year)
-    ts = ts[ts.matches >= 30]
-    parts = []
-    for _, g in ts.groupby(["Div", "season"]):
-        g = g.reset_index(drop=True)
-        prior = beta_binomial_prior(g.yellows, g.fouls)
-        est = shrink_beta_binomial(g.yellows, g.fouls, prior)
-        g["raw"] = est["raw"].to_numpy()
-        g["shrunk"] = est["shrunk"].to_numpy()
-        g["league_mean"] = prior.mean
-        parts.append(g)
-    ts = pd.concat(parts, ignore_index=True)
-    nxt = ts[["Div", "team", "yr", "yellows", "fouls"]].copy()
-    nxt["yr"] -= 1
-    nxt = nxt.rename(columns={"yellows": "y_next", "fouls": "f_next"})
-    p = ts.merge(nxt, on=["Div", "team", "yr"])
-    p["actual"] = p.y_next / p.f_next
-    scores = {
-        "raw ratio": float(np.sqrt(np.mean((p["raw"] - p.actual) ** 2))),
-        "shrunken estimate": float(np.sqrt(np.mean((p["shrunk"] - p.actual) ** 2))),
-        "ignore the club,\nuse the league mean":
-            float(np.sqrt(np.mean((p.league_mean - p.actual) ** 2))),
-    }
-    written += story.shrinkage_validation(scores, out / "fig7-shrinkage-validation",
-                                          n_pairs=len(p), snapshot=stamp)
-
     for w in written:
         print("wrote", w.relative_to(ROOT))
 
@@ -264,15 +233,6 @@ def main() -> None:
             "r": r,
             "permutation_p": permutation_p,
             "permutations": 5000,
-        },
-        "shrinkage_validation": {
-            "pairs": int(len(p)),
-            "min_matches": 30,
-            "rmse": {k.replace("\n", " "): v for k, v in scores.items()},
-            "shrunk_beats_raw": 1 - scores["shrunken estimate"] / scores["raw ratio"],
-            "league_mean_beats_raw": (
-                1 - scores["ignore the club,\nuse the league mean"] / scores["raw ratio"]
-            ),
         },
         "cards_per_foul": {
             f"{row.fouls:.1f}": float(row.rate) for row in cpf.itertuples()
@@ -318,8 +278,7 @@ def main() -> None:
     print(f"\ncontext swing: {100 * swing:.0f}%")
     print(f"clubs separating after adjustment: {separating} of {len(club)}")
     print(f"manager travel r = {r:+.3f}, permutation p = {permutation_p:.3f}")
-    print(f"shrinkage validation: {len(p):,} pairs; shrinking beats the raw ratio by "
-          f"{100 * facts['shrinkage_validation']['shrunk_beats_raw']:.0f}%")
+
 
 
 if __name__ == "__main__":

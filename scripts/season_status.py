@@ -20,8 +20,11 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
+from tfa.viz import season as season_viz
+from tfa.viz import theme
+
 ROOT = Path(__file__).resolve().parents[1]
-REPORT = "02-fouling-with-impunity"
+REPORT = "live-season-portugal"
 SEASON = "2627"
 
 #: Pre-match role from the devigged odds, as study 02 defines it.
@@ -29,6 +32,9 @@ BANDS = [-np.inf, -1.0, -0.35, 0.35, 1.0, np.inf]
 NAMES = ["heavy underdog", "underdog", "even", "favourite", "heavy favourite"]
 
 #: Frozen in the pre-registration on 2026-08-30 and not refitted here.
+#: The false-discovery rate the screen is capped at, per METHODS.md section 5.
+FDR = 0.10
+
 AFFINE_INTERCEPT = 1.1259
 AFFINE_SLOPE = 0.095491
 
@@ -82,13 +88,29 @@ def main() -> None:
         for y, e in zip(clubs.yellows, clubs.e_situation, strict=True)
     ]
 
+    # The same screen against the era-only expectation, so the difference the
+    # situation adjustment makes is a reported number rather than an assertion.
+    # It is the entire subject of study 02's Wrong (1), and it was quoted in
+    # prose without any script computing it.
+    clubs["p_era"] = [
+        2 * min(stats.poisson.cdf(y, e), 1 - stats.poisson.cdf(y - 1, e))
+        for y, e in zip(clubs.yellows, clubs.e_era, strict=True)
+    ]
+
     # Benjamini-Hochberg across every club in the league. Reporting the extreme
     # one of eighteen without this is how a finding gets manufactured.
-    ranked = clubs.sort_values("p").reset_index()
-    count = len(ranked)
-    ranked["bh"] = (ranked.p * count / (ranked.index + 1))[::-1].cummin()[::-1].clip(upper=1)
-    clubs = clubs.join(ranked.set_index("team")[["bh"]])
-    clubs["survives_bh"] = clubs.bh < 0.10
+    def benjamini_hochberg(column: str) -> pd.Series:
+        ranked = clubs.sort_values(column).reset_index()
+        count = len(ranked)
+        adjusted = (
+            (ranked[column] * count / (ranked.index + 1))[::-1].cummin()[::-1]
+        ).clip(upper=1)
+        return pd.Series(adjusted.to_numpy(), index=ranked["team"])
+
+    clubs["bh"] = benjamini_hochberg("p")
+    clubs["bh_era"] = benjamini_hochberg("p_era")
+    count = len(clubs)
+    clubs["survives_bh"] = clubs.bh < FDR
 
     print(f"snapshot {snapshot.name}   season {SEASON}   "
           f"{len(current) // 2} matches to {str(current.date.max())[:10]}")
@@ -100,7 +122,7 @@ def main() -> None:
                    "p", "bh", "survives_bh"]].to_string(
         float_format=lambda v: f"{v:.3f}"))
     survivors = ordered[ordered.survives_bh]
-    print(f"\nsurvive BH at 0.10: {len(survivors)} of {count}"
+    print(f"\nsurvive BH at {FDR}: {len(survivors)} of {count}"
           f"   naive p < 0.05: {int((clubs.p < 0.05).sum())}")
 
     facts = {
@@ -110,6 +132,7 @@ def main() -> None:
         "latest_date": str(current.date.max())[:10],
         "clubs": int(count),
         "survive_bh": [str(t) for t in survivors.index],
+        "bh_fdr": FDR,
         "naive_significant": int((clubs.p < 0.05).sum()),
         "situation_multiplier": {str(k): round(float(v), 3) for k, v in multiplier.items()},
         "table": {
@@ -125,10 +148,27 @@ def main() -> None:
                 "lo": round(interval(row.yellows, row.e_situation)[0], 3),
                 "hi": round(interval(row.yellows, row.e_situation)[1], 3),
                 "bh": round(float(row.bh), 4),
+                "bh_era": round(float(row.bh_era), 4),
             }
             for team, row in ordered.iterrows()
         },
     }
+    # Interval columns for the figure. The JSON computes these inline per row;
+    # the chart needs them as columns, and computing them twice would be two
+    # places for the same number to drift.
+    bounds = [interval(y, e) for y, e in zip(clubs.yellows, clubs.e_situation, strict=True)]
+    clubs["lo"] = [b[0] for b in bounds]
+    clubs["hi"] = [b[1] for b in bounds]
+    clubs["booking_index"] = clubs.index_situation
+
+    theme.apply()
+    for path in season_viz.league_caterpillar(
+        clubs, ROOT / "reports" / REPORT / "figures" / "fig1-league-so-far",
+        highlight="Porto", season_label=f"20{SEASON[:2]}-{SEASON[2:]}",
+        matches=len(current) // 2, snapshot=snapshot.name,
+    ):
+        print(f"wrote {path.relative_to(ROOT)}")
+
     out = ROOT / "reports" / REPORT / "season_status.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(facts, indent=2, sort_keys=True) + "\n")

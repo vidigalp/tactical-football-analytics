@@ -20,7 +20,7 @@ from scipy import stats
 from tfa.competitions import is_completed, season_start_year
 
 ROOT = Path(__file__).resolve().parents[1]
-REPORT = "02-fouling-with-impunity"
+REPORT = "04-how-much-of-an-index-is-real"
 
 #: Below this a club-season is too short to carry a rate at all.
 MIN_MATCHES = 25
