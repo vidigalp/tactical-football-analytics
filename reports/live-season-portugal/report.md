@@ -60,6 +60,37 @@ single season's booking index down to sampling noise — before you even get to 
 A striking number arriving early and feeling conclusive is the exact situation the pre-registration
 was written to handle.
 
+## Could they just be fouling in safer places?
+
+The most natural objection, and it has a ceiling.
+
+[Study 03](../03-the-lever-nobody-pulls/report.md) measures an enormous card-risk gradient by pitch
+position: **31.4%** of fouls in a team's own defensive fifth are carded against **8.9%** in the
+attacking fifth. If a club fouled almost entirely upfield, it would be booked less for the same
+number of fouls, and no adjustment used here accounts for that.
+
+Two things make it an unlikely explanation, and neither requires measuring the Portuguese league.
+
+**The gradient transfers; the club-to-club differences do not.** The gradient is present in
+**5 of 5** big-five leagues, with the own-fifth risk running from **2.5** to **5.0** times the
+attacking-fifth risk, so assuming Portugal has one too is safe. But clubs barely differ in where
+they foul. Across 98 clubs the mean foul position spans 48 to 58 on a hundred-point pitch, a tenth
+of the range the gradient covers, which is the whole finding of study 03.
+
+**So the ceiling is small.** Taking each league's own gradient and finding the club whose actual
+foul placement is most favourable under it, the best placement profile in the most generous of the
+five leagues buys a **7.3%** reduction in card rate. Applying that ceiling here — deliberately
+generous, since it is the best profile in the best league rather than anything measured in Portugal
+— moves the expectation from 8.34 to **7.73** and the index from 0.120 to **0.129**. It accounts
+for **1.1%** of an **88%** shortfall, and the two-sided Poisson p moves from 0.0045 to 0.0077.
+
+Placement is not the explanation. That conclusion is robust precisely because it was tested at its
+most favourable, and it would survive Portugal's gradient being twice as steep as any measured.
+
+What it does not rule out is the thing no public data can see: whether the fouls themselves are
+different in kind. Produced by `scripts/placement_ceiling.py` alongside
+[`placement.json`](placement.json).
+
 ## The sealed test
 
 [The pre-registration](https://github.com/vidigalp/tactical-football-analytics/blob/main/preregistrations/2026-08-30-porto-booking-index.md)

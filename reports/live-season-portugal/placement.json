@@ -1,0 +1,91 @@
+{
+  "attacking_fifth": 0.08876560332871013,
+  "bands": [
+    0,
+    20,
+    35,
+    50,
+    65,
+    80,
+    100
+  ],
+  "base_rate": 0.1531852778646648,
+  "ceiling_saving": 0.07306875462131412,
+  "club": "Porto",
+  "expected": 8.34,
+  "expected_under_ceiling": 7.73060658645824,
+  "gradient_ratio_max": 4.967073621901591,
+  "gradient_ratio_min": 2.469295331351635,
+  "index": 0.11990407673860912,
+  "index_under_ceiling": 0.12935595529485452,
+  "leagues": [
+    {
+      "attacking_fifth": 0.10292524377031419,
+      "base_rate": 0.15003686409437209,
+      "best_mix": 0.14423341648330787,
+      "best_saving": 0.03868014468373515,
+      "clubs": 20,
+      "fouls": 8138,
+      "gradient_ratio": 2.469295331351635,
+      "league": "England",
+      "own_fifth": 0.2541528239202658,
+      "worst_mix": 0.15623451545882208
+    },
+    {
+      "attacking_fifth": 0.08771929824561403,
+      "base_rate": 0.14869633405214663,
+      "best_mix": 0.1441768659849578,
+      "best_saving": 0.030393944114344484,
+      "clubs": 20,
+      "fouls": 10202,
+      "gradient_ratio": 3.4810419681620837,
+      "league": "France",
+      "own_fifth": 0.3053545586107091,
+      "worst_mix": 0.15597659256756816
+    },
+    {
+      "attacking_fifth": 0.05408163265306123,
+      "base_rate": 0.1241913123844732,
+      "best_mix": 0.11662726111763214,
+      "best_saving": 0.060906444433280194,
+      "clubs": 18,
+      "fouls": 8656,
+      "gradient_ratio": 4.967073621901591,
+      "league": "Germany",
+      "own_fifth": 0.26862745098039215,
+      "worst_mix": 0.13087189553609224
+    },
+    {
+      "attacking_fifth": 0.08214849921011058,
+      "base_rate": 0.15999599759855915,
+      "best_mix": 0.1515449569750003,
+      "best_saving": 0.05282032519815327,
+      "clubs": 20,
+      "fouls": 9994,
+      "gradient_ratio": 4.231593406593406,
+      "league": "Italy",
+      "own_fifth": 0.3476190476190476,
+      "worst_mix": 0.16816289208365123
+    },
+    {
+      "attacking_fifth": 0.11152416356877323,
+      "base_rate": 0.17637938896488828,
+      "best_mix": 0.16349156667235554,
+      "best_saving": 0.07306875462131412,
+      "clubs": 20,
+      "fouls": 10965,
+      "gradient_ratio": 3.364012595591543,
+      "league": "Spain",
+      "own_fifth": 0.37516869095816463,
+      "worst_mix": 0.18496263326544415
+    }
+  ],
+  "leagues_measured": 5,
+  "leagues_with_gradient": 5,
+  "most_generous_league": "Spain",
+  "own_fifth": 0.3144297416509137,
+  "p": 0.0044602673660624915,
+  "p_under_ceiling": 0.0076685743418493605,
+  "share_of_shortfall_explained": 0.010739600430393284,
+  "shortfall": 0.8800959232613909
+}
