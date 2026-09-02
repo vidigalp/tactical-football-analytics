@@ -148,7 +148,7 @@ def main() -> None:
     print(f"wrote {sidecar.relative_to(ROOT)}")
 
     out = ROOT / "reports" / REPORT / "figures"
-    for written in aggregation.levels(leagues, blocks, out / "fig5-aggregation-levels",
+    for written in aggregation.levels(leagues, blocks, out / "fig8-aggregation-levels",
                                       snapshot.name):
         print(f"wrote {written.relative_to(ROOT)}")
 

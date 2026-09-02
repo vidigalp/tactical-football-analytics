@@ -186,6 +186,23 @@ leagues. A Skellam distribution built only from each team's season goal means re
 curve. Excess over that baseline: r = -0.048. Blowout rate, clean-sheet rate, failure-to-score rate
 and within-one-goal rate are all likewise fully accounted for by the means.
 
+**The same failure can live in the pipeline rather than in a finding.** Five scripts in this
+repository fitted their retrospective baselines on ten completed seasons *plus* four matchweeks of
+the season in progress. The club under investigation had taken 58 fouls and one yellow card in
+those four matchweeks — so the anomaly being tested was contributing to the expectation it was
+being measured against, shrinking itself. It bit hardest exactly where it would: the clubs fouling
+with apparent impunity in the live season are the same heavy favourites whose multiplier the fit
+estimates.
+
+Nothing failed, because the boundary between "retrospective" and "in progress" was spelled three
+different ways across the codebase and omitted entirely in two places. There is now one definition
+and a test asserting the constants behind it agree.
+
+Worth stating as its own rule, because it is easy to pass the finding-level version of this attack
+and still fail it structurally: **the subject of a study must not appear in the study's own
+baseline.** Ask of every fitted nuisance model which rows went into it, not only which rows the
+estimate is reported over.
+
 The generalisation worth carrying: **any "share of X in period P" metric is algebraically exposed
 whenever the period split is near-constant across teams**, and any distributional-shape metric is
 exposed to the moments it is built from. Report the excess over the matched null, never the raw

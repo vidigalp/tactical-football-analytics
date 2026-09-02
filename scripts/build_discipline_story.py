@@ -50,9 +50,9 @@ def load_matches(directory: Path, comp: str | None = None) -> pd.DataFrame:
     )
     frame["year"] = frame["season"].map(season_start_year)
     # Retrospective throughout this script. Previously only the shrinkage block
-    # filtered, so figures 1-3 and the club table were fitted on ten seasons
-    # plus four matchweeks of the season being investigated, while figure 4 was
-    # fitted on ten. One study, two windows.
+    # filtered, so the Portuguese figures and the club table were fitted on ten
+    # seasons plus four matchweeks of the season being investigated, while the
+    # shrinkage validation was fitted on ten. One study, two windows.
     return frame[frame["season"].map(is_completed)]
 
 
@@ -66,7 +66,7 @@ def main() -> None:
     stamp = directory.name
     written = []
 
-    # ---------- Portuguese league, for figures 1-3 ----------
+    # ---------- Portuguese league: context, manager travel, club table ----------
     tm = to_team_match(load_matches(directory, "P1"))
     lg = tm.groupby("season", as_index=False).agg(
         f=("fouls", "sum"), y=("yellows", "sum"))
@@ -85,7 +85,7 @@ def main() -> None:
     # The same gradient across every division, so the Portugal figure above
     # cannot be read as a quirk of one league. Names are scoped to this block:
     # `tm` and `rows` below belong to the Portuguese figures and reassigning
-    # them here silently emptied figures 2 and 3.
+    # them here silently emptied the club table and manager-travel figures.
     def league_profile(directory: Path) -> pd.DataFrame:
         per_league = []
         for code, group in load_matches(directory).groupby("Div"):
@@ -105,7 +105,7 @@ def main() -> None:
 
     profile = league_profile(directory)
     written += story.context_all_leagues(
-        profile, out / "fig6-context-all-leagues", snapshot=stamp)
+        profile, out / "fig2-context-all-leagues", snapshot=stamp)
 
     def cards_per_foul_curve(directory: Path) -> pd.DataFrame:
         """Observed cards per foul against the team's foul count in that match."""
@@ -127,7 +127,7 @@ def main() -> None:
         return grouped.reset_index(drop=True)
 
     written += story.cards_per_foul(
-        cards_per_foul_curve(directory), out / "fig7-cards-per-foul", snapshot=stamp)
+        cards_per_foul_curve(directory), out / "fig3-cards-per-foul", snapshot=stamp)
 
     def opponent_terciles(directory: Path) -> pd.DataFrame:
         """A club's own index, split by the strength of who it faced."""
@@ -153,7 +153,7 @@ def main() -> None:
 
     terciles = opponent_terciles(directory)
     written += story.opponent_test(
-        terciles, out / "fig8-opponent-test", snapshot=stamp)
+        terciles, out / "fig4-opponent-test", snapshot=stamp)
 
     tm = tm.merge(ctx[["band", "multiplier"]], on="band", how="left")
     tm["expected"] = tm.exp_era * tm.multiplier.fillna(1.0)
@@ -166,7 +166,7 @@ def main() -> None:
     club["adjusted"] = club.y / club.e_adj
     bounds = [ci(y, e) for y, e in zip(club.y, club.e_adj, strict=True)]
     club["lo"], club["hi"] = [b[0] for b in bounds], [b[1] for b in bounds]
-    written += story.clubs_before_after(club, out / "fig2-clubs-adjusted", snapshot=stamp)
+    written += story.clubs_before_after(club, out / "fig6-clubs-adjusted", snapshot=stamp)
 
     # ---------- manager travel ----------
     known = attach(tm, load_managers("primeira_liga"))
@@ -200,7 +200,7 @@ def main() -> None:
         stats.pearsonr(pairs.a, rng.permutation(pairs.b.to_numpy()))[0]
         for _ in range(5000)
     ])
-    written += story.manager_travel(pairs, null, r, out / "fig3-manager-travel",
+    written += story.manager_travel(pairs, null, r, out / "fig5-manager-travel",
                                    snapshot=stamp)
 
     # ---------- shrinkage validation, all leagues ----------
@@ -229,7 +229,7 @@ def main() -> None:
         "ignore the club,\nuse the league mean":
             float(np.sqrt(np.mean((p.league_mean - p.actual) ** 2))),
     }
-    written += story.shrinkage_validation(scores, out / "fig4-shrinkage-validation",
+    written += story.shrinkage_validation(scores, out / "fig7-shrinkage-validation",
                                           n_pairs=len(p), snapshot=stamp)
 
     for w in written:

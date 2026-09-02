@@ -53,7 +53,7 @@ match. In Portugal, the league the question was about and the one the figure sho
 underdog is booked at **1.121** times its foul count and a heavy favourite at **0.854**. A 31%
 swing, with no club identity involved.
 
-![The same gradient in every league](figures/fig6-context-all-leagues.png)
+![The same gradient in every league](figures/fig2-context-all-leagues.png)
 
 The pattern is not Portuguese. The underdog end sits above the favourite end in **all eleven
 leagues**, median 1.098 against 0.856. Per-league bands are in
@@ -70,7 +70,7 @@ the better side, which they share with every strong club in Europe.
 
 The expectation assumed cards are proportional to fouls: *expected = rate × fouls*. They are not.
 
-![Cards per foul against foul count](figures/fig7-cards-per-foul.png)
+![Cards per foul against foul count](figures/fig3-cards-per-foul.png)
 
 Fitting `cards = a + b × fouls` per league-season gives an intercept worth 13% to 47% of mean
 cards, depending on the competition. Observed cards per foul falls monotonically across the range,
@@ -108,7 +108,7 @@ independent. A club-level story predicts the second correlation is zero. It is n
 The within-club version is cleaner still. Holding the club fixed and splitting its own matches by
 opponent quality:
 
-![Booking index by opponent quality](figures/fig8-opponent-test.png)
+![Booking index by opponent quality](figures/fig4-opponent-test.png)
 
 | Opponent | Portugal | Median of eleven leagues |
 |---|---|---|
@@ -129,7 +129,7 @@ matches produce more cards per foul.
 
 ## If not the club, then the manager?
 
-![Manager travel](figures/fig3-manager-travel.png)
+![Manager travel](figures/fig5-manager-travel.png)
 
 The natural next candidate. Managers set how a side presses and how it fouls, and Portuguese clubs
 change them often enough to test it: take every manager who worked at two or more clubs, measure
@@ -183,7 +183,7 @@ Produced by `scripts/portugal_referee_table.py`, with all 26 clubs in
 Porto sit at 1.002, indistinguishable from average. One club of twenty-six separates from
 expectation, and it is not the one in the original claim.
 
-![Clubs before and after adjustment](figures/fig2-clubs-adjusted.png)
+![Clubs before and after adjustment](figures/fig6-clubs-adjusted.png)
 
 The figure shows the era-and-situation step only, which is why Porto reads 1.02 there against 1.00
 in the table: the referee adjustment moves them slightly further down. The shape is the point.
@@ -304,7 +304,7 @@ is a claim, and it is false.
 **Adjustment coarseness.** This one did not land. Five strength bands under-corrected the strongest
 clubs, so it was redone as a continuous fit. The association strengthened.
 
-![Shrinkage validation](figures/fig4-shrinkage-validation.png)
+![Shrinkage validation](figures/fig7-shrinkage-validation.png)
 
 There is a harder version of the same lesson. Taking 2,432 consecutive club-season pairs across the
 eleven leagues and asking which estimate best predicts a club's next season, the raw ratio is the
@@ -375,7 +375,7 @@ covariates.
 
 It is also an artifact of aggregation.
 
-![Two levels of aggregation](figures/fig5-aggregation-levels.png)
+![Two levels of aggregation](figures/fig8-aggregation-levels.png)
 
 Splitting the same data into three-season blocks and asking whether a league's own gradient moves
 when its own home advantage moves gives **−0.086, p = 0.50**, with the slope running the other way
@@ -406,8 +406,8 @@ foul-level video coding. That is the honest limit here.
 ## Reproduce this
 
 ```bash
-uv run python scripts/build_discipline_story.py   # figures 1-4, and the club table
-uv run python scripts/aggregation_levels.py       # figure 5, the aggregation test
+uv run python scripts/build_discipline_story.py   # figures 1-7, and the club table
+uv run python scripts/aggregation_levels.py       # figure 8, the aggregation test
 uv run python scripts/strength_effect.py          # the cross-league association
 uv run python scripts/portugal_referee_table.py  # the club table above
 uv run python scripts/season_status.py            # the season in progress
