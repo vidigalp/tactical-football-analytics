@@ -426,3 +426,48 @@ def test_every_attack_has_a_status(report: Path, attack: str) -> None:
     assert len(cells[2]) >= 20, (
         f"{report.parent.name}'s '{attack}' row gives no account of what happened"
     )
+
+
+# ---------------------------------------------------------------------------
+# Relative links
+# ---------------------------------------------------------------------------
+
+#: ``](../<slug>/report.md)`` — a link from one report to another.
+CROSS_REPORT = re.compile(r"\]\(\.\./([^/)]+)/report\.md\)")
+
+#: ``](../../FILE.md)`` — a link from a report up to a repository document.
+REPO_DOC = re.compile(r"\]\(\.\./\.\./([^)]+)\)")
+
+
+def cross_report_links() -> list[tuple[Path, str]]:
+    return [(r, m) for r in reports() for m in CROSS_REPORT.findall(r.read_text())]
+
+
+@pytest.mark.parametrize(
+    "report,target", cross_report_links(), ids=lambda v: getattr(v, "name", v)
+)
+def test_cross_report_link_resolves(report: Path, target: str) -> None:
+    """Splitting one report into three created these links, and a typo in one
+    would be invisible until a reader clicked it."""
+    assert (REPORTS / target / "report.md").exists(), (
+        f"{report.parent.name} links ../{target}/report.md, which does not exist"
+    )
+    assert target != report.parent.name, (
+        f"{report.parent.name} links to itself as though it were another report"
+    )
+
+
+@pytest.mark.parametrize(
+    "report,target",
+    [(r, m) for r in reports() for m in REPO_DOC.findall(r.read_text())],
+    ids=lambda v: getattr(v, "name", v),
+)
+def test_repo_document_link_resolves(report: Path, target: str) -> None:
+    assert (ROOT / target).exists(), (
+        f"{report.parent.name} links ../../{target}, which does not exist"
+    )
+
+
+def test_there_are_cross_report_links() -> None:
+    """Guard the guards. The split is the reason these exist at all."""
+    assert len(cross_report_links()) >= 5
