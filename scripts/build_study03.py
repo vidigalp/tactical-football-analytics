@@ -3,7 +3,7 @@
 Reads the committed foul table, so it runs offline and does not need the 950 MB
 event extract.
 
-Run: uv run python scripts/build_week03.py
+Run: uv run python scripts/build_study03.py
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ from tfa.viz import fouls as viz
 from tfa.viz import theme
 
 ROOT = Path(__file__).resolve().parents[1]
-REPORT = "2026-W37"
+REPORT = "03-the-lever-nobody-pulls"
 
 #: What the figure stamps name as provenance. This study reads a derived event
 #: table, not a dated snapshot; stamping it "2026-W37" pointed every figure at a

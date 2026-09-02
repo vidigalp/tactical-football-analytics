@@ -1,4 +1,4 @@
-"""Render the Week 1 figures from the committed snapshot.
+"""Render study 01's figures from the committed snapshot.
 
 Runs entirely offline: reads the snapshot, writes figures. If this needs the
 network, provenance has been broken somewhere.
@@ -16,14 +16,29 @@ from tfa.viz import theme, week01
 
 ROOT = Path(__file__).resolve().parents[1]
 
+#: The study these outputs belong to. Deliberately NOT the snapshot name: this
+#: script used to derive the directory from the latest snapshot, so when a
+#: second snapshot landed it began writing study 01's figures and facts into a
+#: directory named after that snapshot. Report identity and data vintage are
+#: different things and no longer share a naming scheme.
+REPORT = "01-free-football-data"
+
 
 def main() -> None:
     theme.apply()
 
+    # The most recent snapshot that actually holds an audit, not simply the most
+    # recent snapshot. This study is an audit of what the source publishes, and
+    # only run_audit.py writes that frame; the match snapshots taken since do
+    # not contain one. Taking snapshots[-1] unconditionally made the reproduce
+    # path in the README exit non-zero the moment a second snapshot landed.
     snapshots = sorted((ROOT / "data" / "snapshots").glob("*-W*"))
-    if not snapshots:
-        raise SystemExit("no snapshot found — run scripts/run_audit.py first")
-    directory = snapshots[-1]
+    audited = [d for d in snapshots if any(d.glob("audit__*.parquet"))]
+    if not audited:
+        raise SystemExit(
+            "no snapshot contains an audit frame — run scripts/run_audit.py first"
+        )
+    directory = audited[-1]
 
     entries = read_manifest(directory)
     snapshot_label = f"{directory.name} ({entries[0].retrieved_at[:10]})"
@@ -33,11 +48,9 @@ def main() -> None:
     # silently turned the audit frame into 58,171 match rows and broke this
     # script's reproduce path without anything failing loudly.
     audit_files = sorted(directory.glob("audit__*.parquet"))
-    if not audit_files:
-        raise SystemExit(f"no audit parquet in {directory} — run scripts/run_audit.py")
     audit = pd.concat([pd.read_parquet(f) for f in audit_files], ignore_index=True)
 
-    out = ROOT / "reports" / directory.name / "figures"
+    out = ROOT / "reports" / REPORT / "figures"
     written = []
     written += week01.coverage_timeline(audit, out / "coverage-timeline", snapshot_label)
     written += week01.width_versus_football(audit, out / "width-vs-football", snapshot_label)
@@ -57,7 +70,7 @@ def main() -> None:
         "league_seasons_usable": int(live[disc].all(axis=1).sum()),
         "leagues": int(audit["competition"].nunique()),
     }
-    facts_path = ROOT / "reports" / directory.name / "facts.json"
+    facts_path = ROOT / "reports" / REPORT / "facts.json"
     facts_path.write_text(json.dumps(facts, indent=2, sort_keys=True) + "\n")
     print(f"wrote {facts_path.relative_to(ROOT)}")
     print(json.dumps(facts, indent=2, sort_keys=True))

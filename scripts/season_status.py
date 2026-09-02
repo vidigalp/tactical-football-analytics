@@ -21,7 +21,7 @@ import pandas as pd
 from scipy import stats
 
 ROOT = Path(__file__).resolve().parents[1]
-REPORT = "2026-W36"
+REPORT = "02-fouling-with-impunity"
 SEASON = "2627"
 
 #: Pre-match role from the devigged odds, as study 02 defines it.

@@ -3,6 +3,12 @@
     uv run python scripts/build_phase.py --league P1 --season 2627
 
 Offline: reads the committed snapshot only.
+
+Exploratory, and parametrised by league and season, so its output is a scan
+rather than a study's figure set. Writes to the gitignored ``scratch/``: these
+figures were previously written into a report directory named after the
+snapshot, which is where three ``phase-*`` and three ``shrinkage-*`` orphans
+came from.
 """
 
 from __future__ import annotations
@@ -18,6 +24,9 @@ from tfa.snapshot import read_manifest
 from tfa.viz import phase, theme
 
 ROOT = Path(__file__).resolve().parents[1]
+
+#: Exploratory output. Gitignored, and not part of any study's figure set.
+OUT = "scratch"
 
 
 def season_label(code: str) -> str:
@@ -50,7 +59,7 @@ def main() -> None:
 
     comp = COMPETITIONS[args.league]
     label = season_label(args.season)
-    out = ROOT / "reports" / directory.name / "figures"
+    out = ROOT / OUT / f"phase-{args.league}-{args.season}-figures"
     stamp = f"{directory.name}"
 
     written = phase.phase_space(

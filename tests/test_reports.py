@@ -1,9 +1,9 @@
 """A published report must not reference a figure that is not there.
 
 Two figure bugs shipped before this existed. build_discipline_story.py derived
-its output directory from the snapshot name rather than the report's, so week 2's
-figures were written into week 1's folder; and build_week01.py raised on a
-renamed frame, so week 1's figures stopped regenerating entirely. Neither failed
+its output directory from the snapshot name rather than the report's, so study 02's
+figures were written into study 01's folder; and build_study01.py raised on a
+renamed frame, so study 01's figures stopped regenerating entirely. Neither failed
 loudly, because a missing image renders as a broken icon rather than an error.
 """
 
@@ -107,3 +107,46 @@ def test_linked_sidecar_exists(report: Path) -> None:
     for name in SIDECAR.findall(report.read_text()):
         path = report.parent / f"{name}.json"
         assert path.exists(), f"{report.parent.name} links {name}.json, which does not exist"
+
+
+def figure_files() -> list[tuple[Path, Path]]:
+    """Every file sitting in a report's figures directory."""
+    return [
+        (report, path)
+        for report in reports()
+        for path in sorted((report.parent / "figures").glob("*"))
+        if path.is_file()
+    ]
+
+
+@pytest.mark.parametrize(
+    "report,figure", figure_files(), ids=lambda v: getattr(v, "name", v)
+)
+def test_no_orphan_figures(report: Path, figure: Path) -> None:
+    """The converse of the test above: a report's figures directory holds only
+    figures that report displays.
+
+    Twenty-two files accumulated here, and the cause was not carelessness. Three
+    scripts named their output directory after the latest *snapshot* rather than
+    after the report, and while report directories were themselves named by ISO
+    week the two were indistinguishable, so the wrong path silently resolved to
+    a real study's folder. Renaming reports to their slugs broke that
+    coincidence; this test is what makes the breakage loud.
+
+    Checked in both directions because the earlier test only catches a reference
+    with no file. An unreferenced file is the more dangerous direction: it is
+    invisible in the rendered page, it is committed, it ships to the site's
+    asset collector, and a reader who finds it has no way to know it is stale.
+    """
+    stems = {
+        Path(ref).stem for source, ref in references() if source == report
+    }
+    assert figure.stem in stems, (
+        f"{report.parent.name}/figures/{figure.name} is displayed by no report. "
+        f"Either reference it or write it to scratch/ — see build_phase.py."
+    )
+
+
+def test_there_are_figures() -> None:
+    """Guard the guards: an empty figures glob would vacate the test above."""
+    assert len(figure_files()) >= 8

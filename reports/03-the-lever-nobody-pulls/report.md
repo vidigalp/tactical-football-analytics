@@ -182,5 +182,5 @@ second command. Nothing on this page is typed by hand.
 
 ```bash
 uv run python scripts/ingest_events.py    # downloads and reduces the event logs
-uv run python scripts/build_week03.py     # figures and facts, offline
+uv run python scripts/build_study03.py     # figures and facts, offline
 ```

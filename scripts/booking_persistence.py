@@ -20,7 +20,7 @@ from scipy import stats
 from tfa.competitions import season_start_year
 
 ROOT = Path(__file__).resolve().parents[1]
-REPORT = "2026-W36"
+REPORT = "02-fouling-with-impunity"
 
 #: Below this a club-season is too short to carry a rate at all.
 MIN_MATCHES = 25
@@ -86,6 +86,15 @@ def expectation(teams: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
+    # Latest snapshot, so this moves forward with the data rather than being
+    # frozen. One consequence is worth stating, because it looks like a bug:
+    # MIN_MATCHES keeps the in-progress season out of the *pairs*, but the era
+    # rate and the strength polynomial are still fitted on every row, the
+    # current season included. So each matchweek nudges the nuisance fit, and
+    # with it every historical index. The movement is in the fourth decimal —
+    # r ran 0.32429 to 0.32442 across one matchweek — and no published numeral
+    # changes at the precision it is quoted to. A future reader who diffs this
+    # sidecar and finds it moved has not found an error.
     snapshot = sorted((ROOT / "data" / "snapshots").glob("*-W*"))[-1]
     teams = expectation(team_rows(load(snapshot)))
 

@@ -1,4 +1,10 @@
-"""Build the two-panel replacement figure. Offline, from the committed snapshot."""
+"""Two-panel league-phase and persistence figure. Offline, from the committed snapshot.
+
+Exploratory: no report references this figure and no Reproduce block names this
+script, so it writes to the gitignored ``scratch/`` rather than into a report
+directory. Output that no report cites does not belong beside output that is
+cited — that is how eleven orphan figures accumulated.
+"""
 
 from __future__ import annotations
 
@@ -13,8 +19,8 @@ from tfa.viz import persistence, theme
 
 ROOT = Path(__file__).resolve().parents[1]
 
-#: The study these figures belong to.
-REPORT = "2026-W36"
+#: Exploratory output. Gitignored, and not part of any study's figure set.
+OUT = "scratch"
 
 
 def main() -> None:
@@ -46,7 +52,7 @@ def main() -> None:
     written = persistence.league_phase_and_persistence(
         latest,
         pairs,
-        ROOT / "reports" / directory.name / "figures" / "leagues-and-persistence",
+        ROOT / OUT / "leagues-and-persistence",
         season_label=f"{int(latest['year'].iloc[0])}-"
                      f"{str(int(latest['year'].iloc[0]) + 1)[-2:]}",
         snapshot=directory.name,

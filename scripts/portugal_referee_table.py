@@ -25,7 +25,7 @@ from scipy import stats
 from tfa.ingest.referees import join_to_matches
 
 ROOT = Path(__file__).resolve().parents[1]
-REPORT = "2026-W36"
+REPORT = "02-fouling-with-impunity"
 
 #: Pre-match role, from the devigged odds. Symmetric about zero by construction.
 BANDS = [-np.inf, -1.0, -0.35, 0.35, 1.0, np.inf]

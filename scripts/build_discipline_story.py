@@ -21,7 +21,7 @@ from tfa.viz import theme
 ROOT = Path(__file__).resolve().parents[1]
 
 #: The study these figures belong to.
-REPORT = "2026-W36"
+REPORT = "02-fouling-with-impunity"
 BANDS = [-np.inf, -1.0, -0.35, 0.35, 1.0, np.inf]
 NAMES = ["heavy\nunderdog", "underdog", "even", "favourite", "heavy\nfavourite"]
 

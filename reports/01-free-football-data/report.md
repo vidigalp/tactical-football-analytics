@@ -187,7 +187,7 @@ cd tactical-football-analytics
 uv sync --all-extras --dev
 
 # Figures and facts, entirely from the committed snapshot — no network needed
-uv run python scripts/build_week01.py
+uv run python scripts/build_study01.py
 
 # Re-run the audit against the live site
 uv run python scripts/run_audit.py --from 2000 --to 2025

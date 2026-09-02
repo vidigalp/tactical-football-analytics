@@ -20,7 +20,7 @@ from tfa.competitions import season_start_year
 from tfa.viz import aggregation, theme
 
 ROOT = Path(__file__).resolve().parents[1]
-REPORT = "2026-W36"
+REPORT = "02-fouling-with-impunity"
 
 #: Three seasons per point. One season cannot estimate a slope: the standard
 #: error swamps the between-league spread the figure is about.
