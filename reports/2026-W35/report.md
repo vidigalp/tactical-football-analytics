@@ -1,4 +1,4 @@
-# Week 1 — What free football data can still tell you
+# What free football data can still tell you
 
 **Published:** 2026-08-29 · **Snapshot:** `2026-W35` · **Claim level:** L1 (descriptive)
 

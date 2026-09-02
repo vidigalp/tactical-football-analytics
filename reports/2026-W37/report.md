@@ -1,6 +1,6 @@
-# Week 3 — The lever nobody pulls
+# The lever nobody pulls
 
-**Published:** 2026-08-31 · **Snapshot:** `2026-W37` · **Claim level:** L1 (descriptive)
+**Published:** 2026-08-31 · **Data:** `fouls_bigfive_2017-18` · **Claim level:** L1 (descriptive)
 
 ---
 
@@ -60,10 +60,10 @@ The interesting part is the discontinuity. Card rate climbs through the first ha
 its final five minutes, then **drops to 12.8%** in the first five minutes of the second. A 3.3
 point fall across the interval, p = 4×10⁻⁴.
 
-Whatever accumulates during a half is therefore partly discharged at half time, which points at
-match tension and referee escalation rather than at fatigue or the running foul count. This report
-does not attempt to distinguish those, and the search that would establish whether the reset is
-already known in the literature could not be run.
+Whatever accumulates within a half is therefore partly discharged at the interval. That rules out
+anything monotonic in elapsed time, fatigue included, and leaves both referee escalation and a
+genuine change in how teams play. These data do not separate them, and the search that would
+establish whether the reset is already documented could not be run.
 
 ## 3. What state you are in
 
@@ -84,11 +84,13 @@ response from the team's behaviour.
 This is the result. The card-rate gradient runs the length of the pitch. Club averages occupy
 **48 to 58** of it.
 
-Foul context, meaning position and minute and score state together, explains **30.8%** of the
-spread in cards per foul between clubs. So context matters a great deal to whether *a* foul is carded, and clubs differ
-enough in aggregate for it to matter to *a club*.
+Context matters enormously to whether *a* foul is carded. It barely matters to whether *a club* is
+carded more than another. Position, minute and score state together explain
+**3.1%** of the spread in cards per foul between clubs.
 
-They just do not differ in the direction that would help.
+That is the whole finding in one number, and it is not a contradiction of the sections above. A
+gradient can be steep and still explain nothing between actors, provided the actors all stand in
+the same place on it.
 
 ![Placement against card rate](figures/fig4-placement-null.png)
 
@@ -112,9 +114,10 @@ way a real effect would hide from this test, and this data cannot rule it out.
 **It does not establish causation in either direction.** Where a team fouls is a consequence of how
 it defends, which is a consequence of who it is playing. None of that is randomised.
 
-**It does show** that referees respond to context far more strongly than to anything about the club
-in front of them, and that the aggregate differences between clubs in foul placement are small
-enough to leave most of the available advantage unclaimed.
+**It does show** that card rate varies far more with the context of a foul than with which club
+committed it, and that clubs differ so little in aggregate foul placement that most of the
+available advantage is unclaimed. Whether referees are responding to context, or the fouls
+committed in those contexts are genuinely different, is not something these data separate.
 
 ### For the club in study 02
 
@@ -174,8 +177,8 @@ out of reach at foul level.
 
 ## Reproduce this
 
-Every number above is written to [`facts.json`](facts.json) by the second command, so nothing here
-is typed by hand.
+Every number above is written to [`facts.json`](facts.json) and [`chart.json`](chart.json) by the
+second command. Nothing on this page is typed by hand.
 
 ```bash
 uv run python scripts/ingest_events.py    # downloads and reduces the event logs

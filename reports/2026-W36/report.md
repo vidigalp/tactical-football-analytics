@@ -1,15 +1,14 @@
-# Week 2 — A club that fouls with impunity, and the three ways I was wrong about it
+# A club that fouls with impunity, and the four ways I was wrong about it
 
-**Published:** 2026-08-30 · **Snapshot:** `2026-W35` · **Claim level:** L2 (hypothesis, adjusted)
+**Published:** 2026-08-30 · **Data:** `2026-W35`, with the season in progress from `2026-W36` · **Claim level:** L2 (hypothesis, adjusted)
 
 ---
 
 ## What the data says
 
 Across eleven European leagues, how often a team is booked per foul it commits depends mostly on
-how strong that team was expected to be that afternoon. Heavy underdogs are booked more. Heavy
-favourites are booked less. The gradient is monotone in all eleven leagues and involves no club
-identity at all.
+how strong that team was expected to be that afternoon. Heavy underdogs are booked more, heavy
+favourites less, in all eleven leagues, and no club identity is involved.
 
 In the Portuguese league, once you account for that, for the era and for the referee who was
 actually appointed, one club of twenty-six is booked measurably more than expected. It is Sporting,
@@ -194,7 +193,7 @@ Under a Benjamini–Hochberg screen at FDR 0.10, one survives:
 
 | Club | Index | raw p | BH-adjusted | Bonferroni |
 |---|---|---|---|---|
-| Sporting | 1.183 | 0.00001 | **0.0002** | **0.0002** |
+| Sporting | 1.179 | 0.00001 | **0.0002** | **0.0002** |
 | Gil Vicente | 0.917 | 0.044 | 0.567 | 1.000 |
 | Boavista | 1.066 | 0.073 | 0.628 | 1.000 |
 
@@ -217,7 +216,8 @@ Everything above measures ten completed seasons. The season in progress is a sep
 worth asking separately, because four matchweeks cannot revise a ten-season estimate but they can
 still be extraordinary.
 
-Portugal through matchweek 4, snapshot `2026-W36`, 33 matches. The situation multiplier comes from
+Portugal through matchweek 4, snapshot `2026-W36`, 33 matches, produced by
+`scripts/season_status.py` alongside [`season_status.json`](season_status.json). The situation multiplier comes from
 the completed seasons and is deliberately not refitted here: heavy favourites 0.830, favourites
 0.941, even 1.036, underdogs 1.085, heavy underdogs 1.103. Letting four matches set their own
 baseline would defeat the point of having one.
@@ -239,7 +239,7 @@ difference between them is the entire subject of Wrong (1) above.
 So it is not an ordinary early-season fluctuation. It survives the screen built to dismiss those.
 
 It is also four matches. The interval on Porto's index runs from 0.003 to 0.668, which admits
-almost anything, and the finding two sections below is that 85% of the spread in a single season's
+almost anything, and the finding in the next section is that 85% of the spread in a single season's
 booking index is sampling noise. A striking number arriving early and feeling conclusive is the
 exact situation
 [the pre-registered test](https://github.com/vidigalp/tactical-football-analytics/blob/main/preregistrations/2026-08-30-porto-booking-index.md)
@@ -264,8 +264,8 @@ expectation.
 
 Both halves of that matter. A real, repeatable club effect exists, which is why it is worth
 measuring at all. It is small and it is buried in noise, which is why a single season's raw ratio is
-a bad way to find it — and why figure 4 above shows that raw ratio being beaten by ignoring the club
-entirely. A noisy estimate of a real quantity is still an estimate that should be pulled toward the
+a bad way to find it, and why the shrinkage figure below shows that raw ratio being beaten by
+ignoring the club entirely. A noisy estimate of a real quantity is still an estimate that should be pulled toward the
 mean.
 
 Produced by `scripts/booking_persistence.py`, alongside [`persistence.json`](persistence.json).
