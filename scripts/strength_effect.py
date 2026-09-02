@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from tfa.competitions import COMPETITIONS
+from tfa.competitions import COMPETITIONS, is_completed
 from tfa.ingest.matches import to_team_match
 from tfa.snapshot import read_manifest
 
@@ -46,6 +46,10 @@ def load_all(directory: Path) -> pd.DataFrame:
         frames.append(tm)
     tm = pd.concat(frames, ignore_index=True)
     tm = tm.dropna(subset=["strength_diff", "fouls", "yellows"])
+    # Retrospective: the season in progress is excluded. See
+    # competitions.LAST_COMPLETED_SEASON_YEAR for why this matters more than
+    # tidiness — the live season is the one under investigation.
+    tm = tm[tm["season"].map(is_completed)]
     # A zero-foul match makes the log-offset undefined. There are a few dozen.
     return tm[tm["fouls"] > 0].copy()
 

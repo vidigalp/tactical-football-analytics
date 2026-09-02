@@ -12,7 +12,7 @@ favourites less, in all eleven leagues, and no club identity is involved.
 
 In the Portuguese league, once you account for that, for the era and for the referee who was
 actually appointed, one club of twenty-six is booked measurably more than expected. It is Sporting,
-at 1.18. Porto sit at 0.99 and Benfica at 1.00, both indistinguishable from average.
+at 1.18. Porto and Benfica both sit at 1.00, indistinguishable from average.
 
 A post had gone around implying Porto were being favoured by referees. That is where the question
 came from, and it is the last time the post appears here. The claim is the object of study; the
@@ -39,7 +39,7 @@ a mistake.
 
 ## The first answer, which looked good and was wrong
 
-Porto's raw booking index comes out at **0.884**. Comfortably below 1.0, interval excluding it.
+Porto's raw booking index comes out at **0.890**. Comfortably below 1.0, interval excluding it.
 Benfica sits at 0.883. On its face, two clubs booked around 12% less than their fouls imply.
 
 That is roughly the shape the original claim predicted. It is also wrong three times over.
@@ -50,13 +50,14 @@ That is roughly the shape the original claim predicted. It is also wrong three t
 
 Booking rate per foul depends heavily on how strong you were expected to be in that specific
 match. In Portugal, the league the question was about and the one the figure shows, a heavy
-underdog is booked at **1.122** times its foul count and a heavy favourite at **0.851**. A 32%
+underdog is booked at **1.121** times its foul count and a heavy favourite at **0.854**. A 31%
 swing, with no club identity involved.
 
 ![The same gradient in every league](figures/fig6-context-all-leagues.png)
 
 The pattern is not Portuguese. The underdog end sits above the favourite end in **all eleven
-leagues**, median 1.098 against 0.857.
+leagues**, median 1.098 against 0.856. Per-league bands are in
+[`story.json`](story.json), alongside every other number this study's figures carry.
 
 Strict monotonicity across all five bands holds in seven of them. Germany, France, Italy and Spain
 each tick up by less than 0.01 between the two underdog bands, which are also their smallest
@@ -107,8 +108,8 @@ opponent quality:
 
 | Opponent | Portugal | Median of eleven leagues |
 |---|---|---|
-| Weakest third | 0.937 | 0.937 |
-| Middle third | 0.974 | 0.994 |
+| Weakest third | 0.939 | 0.938 |
+| Middle third | 0.973 | 0.993 |
 | **Strongest third** | **1.092** | **1.088** |
 
 It rises in **11 of 11** leagues. Club identity is differenced out here, so this is the same side,
@@ -157,7 +158,7 @@ Portugal has no referee data in the standard source, so we assembled it. 2,737 m
 across ten seasons, 98.4% joined to our matches and validated on scorelines rather than names.
 Portuguese referees vary as much as English ones, with booking multipliers from 0.76 to 1.32 among
 the 32 with 40+ matches, but that variation is not concentrated on anyone. Every club's mean
-referee draw falls between 0.969 and 1.020.
+referee draw falls between 0.971 and 1.021.
 
 Each club is judged against officials measured without that club. Otherwise a side that draws one
 official often helps set the baseline it is being judged against, and a real effect partly cancels
@@ -167,35 +168,41 @@ Adjusting for era, match situation and the actual official on the pitch:
 
 | Club | Booking index | 95% interval |
 |---|---|---|
-| **Sporting** | **1.179** | [1.097, 1.267] |
-| Benfica | 1.003 | [0.926, 1.084] |
-| Porto | 0.999 | [0.927, 1.076] |
+| **Sporting** | **1.177** | [1.094, 1.264] |
+| Benfica | 1.002 | [0.925, 1.084] |
+| Porto | 1.002 | [0.929, 1.079] |
 
 Produced by `scripts/portugal_referee_table.py`, with all 26 clubs in
 [`referee_table.json`](referee_table.json).
 
-Porto sit at 0.999, indistinguishable from average. One club of twenty-six separates from
+Porto sit at 1.002, indistinguishable from average. One club of twenty-six separates from
 expectation, and it is not the one in the original claim.
 
 ![Clubs before and after adjustment](figures/fig2-clubs-adjusted.png)
 
-The figure shows the era-and-situation step only, which is why Porto reads 1.01 there against 0.99
+The figure shows the era-and-situation step only, which is why Porto reads 1.02 there against 1.00
 in the table: the referee adjustment moves them slightly further down. The shape is the point.
 Almost every club that looked unusual on the raw index stops looking unusual once the situation is
 accounted for, and the hollow-to-solid movement is the size of that correction.
 
 ### The multiplicity check, which is where most of these die
 
-Testing twenty-six clubs and reporting the extreme one is how you manufacture a finding. Two clubs
-clear an uncorrected p < 0.05, which is roughly what twenty-six coin flips would give you.
+Testing twenty-six clubs and reporting the extreme one is how you manufacture a finding. One club
+clears an uncorrected p < 0.05, and the next two sit just outside it.
 
 Under a Benjamini–Hochberg screen at FDR 0.10, one survives:
 
 | Club | Index | raw p | BH-adjusted | Bonferroni |
 |---|---|---|---|---|
-| Sporting | 1.179 | 0.00001 | **0.0002** | **0.0002** |
-| Gil Vicente | 0.917 | 0.044 | 0.567 | 1.000 |
-| Boavista | 1.066 | 0.073 | 0.628 | 1.000 |
+| Sporting | 1.177 | 0.00002 | **0.0004** | **0.0004** |
+| Gil Vicente | 0.928 | 0.081 | 0.635 | 1.000 |
+| Boavista | 1.062 | 0.090 | 0.635 | 1.000 |
+
+These p-values are two-sided, computed by the script alongside the table. They were previously
+typed in by hand and cannot be reproduced from any method recorded here, which is why they moved:
+the runner-up used to read 0.044 and now reads 0.081. Two-sided is the convention the 95% interval
+above already assumes, and no direction was specified in advance for a club sitting *below*
+expectation, so the screen and the interval now agree about which clubs are extreme.
 
 Gil Vicente is the one a naive threshold would have published. Sporting survives Bonferroni too,
 which is the conservative correction and not one this result needed.
@@ -307,7 +314,7 @@ slices. The arithmetic is identical and so is the error.
 
 | Anchor | Source |
 |---|---|
-| **Data** | 58,150 matches across 11 leagues, 2000–2026, committed snapshot `2026-W35`, plus 2,737 Portuguese match officials |
+| **Data** | 58,013 completed-season matches across 11 leagues, 2000–2025, committed snapshot `2026-W35`, plus 2,737 Portuguese match officials |
 | **Football** | Dawson et al. (2007) on referee inconsistency and the strength gradient; Phatak et al. (2021) on fouls-to-cards across leagues |
 | **Data science** | Efron & Morris (1975) on shrinkage; Benjamini & Hochberg (1995) on multiplicity |
 
@@ -344,15 +351,18 @@ It is also an artifact of aggregation.
 ![Two levels of aggregation](figures/fig5-aggregation-levels.png)
 
 Splitting the same data into three-season blocks and asking whether a league's own gradient moves
-when its own home advantage moves gives **−0.107, p = 0.41**, with the slope running the other way
-in four of the six leagues that have enough blocks to fit one. The test can detect a correlation of
+when its own home advantage moves gives **−0.086, p = 0.50**, with the slope running the other way
+in five of the six leagues that have enough blocks to fit one. The test can detect a correlation of
 0.35 at 80% power, so it is not simply underpowered against a claimed 0.79.
 
 | Unit | n | correlation |
 |---|---|---|
-| League averages | 11 | **+0.791** |
-| Three-season blocks, pooled | 62 | +0.231 |
-| Three-season blocks, within league | 62 | **−0.107** |
+| League averages | 11 | **+0.782** |
+| Three-season blocks, pooled | 62 | +0.238 |
+| Three-season blocks, within league | 62 | **−0.086** |
+
+Produced by `scripts/aggregation_levels.py`, with each league's own slope in
+[`aggregation.json`](aggregation.json).
 
 Home advantage fell across the panel from 0.349 goals per match in 2001 to 0.220 in 2025, with the
 crowd-free seasons visible as a trough. The gradient did not follow it.

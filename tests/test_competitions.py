@@ -12,12 +12,15 @@ import pytest
 from tfa.competitions import (
     COMPETITIONS,
     CORE_COLUMNS,
+    CURRENT_SEASON,
     DEPRECATED_COLUMNS,
     FIRST_STATS_SEASON_YEAR,
+    LAST_COMPLETED_SEASON_YEAR,
     REFEREE_LEAGUES,
     SECOND_YELLOW_FOLDED_INTO_RED,
     UNDERSTAT_LEAGUES,
     available_seasons,
+    is_completed,
     season_code,
     season_start_year,
     seasons_range,
@@ -139,3 +142,20 @@ def test_germany_discipline_series_is_interrupted():
 def test_full_core_never_precedes_discipline():
     for comp in COMPETITIONS.values():
         assert comp.full_core_from >= comp.discipline_from
+
+
+def test_completed_season_boundary() -> None:
+    """The boundary is one definition, not one per script.
+
+    Retrospective fits must not see the season in progress. A partial season is
+    not comparable to a full one, and more importantly the live season is the
+    one being investigated: letting it into the baseline lets the anomaly under
+    test contribute to its own expectation.
+    """
+    assert is_completed("2526")
+    assert is_completed("0001")
+    assert not is_completed(CURRENT_SEASON)
+    assert not is_completed("2728")
+    assert season_start_year(CURRENT_SEASON) == LAST_COMPLETED_SEASON_YEAR + 1, (
+        "CURRENT_SEASON and LAST_COMPLETED_SEASON_YEAR must describe one boundary"
+    )

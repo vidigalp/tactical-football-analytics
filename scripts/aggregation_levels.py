@@ -10,13 +10,14 @@ Run: uv run python scripts/aggregation_levels.py
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from scipy import stats
 
-from tfa.competitions import season_start_year
+from tfa.competitions import is_completed, season_start_year
 from tfa.viz import aggregation, theme
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +27,12 @@ REPORT = "02-fouling-with-impunity"
 #: error swamps the between-league spread the figure is about.
 BLOCK = 3
 MIN_TEAM_MATCHES = 600
+
+#: Blocks a league needs before its own slope over time is fitted at all. Three
+#: points through a line is a gesture rather than an estimate. This threshold was
+#: applied in the published study but never written down; it is recorded here
+#: because it is what sets the denominator of "n of the six leagues".
+MIN_BLOCKS_FOR_SLOPE = 4
 
 COUNTRY = {"E0": "England", "I1": "Italy", "SP1": "Spain", "D1": "Germany",
            "F1": "France", "P1": "Portugal", "B1": "Belgium",
@@ -42,7 +49,10 @@ def load(snapshot: Path) -> pd.DataFrame:
         frames.append(frame.assign(lg=path.name.split("__")[1]))
     matches = pd.concat(frames, ignore_index=True)
     matches["yr"] = matches["season"].map(season_start_year)
-    return matches
+    # Retrospective: the season in progress is excluded. See
+    # competitions.LAST_COMPLETED_SEASON_YEAR for why this matters more than
+    # tidiness — the live season is the one under investigation.
+    return matches[matches["season"].map(is_completed)]
 
 
 def gradient(matches: pd.DataFrame) -> float:
@@ -98,10 +108,44 @@ def main() -> None:
         blocks.gradient - blocks.groupby("lg").gradient.transform("mean"))
     pooled = stats.spearmanr(blocks.home_gd, blocks.gradient)
 
+    # Sign of each league's own slope over time. The claim in the report and in
+    # METHODS is not only that the within-league correlation is near zero, but
+    # that individual leagues slope in both directions — so the count has to be
+    # computed rather than remembered.
+    slopes = {}
+    for lg, g in blocks.groupby("lg"):
+        if len(g) < MIN_BLOCKS_FOR_SLOPE:
+            continue
+        slopes[lg] = float(np.polyfit(g.home_gd, g.gradient, 1)[0])
+    negative = sum(1 for v in slopes.values() if v < 0)
+
     print(f"leagues: {len(leagues)}   blocks: {len(blocks)}")
     print(f"  between leagues   rho={between.statistic:+.3f}  p={between.pvalue:.3f}")
     print(f"  blocks pooled     rho={pooled.statistic:+.3f}  p={pooled.pvalue:.3f}")
     print(f"  within league     rho={within.statistic:+.3f}  p={within.pvalue:.3f}")
+    print(f"  leagues with enough blocks to fit a line: {len(slopes)}, "
+          f"of which {negative} slope negative")
+
+    facts = {
+        "snapshot": snapshot.name,
+        "leagues": int(len(leagues)),
+        "blocks": int(len(blocks)),
+        "block_seasons": BLOCK,
+        "between_leagues": {"rho": float(between.statistic), "p": float(between.pvalue)},
+        "blocks_pooled": {"rho": float(pooled.statistic), "p": float(pooled.pvalue)},
+        "within_league": {"rho": float(within.statistic), "p": float(within.pvalue)},
+        "league_slopes": slopes,
+        "leagues_fitted": int(len(slopes)),
+        "min_blocks_for_slope": MIN_BLOCKS_FOR_SLOPE,
+        "leagues_sloping_negative": int(negative),
+        "gradient_by_league": {
+            row.lg: {"gradient": float(row.gradient), "home_gd": float(row.home_gd)}
+            for row in leagues.itertuples()
+        },
+    }
+    sidecar = ROOT / "reports" / REPORT / "aggregation.json"
+    sidecar.write_text(json.dumps(facts, indent=2, sort_keys=True) + "\n")
+    print(f"wrote {sidecar.relative_to(ROOT)}")
 
     out = ROOT / "reports" / REPORT / "figures"
     for written in aggregation.levels(leagues, blocks, out / "fig5-aggregation-levels",

@@ -55,6 +55,20 @@ CORE_COLUMNS: tuple[str, ...] = REQUIRED_COLUMNS + OPTIONAL_COLUMNS
 #: The first season carrying match statistics. Earlier files are results+odds only.
 FIRST_STATS_SEASON_YEAR = 2000
 
+#: The last completed season. Retrospective analysis stops here.
+#:
+#: Three scripts spelled this boundary three different ways — ``year <= 2025``,
+#: ``season != "2627"``, and not at all — so the same study fitted some of its
+#: estimates on ten completed seasons and others on ten seasons plus four
+#: matchweeks. That is not merely untidy. The live season is the one under
+#: investigation, so letting it into a retrospective baseline lets an anomaly
+#: contribute to the expectation it is then measured against, which shrinks the
+#: very effect the study is testing for.
+LAST_COMPLETED_SEASON_YEAR = 2025
+
+#: The season in progress, in football-data's own coding.
+CURRENT_SEASON = "2627"
+
 #: Documented by football-data.co.uk but long since dropped from live files.
 #: Kept here so a future contributor cannot build on a column that no longer
 #: exists, and so the Week 1 audit can report exactly when each disappeared.
@@ -196,6 +210,18 @@ def season_start_year(code: str) -> int:
     """
     first = int(code[:2])
     return 1900 + first if first >= 93 else 2000 + first
+
+
+def is_completed(code: str) -> bool:
+    """Is this season finished?
+
+    The single definition of the boundary between a retrospective estimate and
+    the season being watched. See :data:`LAST_COMPLETED_SEASON_YEAR`.
+
+    >>> is_completed("2526"), is_completed("2627")
+    (True, False)
+    """
+    return season_start_year(code) <= LAST_COMPLETED_SEASON_YEAR
 
 
 def seasons_range(start_year: int, end_year: int) -> list[str]:

@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from tfa.competitions import COMPETITIONS, season_start_year
+from tfa.competitions import COMPETITIONS, is_completed, season_start_year
 from tfa.ingest.matches import to_team_match
 from tfa.snapshot import read_manifest
 
@@ -52,6 +52,10 @@ def prepare(directory: Path, code: str) -> pd.DataFrame:
     )
     tm = to_team_match(frame)
     tm["yr"] = tm["season"].map(season_start_year)
+    # Retrospective: the season in progress is excluded. See
+    # competitions.LAST_COMPLETED_SEASON_YEAR for why this matters more than
+    # tidiness — the live season is the one under investigation.
+    tm = tm[tm["season"].map(is_completed)]
     tm = tm[tm["Referee"].notna() & (tm["Referee"].astype(str).str.len() > 1)]
 
     lg = tm.groupby("season", as_index=False).agg(

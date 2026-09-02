@@ -202,12 +202,12 @@ often not survive being asked at a finer grain. Test it within units before beli
 
 The worked example cost nothing to find and would have cost a great deal to publish. Booking
 gradients differ genuinely between the eleven leagues, and across those eleven league averages the
-gradient correlates with home advantage at +0.79. It has every mark of a result: a plausible
+gradient correlates with home advantage at +0.78. It has every mark of a result: a plausible
 mechanism, stability under leave-one-out, and survival of a Bonferroni correction for the seven
 covariates tried. Splitting the same data into three-season blocks and asking whether a league's
-own gradient moves when its own home advantage moves gives -0.11, sloping the other way in four
+own gradient moves when its own home advantage moves gives -0.09, sloping the other way in five
 of the six leagues with enough blocks to fit a line, against a test able to detect 0.35 at 80%
-power. Pooled at block level it is +0.23. One dataset, three levels of aggregation, and the
+power. Pooled at block level it is +0.24. One dataset, three levels of aggregation, and the
 association is manufactured by the coarsest one.
 
 The prompt that exposed it is worth recording too, because it was not a statistical objection: the

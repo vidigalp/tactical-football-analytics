@@ -1,195 +1,276 @@
 {
+  "bh_fdr": 0.1,
+  "bh_surviving": 1,
   "clubs": 26,
+  "naive_significant": 1,
   "officials": 32,
-  "ref_draw_max": 1.0198035757747559,
-  "ref_draw_min": 0.9695945858223941,
-  "referee_known_share": 0.982059562253319,
-  "referee_multiplier_max": 1.3241268354710387,
-  "referee_multiplier_min": 0.7584959591374648,
+  "ref_draw_max": 1.0211302423157456,
+  "ref_draw_min": 0.970606599573002,
+  "referee_known_share": 0.9836601307189542,
+  "referee_multiplier_max": 1.323506420178776,
+  "referee_multiplier_min": 0.7548199134931747,
   "separating": 1,
   "table": {
     "Arouca": {
-      "hi": 1.072,
-      "lo": 0.89,
-      "raw": 0.985,
-      "referee": 0.978,
-      "situation": 0.953
+      "hi": 1.06,
+      "lo": 0.878,
+      "p_bh": 0.9580194277817622,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.4790097138908811,
+      "raw": 0.974,
+      "referee": 0.966,
+      "situation": 0.944
     },
     "Aves": {
-      "hi": 1.038,
-      "lo": 0.805,
+      "hi": 1.039,
+      "lo": 0.806,
+      "p_bh": 0.7684453343830578,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.18080129500791012,
       "raw": 0.975,
-      "referee": 0.916,
-      "situation": 0.928
+      "referee": 0.917,
+      "situation": 0.929
     },
     "Belenenses": {
-      "hi": 1.118,
-      "lo": 0.928,
+      "hi": 1.12,
+      "lo": 0.93,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.6626208061575893,
       "raw": 1.067,
-      "referee": 1.02,
-      "situation": 1.013
+      "referee": 1.021,
+      "situation": 1.014
     },
     "Benfica": {
-      "hi": 1.083,
-      "lo": 0.924,
-      "raw": 0.88,
-      "referee": 1.001,
-      "situation": 1.007
+      "hi": 1.084,
+      "lo": 0.925,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.9646290393930824,
+      "raw": 0.885,
+      "referee": 1.002,
+      "situation": 1.009
     },
     "Boavista": {
-      "hi": 1.136,
-      "lo": 0.989,
+      "hi": 1.138,
+      "lo": 0.991,
+      "p_bh": 0.6348662745526372,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.08953467820604416,
       "raw": 1.114,
-      "referee": 1.061,
-      "situation": 1.066
+      "referee": 1.062,
+      "situation": 1.067
     },
     "Casa Pia": {
-      "hi": 1.066,
-      "lo": 0.867,
-      "raw": 0.971,
-      "referee": 0.963,
-      "situation": 0.938
+      "hi": 1.071,
+      "lo": 0.869,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.5278821187849254,
+      "raw": 0.973,
+      "referee": 0.966,
+      "situation": 0.941
     },
     "Chaves": {
-      "hi": 1.162,
-      "lo": 0.94,
+      "hi": 1.163,
+      "lo": 0.941,
+      "p_bh": 0.9266371510411363,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.39203879467124997,
       "raw": 1.099,
-      "referee": 1.046,
-      "situation": 1.051
+      "referee": 1.048,
+      "situation": 1.052
     },
     "Estoril": {
-      "hi": 1.043,
+      "hi": 1.044,
       "lo": 0.877,
-      "raw": 0.973,
-      "referee": 0.957,
-      "situation": 0.942
+      "p_bh": 0.9266371510411363,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.33526383942755084,
+      "raw": 0.974,
+      "referee": 0.958,
+      "situation": 0.943
     },
     "Estrela": {
-      "hi": 1.103,
-      "lo": 0.866,
-      "raw": 1.029,
-      "referee": 0.979,
-      "situation": 0.975
+      "hi": 1.102,
+      "lo": 0.862,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.7285028702673186,
+      "raw": 1.023,
+      "referee": 0.976,
+      "situation": 0.971
     },
     "Famalicao": {
       "hi": 1.1,
-      "lo": 0.943,
+      "lo": 0.942,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.6469591765233411,
       "raw": 1.013,
       "referee": 1.019,
-      "situation": 1.016
+      "situation": 1.015
     },
     "Farense": {
-      "hi": 1.063,
-      "lo": 0.828,
+      "hi": 1.066,
+      "lo": 0.83,
+      "p_bh": 0.9266371510411363,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.35894366419878293,
       "raw": 0.962,
-      "referee": 0.94,
-      "situation": 0.927
+      "referee": 0.942,
+      "situation": 0.928
     },
     "Gil Vicente": {
-      "hi": 1.007,
-      "lo": 0.85,
-      "raw": 0.932,
-      "referee": 0.926,
-      "situation": 0.919
+      "hi": 1.009,
+      "lo": 0.851,
+      "p_bh": 0.6348662745526372,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.08115647633878059,
+      "raw": 0.933,
+      "referee": 0.928,
+      "situation": 0.92
     },
     "Guimaraes": {
-      "hi": 1.089,
-      "lo": 0.947,
-      "raw": 0.992,
-      "referee": 1.016,
-      "situation": 1.014
+      "hi": 1.088,
+      "lo": 0.945,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.6877972713440705,
+      "raw": 0.991,
+      "referee": 1.015,
+      "situation": 1.013
     },
     "Maritimo": {
-      "hi": 1.09,
-      "lo": 0.926,
-      "raw": 1.068,
-      "referee": 1.006,
-      "situation": 1.022
+      "hi": 1.095,
+      "lo": 0.929,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.8327218920870676,
+      "raw": 1.072,
+      "referee": 1.009,
+      "situation": 1.026
     },
     "Moreirense": {
-      "hi": 1.017,
-      "lo": 0.875,
-      "raw": 0.978,
-      "referee": 0.944,
-      "situation": 0.948
+      "hi": 1.013,
+      "lo": 0.871,
+      "p_bh": 0.6348662745526372,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.1068847178916945,
+      "raw": 0.972,
+      "referee": 0.94,
+      "situation": 0.942
     },
     "Nacional": {
-      "hi": 1.168,
+      "hi": 1.172,
       "lo": 0.951,
-      "raw": 1.095,
-      "referee": 1.055,
-      "situation": 1.042
+      "p_bh": 0.9266371510411363,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.30041872534035385,
+      "raw": 1.097,
+      "referee": 1.057,
+      "situation": 1.046
     },
     "Pacos Ferreira": {
-      "hi": 1.087,
-      "lo": 0.909,
+      "hi": 1.088,
+      "lo": 0.91,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.9591168964550696,
       "raw": 1.032,
-      "referee": 0.995,
-      "situation": 0.993
+      "referee": 0.996,
+      "situation": 0.994
     },
     "Portimonense": {
-      "hi": 1.027,
-      "lo": 0.876,
+      "hi": 1.028,
+      "lo": 0.877,
+      "p_bh": 0.7684453343830578,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.20688912848774635,
       "raw": 0.983,
-      "referee": 0.949,
+      "referee": 0.95,
       "situation": 0.96
     },
     "Porto": {
-      "hi": 1.074,
-      "lo": 0.925,
-      "raw": 0.881,
-      "referee": 0.997,
-      "situation": 1.012
+      "hi": 1.079,
+      "lo": 0.929,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.963831427161208,
+      "raw": 0.89,
+      "referee": 1.002,
+      "situation": 1.018
     },
     "Rio Ave": {
       "hi": 1.085,
-      "lo": 0.932,
+      "lo": 0.931,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.8898196661181728,
       "raw": 1.021,
       "referee": 1.006,
-      "situation": 1.0
+      "situation": 1.001
     },
     "Santa Clara": {
-      "hi": 1.108,
-      "lo": 0.951,
-      "raw": 1.029,
-      "referee": 1.028,
-      "situation": 1.012
+      "hi": 1.11,
+      "lo": 0.952,
+      "p_bh": 0.9580194277817622,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.47216456707514637,
+      "raw": 1.03,
+      "referee": 1.029,
+      "situation": 1.014
     },
     "Setubal": {
-      "hi": 1.14,
-      "lo": 0.896,
+      "hi": 1.141,
+      "lo": 0.897,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.8397961861084218,
       "raw": 1.053,
-      "referee": 1.013,
-      "situation": 1.019
-    },
-    "Sp Braga": {
-      "hi": 1.084,
-      "lo": 0.933,
-      "raw": 0.935,
-      "referee": 1.006,
+      "referee": 1.014,
       "situation": 1.021
     },
+    "Sp Braga": {
+      "hi": 1.083,
+      "lo": 0.931,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.9135852192509168,
+      "raw": 0.936,
+      "referee": 1.005,
+      "situation": 1.02
+    },
     "Sp Lisbon": {
-      "hi": 1.267,
-      "lo": 1.097,
-      "raw": 1.045,
-      "referee": 1.18,
-      "situation": 1.182
+      "hi": 1.264,
+      "lo": 1.094,
+      "p_bh": 0.00041764829535043265,
+      "p_bonferroni": 0.00041764829535043265,
+      "p_raw": 1.606339597501664e-05,
+      "raw": 1.046,
+      "referee": 1.177,
+      "situation": 1.179
     },
     "Tondela": {
       "hi": 1.018,
       "lo": 0.855,
+      "p_bh": 0.6348662745526372,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.12208966818319947,
       "raw": 0.995,
       "referee": 0.934,
-      "situation": 0.946
+      "situation": 0.947
     },
     "Vizela": {
-      "hi": 1.11,
-      "lo": 0.876,
+      "hi": 1.112,
+      "lo": 0.878,
+      "p_bh": 0.9646290393930824,
+      "p_bonferroni": 1.0,
+      "p_raw": 0.8925197143374392,
       "raw": 1.007,
-      "referee": 0.988,
-      "situation": 0.985
+      "referee": 0.99,
+      "situation": 0.986
     }
   },
-  "team_matches": 5574
+  "team_matches": 5508
 }

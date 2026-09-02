@@ -48,7 +48,8 @@ Fouls and cards arrived league by league across seventeen years. England and Sco
 Turkey only from 2017-18; Belgium and Greece only from 2019-20.
 
 **179 of 286 league-season files carry fouls and cards.** The other 107 exist, download fine, and
-parse fine. They simply have no football in them.
+parse fine. They simply have no football in them. The counts come from
+[`facts.json`](facts.json), written by the audit rather than read off a screen.
 
 This matters more than it sounds. A researcher pulling "twenty-six seasons of Portuguese football"
 gets twenty-six files and nine seasons of data, with no error raised anywhere in that process.

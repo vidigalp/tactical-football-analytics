@@ -24,7 +24,13 @@ FIGURE = re.compile(r"!\[[^\]]*\]\((figures/[^)]+)\)")
 SCRIPT = re.compile(r"\b(scripts/[A-Za-z0-9_]+\.py)\b")
 
 #: A JSON provenance sidecar a study links to as the source of its numbers.
-SIDECAR = re.compile(r"\]\((facts|persistence|numbers|chart)\.json\)")
+#: Listed explicitly rather than matched as ``\w+\.json`` so that adding a
+#: sidecar is a deliberate act; a study that links a file this does not know
+#: about goes unchecked, which is the failure this test exists to prevent.
+SIDECAR = re.compile(
+    r"\]\((facts|persistence|numbers|chart|story|aggregation"
+    r"|referee_table|season_status)\.json\)"
+)
 
 
 def reports() -> list[Path]:

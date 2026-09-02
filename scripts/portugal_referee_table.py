@@ -22,6 +22,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
+from tfa.competitions import is_completed
 from tfa.ingest.referees import join_to_matches
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,6 +52,10 @@ def load() -> pd.DataFrame:
     matches = pd.read_parquet(
         next(snapshot.glob("football-data__P1__*.parquet")))
     matches = matches.dropna(subset=["HF", "AF", "HY", "AY", "strength_diff"])
+    # Retrospective: the season in progress is excluded. See
+    # competitions.LAST_COMPLETED_SEASON_YEAR for why this matters more than
+    # tidiness — the live season is the one under investigation.
+    matches = matches[matches["season"].map(is_completed)]
 
     referees = pd.read_csv(ROOT / "data" / "managers" / "primeira_liga_referees.csv")
     joined, _unmatched = join_to_matches(referees, matches)
@@ -106,6 +111,22 @@ def referee_multipliers(teams: pd.DataFrame, *, exclude: str | None = None) -> p
         lambda g: g.yellows.sum() / g.exp_situation.sum(), include_groups=False)
 
 
+def poisson_two_sided(observed: int, expected: float) -> float:
+    """Two-sided Poisson probability of a count this far from *expected*.
+
+    The doubled one-tailed tail, which is the convention the interval in
+    :func:`interval` already assumes, so the screen and the interval cannot
+    disagree about which clubs are extreme.
+    """
+    if expected <= 0:
+        return 1.0
+    if observed >= expected:
+        tail = stats.poisson.sf(observed - 1, expected)
+    else:
+        tail = stats.poisson.cdf(observed, expected)
+    return float(min(1.0, 2 * tail))
+
+
 def main() -> None:
     teams = add_expectations(load())
     multipliers = referee_multipliers(teams)
@@ -138,6 +159,26 @@ def main() -> None:
     clubs["lo"] = [b[0] for b in bounds]
     clubs["hi"] = [b[1] for b in bounds]
     clubs["separates"] = (clubs.lo > 1.0) | (clubs.hi < 1.0)
+
+    # The multiplicity screen. Twenty-six clubs tested and the extreme one
+    # reported is how a finding is manufactured, so the correction belongs in
+    # the script that produces the table rather than in the prose beside it.
+    # These p-values were previously typed into the report by hand.
+    clubs["p_raw"] = [
+        poisson_two_sided(int(y), float(e))
+        for y, e in zip(clubs.yellows, clubs.e_referee, strict=True)
+    ]
+    order = np.argsort(clubs.p_raw.to_numpy())
+    ranked = clubs.p_raw.to_numpy()[order]
+    m = len(ranked)
+    # Benjamini-Hochberg, enforcing monotonicity from the largest p downward.
+    adjusted = np.minimum.accumulate(
+        (ranked * m / np.arange(1, m + 1))[::-1]
+    )[::-1].clip(max=1.0)
+    bh = np.empty(m)
+    bh[order] = adjusted
+    clubs["p_bh"] = bh
+    clubs["p_bonferroni"] = (clubs.p_raw * m).clip(upper=1.0)
     clubs = clubs.sort_values("referee", ascending=False)
 
     print(f"{len(teams):,} team-matches, "
@@ -152,6 +193,13 @@ def main() -> None:
     print(f"referee draw across clubs: {clubs.ref_draw.min():.3f} "
           f"to {clubs.ref_draw.max():.3f}")
 
+    screen = clubs.sort_values("p_raw")[["referee", "p_raw", "p_bh", "p_bonferroni"]]
+    print("\nmultiplicity screen, most extreme first:")
+    print(screen.head(5).to_string(
+        float_format=lambda v: f"{v:.5f}" if v < 0.001 else f"{v:.3f}"))
+    print(f"  uncorrected p < 0.05: {int((clubs.p_raw < 0.05).sum())} of {len(clubs)}")
+    print(f"  surviving BH at FDR 0.10: {int((clubs.p_bh < 0.10).sum())}")
+
     facts = {
         "team_matches": int(len(teams)),
         "referee_known_share": float(teams.referee.notna().mean()),
@@ -160,6 +208,9 @@ def main() -> None:
         "referee_multiplier_max": float(multipliers.max()),
         "clubs": int(len(clubs)),
         "separating": int(len(separating)),
+        "naive_significant": int((clubs.p_raw < 0.05).sum()),
+        "bh_surviving": int((clubs.p_bh < 0.10).sum()),
+        "bh_fdr": 0.10,
         "ref_draw_min": float(clubs.ref_draw.min()),
         "ref_draw_max": float(clubs.ref_draw.max()),
         "table": {
@@ -169,6 +220,9 @@ def main() -> None:
                 "referee": round(float(row.referee), 3),
                 "lo": round(float(row.lo), 3),
                 "hi": round(float(row.hi), 3),
+                "p_raw": float(row.p_raw),
+                "p_bh": float(row.p_bh),
+                "p_bonferroni": float(row.p_bonferroni),
             }
             for team, row in clubs.iterrows()
         },

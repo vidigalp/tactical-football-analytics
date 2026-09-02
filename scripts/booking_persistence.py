@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from tfa.competitions import season_start_year
+from tfa.competitions import is_completed, season_start_year
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = "02-fouling-with-impunity"
@@ -41,7 +41,10 @@ def load(snapshot: Path) -> pd.DataFrame:
         frames.append(frame.assign(lg=path.name.split("__")[1]))
     matches = pd.concat(frames, ignore_index=True)
     matches["yr"] = matches["season"].map(season_start_year)
-    return matches
+    # Retrospective: the season in progress is excluded. See
+    # competitions.LAST_COMPLETED_SEASON_YEAR for why this matters more than
+    # tidiness — the live season is the one under investigation.
+    return matches[matches["season"].map(is_completed)]
 
 
 def team_rows(matches: pd.DataFrame) -> pd.DataFrame:
