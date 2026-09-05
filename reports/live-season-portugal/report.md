@@ -1,6 +1,6 @@
 # The Portuguese season as it stands
 
-**Updated:** 2026-09-02 · **Snapshot:** `2026-W36` · **Claim level:** L2 (hypothesis, pre-registered)
+**Updated:** 2026-09-05 · **Snapshot:** `2026-W36` · **Claim level:** L2 (hypothesis, pre-registered)
 
 ---
 
@@ -91,6 +91,41 @@ What it does not rule out is the thing no public data can see: whether the fouls
 different in kind. Produced by `scripts/placement_ceiling.py` alongside
 [`placement.json`](placement.json).
 
+## Has an opening like this ever become a season like this?
+
+The archive can answer that without waiting for November. Every completed team-season in the
+snapshot is cut at the point Porto's season now stands, four matches in, and its opening is
+compared with the rest of the same season. The index used for this is deliberately cruder than the
+one in the table above: yellows over yellows expected at the league-season's own card-per-foul
+rate, with no situation adjustment, because the comparison needs one scale that exists for every
+club in every league. On that scale Porto's opening reads **0.112**.
+
+![Opening index against rest-of-season index, every completed team-season](figures/fig2-openings-revert.png)
+
+Across **3,100** completed team-seasons in eleven leagues, **4** openings were at least as extreme.
+Widening to the most lenient 1% of all openings, an index of **0.292** or below, gives **31**
+team-seasons to follow. Their rest-of-season index has a median of **0.965** and a minimum of
+**0.663**. None finished as an outlier. The most lenient completed season in the whole archive is
+Celtic's 2024-25 at **0.548**, and no opening in the extreme group came close to it.
+
+The opening and the rest of the season are close to independent. The correlation between the two
+across all team-seasons is **0.12**, and the first percentile of rest-of-season indices is
+**0.70**: the bottom of what a full season does, once the opening is set aside, is not far below
+average.
+
+The follow-up window matters for the sealed test. In the seven matches after their opening, those
+31 clubs took between 5 and 29 yellow cards: 7 stayed at or below the pre-registration's
+"real" line of seven, 9 landed in the ambiguous band, 15 crossed into noise. The typical club in
+the archive takes 14 yellows in any seven-match stretch. The typical Portuguese club takes 19,
+and Porto's own nine completed seasons here never produced fewer than 14 in matches five to
+eleven. Their rest-of-season index over those seasons ran from **0.744** to **1.081**.
+
+So the sealed test's "real" threshold is a high bar in this league, set before this comparison
+was made, and the base rate for clearing it from an opening like this is roughly one in four. That
+is the reading this page carries into the autumn: unusual, surviving the screen, and historically
+followed by reversion every time. Produced by `scripts/opening_reversion.py` alongside
+[`openings.json`](openings.json).
+
 ## The sealed test
 
 [The pre-registration](https://github.com/vidigalp/tactical-football-analytics/blob/main/preregistrations/2026-08-30-porto-booking-index.md)
@@ -120,11 +155,13 @@ pretending otherwise.
 | Aggregation | **run — survived** | The index is computed per club over its own matches, and the situation multiplier is estimated from the other ten seasons, so no part of this club's own live record sets its own baseline. |
 | Adjustment coarseness | **skipped** | The situation multiplier is banded into five strength levels here rather than fitted continuously, because it is deliberately frozen from study 02's pre-registration. A continuous refit would be a better adjustment and a broken pre-registration. The banding under-corrects heavy favourites, which makes this reading conservative against the club. |
 | Prior work | **not applicable** | No prior work is being extended. This is a status page against a sealed test. |
-| Baseline sufficiency | **run — survived** | The Benjamini–Hochberg screen across all 18 clubs is the matched null: it asks what the most extreme club would look like if nothing were happening, and one club clears it. |
+| Baseline sufficiency | **run — survived** | Two nulls. The Benjamini–Hochberg screen across all 18 clubs asks what the most extreme club would look like if nothing were happening, and one club clears it. The archive of 3,100 completed team-seasons asks what openings this extreme did next, and the answer is that every one of them reverted. |
 | Cross-sectional, few units | **not applicable** | No correlation across aggregate units is claimed. |
 
 ## Reproduce this
 
 ```bash
 uv run python scripts/season_status.py
+uv run python scripts/placement_ceiling.py
+uv run python scripts/opening_reversion.py
 ```

@@ -1,0 +1,453 @@
+{
+  "club": "Porto",
+  "club_history": {
+    "1718": {
+      "index_open": 0.977,
+      "index_rest": 0.844,
+      "index_season": 0.856,
+      "yellows_follow": 17
+    },
+    "1819": {
+      "index_open": 0.984,
+      "index_rest": 0.744,
+      "index_season": 0.769,
+      "yellows_follow": 15
+    },
+    "1920": {
+      "index_open": 1.041,
+      "index_rest": 0.969,
+      "index_season": 0.978,
+      "yellows_follow": 15
+    },
+    "2021": {
+      "index_open": 0.527,
+      "index_rest": 0.827,
+      "index_season": 0.785,
+      "yellows_follow": 15
+    },
+    "2122": {
+      "index_open": 0.677,
+      "index_rest": 0.83,
+      "index_season": 0.813,
+      "yellows_follow": 26
+    },
+    "2223": {
+      "index_open": 0.703,
+      "index_rest": 0.779,
+      "index_season": 0.771,
+      "yellows_follow": 14
+    },
+    "2324": {
+      "index_open": 1.601,
+      "index_rest": 1.024,
+      "index_season": 1.086,
+      "yellows_follow": 27
+    },
+    "2425": {
+      "index_open": 0.735,
+      "index_rest": 1.081,
+      "index_season": 1.036,
+      "yellows_follow": 17
+    },
+    "2526": {
+      "index_open": 1.124,
+      "index_rest": 0.893,
+      "index_season": 0.924,
+      "yellows_follow": 18
+    }
+  },
+  "club_history_follow_min": 14,
+  "club_history_rest_max": 1.081,
+  "club_history_rest_min": 0.744,
+  "club_index_open": 0.112,
+  "club_open_percentile": 0.13,
+  "complete_threshold": 30,
+  "correlation_open_rest": 0.118,
+  "extreme": [
+    {
+      "fouls_open": 30,
+      "index_open": 0.0,
+      "index_rest": 0.824,
+      "league": "N1",
+      "season": "2324",
+      "team": "Feyenoord",
+      "yellows_follow": 7,
+      "yellows_open": 0
+    },
+    {
+      "fouls_open": 48,
+      "index_open": 0.0,
+      "index_rest": 1.173,
+      "league": "E0",
+      "season": "1213",
+      "team": "Norwich",
+      "yellows_follow": 8,
+      "yellows_open": 0
+    },
+    {
+      "fouls_open": 32,
+      "index_open": 0.0,
+      "index_rest": 0.965,
+      "league": "SC0",
+      "season": "1213",
+      "team": "Celtic",
+      "yellows_follow": 13,
+      "yellows_open": 0
+    },
+    {
+      "fouls_open": 54,
+      "index_open": 0.098,
+      "index_rest": 1.083,
+      "league": "T1",
+      "season": "2425",
+      "team": "Galatasaray",
+      "yellows_follow": 22,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 47,
+      "index_open": 0.117,
+      "index_rest": 1.459,
+      "league": "SP1",
+      "season": "2425",
+      "team": "Las Palmas",
+      "yellows_follow": 29,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 49,
+      "index_open": 0.129,
+      "index_rest": 1.258,
+      "league": "E0",
+      "season": "1415",
+      "team": "Tottenham",
+      "yellows_follow": 20,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 62,
+      "index_open": 0.137,
+      "index_rest": 0.938,
+      "league": "E0",
+      "season": "0203",
+      "team": "Everton",
+      "yellows_follow": 12,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 47,
+      "index_open": 0.159,
+      "index_rest": 0.894,
+      "league": "N1",
+      "season": "1819",
+      "team": "Ajax",
+      "yellows_follow": 10,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 49,
+      "index_open": 0.161,
+      "index_rest": 0.921,
+      "league": "D1",
+      "season": "1718",
+      "team": "Dortmund",
+      "yellows_follow": 8,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 45,
+      "index_open": 0.165,
+      "index_rest": 0.998,
+      "league": "E0",
+      "season": "0910",
+      "team": "Everton",
+      "yellows_follow": 13,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 56,
+      "index_open": 0.174,
+      "index_rest": 1.166,
+      "league": "E0",
+      "season": "0405",
+      "team": "Chelsea",
+      "yellows_follow": 6,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 32,
+      "index_open": 0.185,
+      "index_rest": 1.14,
+      "league": "SC0",
+      "season": "2425",
+      "team": "Motherwell",
+      "yellows_follow": 18,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 31,
+      "index_open": 0.186,
+      "index_rest": 0.977,
+      "league": "E0",
+      "season": "2526",
+      "team": "West Ham",
+      "yellows_follow": 16,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 38,
+      "index_open": 0.189,
+      "index_rest": 0.994,
+      "league": "F1",
+      "season": "1819",
+      "team": "Lyon",
+      "yellows_follow": 18,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 35,
+      "index_open": 0.193,
+      "index_rest": 0.88,
+      "league": "D1",
+      "season": "2122",
+      "team": "Bayern Munich",
+      "yellows_follow": 5,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 32,
+      "index_open": 0.2,
+      "index_rest": 0.663,
+      "league": "E0",
+      "season": "1920",
+      "team": "Leicester",
+      "yellows_follow": 10,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 29,
+      "index_open": 0.201,
+      "index_rest": 1.053,
+      "league": "D1",
+      "season": "1920",
+      "team": "Dortmund",
+      "yellows_follow": 11,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 32,
+      "index_open": 0.203,
+      "index_rest": 0.873,
+      "league": "N1",
+      "season": "2324",
+      "team": "Heerenveen",
+      "yellows_follow": 11,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 54,
+      "index_open": 0.214,
+      "index_rest": 0.972,
+      "league": "T1",
+      "season": "2122",
+      "team": "Altay",
+      "yellows_follow": 17,
+      "yellows_open": 2
+    },
+    {
+      "fouls_open": 40,
+      "index_open": 0.214,
+      "index_rest": 0.804,
+      "league": "SC0",
+      "season": "2021",
+      "team": "Rangers",
+      "yellows_follow": 7,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 30,
+      "index_open": 0.224,
+      "index_rest": 0.89,
+      "league": "E0",
+      "season": "1213",
+      "team": "Fulham",
+      "yellows_follow": 10,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 41,
+      "index_open": 0.237,
+      "index_rest": 1.044,
+      "league": "E0",
+      "season": "0405",
+      "team": "Man United",
+      "yellows_follow": 7,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 29,
+      "index_open": 0.241,
+      "index_rest": 0.93,
+      "league": "N1",
+      "season": "2425",
+      "team": "PSV Eindhoven",
+      "yellows_follow": 6,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 28,
+      "index_open": 0.242,
+      "index_rest": 1.073,
+      "league": "SC0",
+      "season": "1112",
+      "team": "Kilmarnock",
+      "yellows_follow": 16,
+      "yellows_open": 1
+    },
+    {
+      "fouls_open": 67,
+      "index_open": 0.256,
+      "index_rest": 0.813,
+      "league": "E0",
+      "season": "0001",
+      "team": "Newcastle",
+      "yellows_follow": 6,
+      "yellows_open": 2
+    },
+    {
+      "fouls_open": 74,
+      "index_open": 0.26,
+      "index_rest": 0.98,
+      "league": "D1",
+      "season": "1011",
+      "team": "Hoffenheim",
+      "yellows_follow": 16,
+      "yellows_open": 2
+    },
+    {
+      "fouls_open": 39,
+      "index_open": 0.271,
+      "index_rest": 0.912,
+      "league": "T1",
+      "season": "2425",
+      "team": "Trabzonspor",
+      "yellows_follow": 27,
+      "yellows_open": 2
+    },
+    {
+      "fouls_open": 47,
+      "index_open": 0.271,
+      "index_rest": 0.971,
+      "league": "SP1",
+      "season": "0910",
+      "team": "Barcelona",
+      "yellows_follow": 13,
+      "yellows_open": 2
+    },
+    {
+      "fouls_open": 47,
+      "index_open": 0.273,
+      "index_rest": 0.853,
+      "league": "F1",
+      "season": "2425",
+      "team": "Monaco",
+      "yellows_follow": 18,
+      "yellows_open": 2
+    },
+    {
+      "fouls_open": 49,
+      "index_open": 0.285,
+      "index_rest": 0.772,
+      "league": "G1",
+      "season": "2122",
+      "team": "Olympiakos",
+      "yellows_follow": 10,
+      "yellows_open": 2
+    },
+    {
+      "fouls_open": 41,
+      "index_open": 0.29,
+      "index_rest": 0.887,
+      "league": "E0",
+      "season": "2122",
+      "team": "Liverpool",
+      "yellows_follow": 10,
+      "yellows_open": 2
+    }
+  ],
+  "extreme_count": 31,
+  "extreme_cut": 0.292,
+  "extreme_quantile": 0.01,
+  "extreme_rest_below_0_5": 0,
+  "extreme_rest_below_0_8": 2,
+  "extreme_rest_median": 0.965,
+  "extreme_rest_min": 0.663,
+  "extreme_season_min": 0.628,
+  "follow_up": 7,
+  "follow_up_yellows": {
+    "all_median": 14.0,
+    "all_share_real": 0.04,
+    "extreme_counts": [
+      5,
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      8,
+      8,
+      10,
+      10,
+      10,
+      10,
+      10,
+      11,
+      11,
+      12,
+      13,
+      13,
+      13,
+      16,
+      16,
+      16,
+      17,
+      18,
+      18,
+      18,
+      20,
+      22,
+      27,
+      29
+    ],
+    "extreme_leagues": [
+      "D1",
+      "E0",
+      "F1",
+      "G1",
+      "N1",
+      "SC0",
+      "SP1",
+      "T1"
+    ],
+    "extreme_share_ambiguous": 0.29,
+    "extreme_share_noise": 0.484,
+    "extreme_share_real": 0.226,
+    "league_median": 19.0,
+    "league_share_real": 0.0062
+  },
+  "leagues": 11,
+  "lowest_full_season": {
+    "index": 0.548,
+    "league": "SC0",
+    "season": "2425",
+    "team": "Celtic"
+  },
+  "opening_median": 0.978,
+  "openings_at_least_as_extreme": 4,
+  "rest_percentile_1": 0.696,
+  "rest_percentile_5": 0.784,
+  "snapshot": "2026-W36",
+  "team_seasons": 3100,
+  "window": 4
+}
