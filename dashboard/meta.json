@@ -1,0 +1,662 @@
+{
+ "bands": {
+  "edges": [
+   null,
+   -1.0,
+   -0.35,
+   0.35,
+   1.0,
+   null
+  ],
+  "names": [
+   "heavy underdog",
+   "underdog",
+   "even",
+   "favourite",
+   "heavy favourite"
+  ]
+ },
+ "baseline_from": "2017-18",
+ "caveats": [
+  "A booking index of 1.0 means as many yellow cards as the model expects from the fouls recorded and the pre-match situation. It is not a measure of fairness and is never read that way here.",
+  "Fouls and cards are as recorded by the source feed. What counts as a foul is not the same in every league, which is why every expectation is fitted within the league.",
+  "Intervals are exact Poisson intervals on the count of yellow cards. Early in a season they are wide enough to admit almost anything, and that is the point of showing them.",
+  "Percentiles say where a club sits among clubs measured the same way. Nothing here is a ranking, and a sorted list drawn from this file would be one.",
+  "The situation multiplier needs odds. A match without them is priced at the era expectation alone.",
+  "Completed seasons use their own league-season fit. The season in progress uses the league's pooled fit on completed seasons since 2017-18, frozen, so four matches cannot set their own baseline."
+ ],
+ "complete_threshold": 30,
+ "current_season": "2627",
+ "current_season_label": "2026-27",
+ "fdr": 0.1,
+ "generated_at": "2026-09-05T14:14:48+00:00",
+ "leagues": {
+  "B1": {
+   "baseline_seasons": [
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "clubs_current": 18,
+   "code": "B1",
+   "completed_seasons": [
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "country": "Belgium",
+   "latest_date": "2026-08-30",
+   "matches_current": 33,
+   "model": {
+    "intercept": 0.495308,
+    "slope": 0.12329,
+    "team_matches": 4158
+   },
+   "name": "Pro League",
+   "prior": {
+    "club_seasons": 102,
+    "detectable_variance": true,
+    "rate": 526.8767,
+    "shape": 526.7228
+   },
+   "situation_multiplier": {
+    "even": 0.999,
+    "favourite": 0.936,
+    "heavy favourite": 0.785,
+    "heavy underdog": 1.133,
+    "underdog": 1.121
+   }
+  },
+  "D1": {
+   "baseline_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "clubs_current": 18,
+   "code": "D1",
+   "completed_seasons": [
+    "0001",
+    "0102",
+    "0304",
+    "0405",
+    "0506",
+    "0607",
+    "0708",
+    "0809",
+    "0910",
+    "1011",
+    "1112",
+    "1213",
+    "1314",
+    "1415",
+    "1516",
+    "1617",
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "country": "Germany",
+   "latest_date": "2026-08-30",
+   "matches_current": 9,
+   "model": {
+    "intercept": 0.425826,
+    "slope": 0.125479,
+    "team_matches": 5506
+   },
+   "name": "Bundesliga",
+   "prior": {
+    "club_seasons": 432,
+    "detectable_variance": true,
+    "rate": 1277.5022,
+    "shape": 1274.4036
+   },
+   "situation_multiplier": {
+    "even": 1.057,
+    "favourite": 0.966,
+    "heavy favourite": 0.849,
+    "heavy underdog": 1.019,
+    "underdog": 1.068
+   }
+  },
+  "E0": {
+   "baseline_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "clubs_current": 20,
+   "code": "E0",
+   "completed_seasons": [
+    "0001",
+    "0102",
+    "0203",
+    "0304",
+    "0405",
+    "0506",
+    "0607",
+    "0708",
+    "0809",
+    "0910",
+    "1011",
+    "1112",
+    "1213",
+    "1314",
+    "1415",
+    "1516",
+    "1617",
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "country": "England",
+   "latest_date": "2026-08-31",
+   "matches_current": 20,
+   "model": {
+    "intercept": 0.317052,
+    "slope": 0.134037,
+    "team_matches": 6840
+   },
+   "name": "Premier League",
+   "prior": {
+    "club_seasons": 520,
+    "detectable_variance": true,
+    "rate": 264.4017,
+    "shape": 263.7427
+   },
+   "situation_multiplier": {
+    "even": 1.035,
+    "favourite": 0.972,
+    "heavy favourite": 0.844,
+    "heavy underdog": 1.096,
+    "underdog": 1.046
+   }
+  },
+  "F1": {
+   "baseline_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "clubs_current": 18,
+   "code": "F1",
+   "completed_seasons": [
+    "0708",
+    "0809",
+    "0910",
+    "1011",
+    "1112",
+    "1213",
+    "1314",
+    "1415",
+    "1516",
+    "1617",
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "country": "France",
+   "latest_date": "2026-08-30",
+   "matches_current": 18,
+   "model": {
+    "intercept": 0.469637,
+    "slope": 0.112778,
+    "team_matches": 6194
+   },
+   "name": "Ligue 1",
+   "prior": {
+    "club_seasons": 354,
+    "detectable_variance": false,
+    "rate": 1312.0864,
+    "shape": 1309.6194
+   },
+   "situation_multiplier": {
+    "even": 1.009,
+    "favourite": 1.017,
+    "heavy favourite": 0.917,
+    "heavy underdog": 1.001,
+    "underdog": 1.042
+   }
+  },
+  "G1": {
+   "baseline_seasons": [
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "clubs_current": 14,
+   "code": "G1",
+   "completed_seasons": [
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "country": "Greece",
+   "latest_date": "2026-08-31",
+   "matches_current": 13,
+   "model": {
+    "intercept": 1.161763,
+    "slope": 0.09083,
+    "team_matches": 3336
+   },
+   "name": "Super League",
+   "prior": {
+    "club_seasons": 98,
+    "detectable_variance": true,
+    "rate": 1225.5269,
+    "shape": 1225.5333
+   },
+   "situation_multiplier": {
+    "even": 1.053,
+    "favourite": 0.996,
+    "heavy favourite": 0.771,
+    "heavy underdog": 1.134,
+    "underdog": 1.066
+   }
+  },
+  "I1": {
+   "baseline_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "clubs_current": 20,
+   "code": "I1",
+   "completed_seasons": [
+    "0506",
+    "0607",
+    "0708",
+    "0809",
+    "0910",
+    "1011",
+    "1112",
+    "1213",
+    "1314",
+    "1415",
+    "1516",
+    "1617",
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "country": "Italy",
+   "latest_date": "2026-08-31",
+   "matches_current": 20,
+   "model": {
+    "intercept": 0.603397,
+    "slope": 0.122282,
+    "team_matches": 6840
+   },
+   "name": "Serie A",
+   "prior": {
+    "club_seasons": 420,
+    "detectable_variance": true,
+    "rate": 1118.5445,
+    "shape": 1115.491
+   },
+   "situation_multiplier": {
+    "even": 1.047,
+    "favourite": 0.971,
+    "heavy favourite": 0.827,
+    "heavy underdog": 1.068,
+    "underdog": 1.093
+   }
+  },
+  "N1": {
+   "baseline_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "clubs_current": 18,
+   "code": "N1",
+   "completed_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "country": "Netherlands",
+   "latest_date": "2026-08-30",
+   "matches_current": 33,
+   "model": {
+    "intercept": 0.206231,
+    "slope": 0.12164,
+    "team_matches": 5360
+   },
+   "name": "Eredivisie",
+   "prior": {
+    "club_seasons": 144,
+    "detectable_variance": false,
+    "rate": 992.3069,
+    "shape": 991.951
+   },
+   "situation_multiplier": {
+    "even": 1.024,
+    "favourite": 0.953,
+    "heavy favourite": 0.85,
+    "heavy underdog": 1.087,
+    "underdog": 1.083
+   }
+  },
+  "P1": {
+   "baseline_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "clubs_current": 18,
+   "code": "P1",
+   "completed_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "country": "Portugal",
+   "latest_date": "2026-08-31",
+   "matches_current": 33,
+   "model": {
+    "intercept": 1.125898,
+    "slope": 0.095491,
+    "team_matches": 5508
+   },
+   "name": "Primeira Liga",
+   "prior": {
+    "club_seasons": 162,
+    "detectable_variance": true,
+    "rate": 3929.6474,
+    "shape": 3929.0679
+   },
+   "situation_multiplier": {
+    "even": 1.036,
+    "favourite": 0.941,
+    "heavy favourite": 0.83,
+    "heavy underdog": 1.103,
+    "underdog": 1.085
+   }
+  },
+  "SC0": {
+   "baseline_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "clubs_current": 12,
+   "code": "SC0",
+   "completed_seasons": [
+    "0001",
+    "0102",
+    "0203",
+    "0304",
+    "0405",
+    "0506",
+    "0607",
+    "0708",
+    "0809",
+    "0910",
+    "1011",
+    "1112",
+    "1213",
+    "1314",
+    "1415",
+    "1516",
+    "1617",
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "country": "Scotland",
+   "latest_date": "2026-08-30",
+   "matches_current": 19,
+   "model": {
+    "intercept": 0.33869,
+    "slope": 0.123868,
+    "team_matches": 4006
+   },
+   "name": "Premiership",
+   "prior": {
+    "club_seasons": 279,
+    "detectable_variance": true,
+    "rate": 380.2653,
+    "shape": 379.6656
+   },
+   "situation_multiplier": {
+    "even": 1.005,
+    "favourite": 0.932,
+    "heavy favourite": 0.742,
+    "heavy underdog": 1.187,
+    "underdog": 1.111
+   }
+  },
+  "SP1": {
+   "baseline_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "clubs_current": 20,
+   "code": "SP1",
+   "completed_seasons": [
+    "0506",
+    "0607",
+    "0708",
+    "0809",
+    "0910",
+    "1011",
+    "1112",
+    "1213",
+    "1314",
+    "1415",
+    "1516",
+    "1617",
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "country": "Spain",
+   "latest_date": "2026-08-31",
+   "matches_current": 30,
+   "model": {
+    "intercept": 0.664616,
+    "slope": 0.133605,
+    "team_matches": 6840
+   },
+   "name": "La Liga",
+   "prior": {
+    "club_seasons": 420,
+    "detectable_variance": true,
+    "rate": 850.3752,
+    "shape": 849.9023
+   },
+   "situation_multiplier": {
+    "even": 1.024,
+    "favourite": 1.002,
+    "heavy favourite": 0.894,
+    "heavy underdog": 1.019,
+    "underdog": 1.051
+   }
+  },
+  "T1": {
+   "baseline_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "clubs_current": 18,
+   "code": "T1",
+   "completed_seasons": [
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "2223",
+    "2324",
+    "2425",
+    "2526"
+   ],
+   "country": "Turkey",
+   "latest_date": "2026-08-31",
+   "matches_current": 27,
+   "model": {
+    "intercept": 0.734653,
+    "slope": 0.117631,
+    "team_matches": 6114
+   },
+   "name": "S\u00fcper Lig",
+   "prior": {
+    "club_seasons": 169,
+    "detectable_variance": true,
+    "rate": 2022.6227,
+    "shape": 2019.175
+   },
+   "situation_multiplier": {
+    "even": 1.002,
+    "favourite": 0.951,
+    "heavy favourite": 0.863,
+    "heavy underdog": 1.112,
+    "underdog": 1.065
+   }
+  }
+ },
+ "quantiles": [
+  0.05,
+  0.25,
+  0.5,
+  0.75,
+  0.95
+ ],
+ "snapshot": "2026-W36",
+ "snapshot_created_at": "2026-09-01T16:11:12+00:00",
+ "sources": [
+  {
+   "attribution": "football-data.co.uk",
+   "covers": "match results, fouls, cards, shots, corners and closing odds, eleven leagues",
+   "licence": "free for personal and research use, attribution requested",
+   "name": "football-data.co.uk",
+   "url": "https://www.football-data.co.uk/"
+  }
+ ],
+ "team_seasons_completed": 3100,
+ "units": {
+  "index": "yellow cards observed \u00f7 yellow cards expected",
+  "percentile": "% of clubs measured the same way at or below this index"
+ }
+}

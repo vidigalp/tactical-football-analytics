@@ -56,6 +56,7 @@ handled.
 | [`AI_WORKFLOW.md`](AI_WORKFLOW.md) | Where AI is used, and where it is structurally distrusted |
 | [`ACKNOWLEDGEMENTS.md`](ACKNOWLEDGEMENTS.md) | The people and projects whose freely-given data makes this possible |
 | [`reports/`](reports/) | Findings, each reproducible from a committed snapshot |
+| [`dashboard/`](dashboard/) | The season in progress, every league and club, regenerated weekly from the newest snapshot |
 | [`references/`](references/) | Bibliography. Every DOI is resolved in CI; unverified entries are quarantined |
 
 ## Studies
@@ -94,6 +95,7 @@ uv run python scripts/build_study01.py           # study 01: the data audit
 uv run python scripts/build_discipline_story.py  # study 02: figures and the club table
 uv run python scripts/booking_persistence.py     # study 02: season-to-season persistence
 uv run python scripts/build_study03.py           # study 03: figures, facts and chart series
+uv run python scripts/season_dashboard.py        # dashboard: the season in progress, every league
 
 uv run pytest                                    # includes live DOI resolution
 ```

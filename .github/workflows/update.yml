@@ -1,0 +1,130 @@
+name: update snapshot and dashboard
+
+# Once a week: fetch football-data.co.uk, write a new dated snapshot, regenerate
+# the dashboard dataset, and commit both. Then move the site's content pin to
+# that commit, which is what triggers the Cloudflare rebuild.
+#
+# WHAT THIS PUBLISHES AND WHAT IT DOES NOT. The dashboard is a dataset: every
+# club's counts, expectation, interval and percentile, computed by a committed
+# script from a committed snapshot. It carries no claim, so it needs no human
+# review to ship. The studies and the live page are claims. They are pinned to
+# the snapshot they were written from and are NOT rebuilt here; a person re-runs
+# their scripts and re-reads their prose when the numbers should move. The
+# outlier scan still runs, and lands in the job summary as a list of things a
+# person might look at, never as a post.
+#
+# WHY MONDAY, ONCE. football-data.co.uk publishes the weekend's matches on
+# Sunday night and midweek matches on Wednesday night. Snapshots are ISO-week
+# directories and nothing in them is ever overwritten, so one run per week is
+# the most this layout allows without a second run clobbering the first. The
+# guard below refuses to touch a week that is already committed.
+#
+# GitHub's schedule trigger drifts and sometimes skips; see the energy archive's
+# workflow for the measurements. Dispatching from an external clock is the
+# reliable path and the cron is the fallback, deliberately off the hour.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 6 * * 1"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-snapshot
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --all-extras --dev
+
+      - name: Refuse to overwrite a committed snapshot
+        id: week
+        run: |
+          week="$(date -u +%G-W%V)"
+          if git ls-files --error-unmatch "data/snapshots/$week/manifest.json" >/dev/null 2>&1; then
+            echo "snapshot $week is already committed; nothing to do"
+            echo "fresh=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "fresh=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fetch every league
+        if: steps.week.outputs.fresh == 'true'
+        run: uv run python scripts/ingest_matches.py --to 2026
+
+      # Fewer leagues or fewer rows than last week is a broken fetch and fails
+      # the job. The same rows is a quiet week: the directory is removed and
+      # nothing is committed. More rows is new data.
+      - name: Compare with the previous snapshot
+        if: steps.week.outputs.fresh == 'true'
+        id: delta
+        run: uv run python scripts/snapshot_delta.py --remove-if-unchanged
+
+      - name: Regenerate the dashboard dataset
+        if: steps.delta.outputs.changed == 'true'
+        run: uv run python scripts/season_dashboard.py
+
+      - name: Check everything that is about to be committed
+        if: steps.delta.outputs.changed == 'true'
+        run: |
+          uv run ruff check .
+          uv run pytest -m "not network" -q
+
+      - name: Scan for things a person might look at
+        if: steps.delta.outputs.changed == 'true'
+        run: |
+          {
+            echo '## Outlier scan'
+            echo
+            echo 'Hypotheses, not findings. METHODS.md requires a pre-registration before any of these becomes a claim.'
+            echo
+            echo '```'
+            uv run python scripts/scan_outliers.py
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit the snapshot and the dashboard
+        if: steps.delta.outputs.changed == 'true'
+        id: commit
+        run: |
+          git config user.name  "snapshot bot"
+          git config user.email "noreply@users.noreply.github.com"
+          git add data/snapshots dashboard
+          git commit -q -m "Weekly snapshot $(date -u +%G-W%V) and dashboard refresh"
+          git pull --rebase --quiet
+          git push --quiet
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      # The site mounts this repository as the `content` submodule and copies the
+      # dashboard out of it at build time. Moving the pin is the whole deploy.
+      - name: Check out the site
+        if: steps.delta.outputs.changed == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: vidigalp/pedrovidigal.com
+          token: ${{ secrets.SITE_PUSH_TOKEN }}
+          path: site
+          submodules: false
+
+      - name: Move the site's content pin
+        if: steps.delta.outputs.changed == 'true'
+        working-directory: site
+        run: |
+          git config user.name  "snapshot bot"
+          git config user.email "noreply@users.noreply.github.com"
+          git submodule update --init content
+          git -C content fetch --quiet origin
+          git -C content checkout --quiet "${{ steps.commit.outputs.sha }}"
+          git add content
+          git commit -q -m "Bump content to ${{ steps.commit.outputs.sha }}" \
+            -m "Weekly snapshot $(date -u +%G-W%V) and dashboard refresh, committed by the research repository's update workflow."
+          git pull --rebase --quiet
+          git push --quiet
