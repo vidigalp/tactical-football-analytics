@@ -246,7 +246,7 @@ def by_matchweek_rates(rows: pd.DataFrame) -> dict[str, list[float | None]]:
         "yellows_per_match": [num(v) for v in cum.yellows / cum.matches],
         "fouls_per_match": [num(v) for v in cum.fouls / cum.matches],
         "reds_per_match": [num(v) for v in cum.reds / cum.matches],
-        "yellows_per_foul": [num(v, 4) for v in cum.yellows / cum.fouls],
+        "cards_per_foul": [num(v, 4) for v in cum.yellows / cum.fouls],
     }
 
 
@@ -345,7 +345,7 @@ def main() -> None:
                 "model": {"intercept": num(model_fit.intercept, 6),
                           "slope": num(model_fit.slope, 6)},
                 "yellows": ints(rows.yellows), "fouls": ints(rows.fouls), "reds": ints(rows.reds),
-                "yellows_per_foul": num(rows.yellows.sum() / rows.fouls.sum(), 4),
+                "cards_per_foul": num(rows.yellows.sum() / rows.fouls.sum(), 4),
                 "by_matchweek": by_matchweek_rates(rows),
             }
         full_rows = done_scored.set_index(keys).loc[full.index].reset_index()
@@ -436,7 +436,7 @@ def main() -> None:
             "matches": int(len(group) // 2),
             "latest_date": str(group.Date.max())[:10],
             "yellows": ints(group.yellows), "fouls": ints(group.fouls), "reds": ints(group.reds),
-            "yellows_per_foul": num(group.yellows.sum() / group.fouls.sum(), 4),
+            "cards_per_foul": num(group.yellows.sum() / group.fouls.sum(), 4),
             "by_matchweek": by_matchweek_rates(group),
             "survive_bh": sorted(
                 str(t) for t, r in clubs.items() if r["survives_bh"]),

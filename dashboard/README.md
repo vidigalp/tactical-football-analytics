@@ -48,9 +48,8 @@ cumulative index and interval after it. **`cum_index`** (history) is the same tr
 completed season, as a list indexed by match number.
 
 **`by_matchweek`** (league level, current and history) gives cumulative yellows per match, fouls
-per match, reds per match and yellows per foul after every club's k-th match, so a season can be
-read against earlier seasons at the same point. Yellows per foul counts yellow cards only; reds
-have their own rate. Per match means both sides counted: a league at 4.7
+per match, reds per match and cards per foul after every club's k-th match, so a season can be read
+against earlier seasons at the same point. Per match means both sides counted: a league at 4.7
 yellows per match is booking about 2.3 per team.
 
 **`cum_index_by_matchweek`** (history, per league) and **`europe_cum_index_by_matchweek`**
