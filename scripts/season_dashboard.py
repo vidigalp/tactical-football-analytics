@@ -148,6 +148,24 @@ def ints(series: pd.Series) -> int | None:
     return None if pd.isna(total) else int(total)
 
 
+def band_summary(rows: pd.DataFrame, band: dict[str, dict]) -> dict[str, float | int | None]:
+    """How often a completed team-season leaves its own pool's 5th-95th band.
+
+    By construction a tenth of seasons sit outside the band at any one match. The
+    share that steps outside at some point is a different number, and the site
+    should quote it rather than guess it.
+    """
+    lo = rows.n.map(lambda k: band[str(k)]["p05"])
+    hi = rows.n.map(lambda k: band[str(k)]["p95"])
+    outside = (rows.cum_index < lo) | (rows.cum_index > hi)
+    per_season = outside.groupby([rows[k] for k in ["Div", "season", "team"]]).agg(["any", "last"])
+    return {
+        "team_seasons": int(len(per_season)),
+        "ever_outside_pct": num(per_season["any"].mean() * 100, 1),
+        "outside_at_end_pct": num(per_season["last"].mean() * 100, 1),
+    }
+
+
 def quantile_rows(values: pd.Series) -> dict[str, float | int | None]:
     """Quantiles of the pool plus its size, which shrinks past the shortest season."""
     row: dict[str, float | int | None] = {
@@ -214,11 +232,16 @@ def club_totals(group: pd.DataFrame) -> dict[str, int | None]:
 
 
 def by_matchweek_rates(rows: pd.DataFrame) -> dict[str, list[float | None]]:
-    """League-level cumulative rates after each team's k-th match."""
+    """League-level cumulative rates after each team's k-th match.
+
+    Rates are per match, both sides counted, so "yellows per match" reads the way
+    a match report would. The rows are team-matches, two per match.
+    """
     ordered = rows.sort_values("n")
     grouped = ordered.groupby("n").agg(fouls=("fouls", "sum"), yellows=("yellows", "sum"),
                                       reds=("reds", "sum"), matches=("fouls", "size"))
     cum = grouped.cumsum()
+    cum["matches"] = cum.matches / 2
     return {
         "yellows_per_match": [num(v) for v in cum.yellows / cum.matches],
         "fouls_per_match": [num(v) for v in cum.fouls / cum.matches],
@@ -326,14 +349,14 @@ def main() -> None:
                 "by_matchweek": by_matchweek_rates(rows),
             }
         full_rows = done_scored.set_index(keys).loc[full.index].reset_index()
+        # The spread of every completed team-season after k matches. The
+        # reader stands the current one against this, not against a rank.
+        band = {str(k): quantile_rows(g.cum_index) for k, g in full_rows.groupby("n")}
         history_out[code] = {
             "league": code,
             "seasons": history_seasons,
-            # The spread of every completed team-season after k matches. The
-            # reader stands the current one against this, not against a rank.
-            "cum_index_by_matchweek": {
-                str(k): quantile_rows(g.cum_index) for k, g in full_rows.groupby("n")
-            },
+            "cum_index_by_matchweek": band,
+            "band_summary": band_summary(full_rows, band),
         }
 
     all_current = pd.concat(scored_current, ignore_index=True)
@@ -439,6 +462,7 @@ def main() -> None:
         "quantiles": QUANTILES,
         "leagues": leagues,
         "team_seasons_completed": int(full_completed.groupby(keys).ngroups),
+        "history_from": season_label(min(completed.season)),
         "units": {"index": "yellow cards observed ÷ yellow cards expected",
                   "percentile": "% of clubs measured the same way at or below this index"},
         "sources": SOURCES,
@@ -451,6 +475,7 @@ def main() -> None:
         "label": season_label(CURRENT_SEASON),
         "leagues": current_leagues,
         "europe_cum_index_by_matchweek": europe_by_matchweek,
+        "europe_band_summary": band_summary(full_completed, europe_by_matchweek),
     }, separators=(",", ":"), sort_keys=True) + "\n")
     for code, payload in history_out.items():
         payload["generated_at"] = generated

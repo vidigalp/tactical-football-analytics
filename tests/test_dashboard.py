@@ -98,3 +98,23 @@ def test_quantiles_are_ordered(meta: dict, current: dict) -> None:
     assert all(ordered(r) for r in current["europe_cum_index_by_matchweek"].values())
     for code in meta["leagues"]:
         assert all(ordered(r) for r in history(code)["cum_index_by_matchweek"].values()), code
+
+
+def test_rates_are_per_match_and_band_summary_bounded(meta: dict, current: dict) -> None:
+    for code, league in current["leagues"].items():
+        rates = league["by_matchweek"]
+        clubs = league["clubs"].values()
+        # After every club's first match the league has played half as many
+        # matches as it has team-matches, and the per-match rate is over those.
+        first = [c["by_match"][0] for c in clubs if c["by_match"]]
+        matches = len(first) / 2
+        assert rates["yellows_per_match"][0] == pytest.approx(
+            sum(m["yellows"] for m in first) / matches, abs=0.002), code
+        assert rates["fouls_per_match"][0] == pytest.approx(
+            sum(m["fouls"] for m in first) / matches, abs=0.002), code
+        summary = history(code)["band_summary"]
+        assert summary["team_seasons"] == history(code)["cum_index_by_matchweek"]["1"]["n"]
+        assert 0 < summary["ever_outside_pct"] < 100
+        assert 5 < summary["outside_at_end_pct"] < 15, (code, summary)
+    europe = current["europe_band_summary"]
+    assert europe["team_seasons"] == meta["team_seasons_completed"]

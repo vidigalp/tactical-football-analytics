@@ -29,7 +29,8 @@
  "current_season": "2627",
  "current_season_label": "2026-27",
  "fdr": 0.1,
- "generated_at": "2026-09-05T14:42:37+00:00",
+ "generated_at": "2026-09-05T15:28:43+00:00",
+ "history_from": "2000-01",
  "leagues": {
   "B1": {
    "baseline_seasons": [

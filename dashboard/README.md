@@ -49,10 +49,17 @@ completed season, as a list indexed by match number.
 
 **`by_matchweek`** (league level, current and history) gives cumulative yellows per match, fouls
 per match, reds per match and cards per foul after every club's k-th match, so a season can be read
-against earlier seasons at the same point.
+against earlier seasons at the same point. Per match means both sides counted: a league at 4.7
+yellows per match is booking about 2.3 per team.
 
 **`cum_index_by_matchweek`** (history, per league) and **`europe_cum_index_by_matchweek`**
 (current) are the 5th, 25th, 50th, 75th and 95th percentiles of the cumulative index across every
 completed team-season after k matches, with `n`, the size of that pool. The pool is every
 completed team-season up to k = 30 and shrinks past it, since seasons run 30 to 38 matches. A
 current trajectory drawn over this band is the honest version of "outlier or noise".
+
+**`band_summary`** (history, per league) and **`europe_band_summary`** (current) say how often a
+completed team-season leaves that 5th-95th band: `ever_outside_pct` at any point in the season,
+`outside_at_end_pct` at its last match, over `team_seasons`. About a tenth end outside by
+construction; the share that visits the outside at some point is between 43% and 55% depending on
+the league, and it is not "most", which is why the number is in the file.
