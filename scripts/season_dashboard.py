@@ -148,8 +148,12 @@ def ints(series: pd.Series) -> int | None:
     return None if pd.isna(total) else int(total)
 
 
-def quantile_rows(values: pd.Series) -> dict[str, float | None]:
-    return {f"p{int(q * 100):02d}": num(values.quantile(q)) for q in QUANTILES}
+def quantile_rows(values: pd.Series) -> dict[str, float | int | None]:
+    """Quantiles of the pool plus its size, which shrinks past the shortest season."""
+    row: dict[str, float | int | None] = {
+        f"p{int(q * 100):02d}": num(values.quantile(q)) for q in QUANTILES}
+    row["n"] = int(len(values))
+    return row
 
 
 def league_models(history: pd.DataFrame) -> tuple[float, float, dict[str, float]]:

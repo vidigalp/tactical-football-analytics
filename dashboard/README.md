@@ -53,5 +53,6 @@ against earlier seasons at the same point.
 
 **`cum_index_by_matchweek`** (history, per league) and **`europe_cum_index_by_matchweek`**
 (current) are the 5th, 25th, 50th, 75th and 95th percentiles of the cumulative index across every
-completed team-season after k matches. A current trajectory drawn over this band is the honest
-version of "outlier or noise".
+completed team-season after k matches, with `n`, the size of that pool. The pool is every
+completed team-season up to k = 30 and shrinks past it, since seasons run 30 to 38 matches. A
+current trajectory drawn over this band is the honest version of "outlier or noise".
