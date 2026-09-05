@@ -63,3 +63,10 @@ completed team-season leaves that 5th-95th band: `ever_outside_pct` at any point
 `outside_at_end_pct` at its last match, over `team_seasons`. About a tenth end outside by
 construction; the share that visits the outside at some point is between 43% and 55% depending on
 the league, and it is not "most", which is why the number is in the file.
+
+## Checking
+
+`tests/test_dashboard_recompute.py` rebuilds every count, expectation, interval, p-value,
+percentile and pool from the raw parquet files using only the constants published in `meta.json`,
+with none of the code that wrote the files, and fails the weekly run if anything disagrees beyond
+the rounding in the files. Nothing in this directory reaches the site without passing it.
