@@ -159,8 +159,8 @@ carries a row for all six with an account attached, so a report cannot go quiet 
 
 **Specification.** What does the model assume that the data might not support? Assumptions that
 look like arithmetic are the dangerous ones — this project shipped an expectation of
-`cards = rate x fouls`, a proportional model through the origin, and only later measured that the
-intercept is 13% to 47% of mean cards depending on the league. Cards per foul falls monotonically
+`yellows = rate x fouls`, a proportional model through the origin, and only later measured that the
+intercept is 13% to 47% of mean yellows depending on the league. Yellows per foul falls monotonically
 from 0.197 at six fouls or fewer to 0.122 above twenty. Because dominant clubs foul *less*, that
 misspecification mechanically inflated precisely the clubs the finding was about.
 

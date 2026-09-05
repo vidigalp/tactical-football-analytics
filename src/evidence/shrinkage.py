@@ -3,7 +3,7 @@
 Two conjugate families cover everything this project measures:
 
 * **Beta-binomial** for a rate conditioned on the team's own denominator, such as
-  cards per foul.
+  yellows per foul.
 * **Gamma-Poisson** for a count against an exposure, such as fouls per match.
 
 Both estimate the prior from the league itself, so a team with little data is

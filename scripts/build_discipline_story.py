@@ -105,8 +105,8 @@ def main() -> None:
     written += story.context_all_leagues(
         profile, out / "fig2-context-all-leagues", snapshot=stamp)
 
-    def cards_per_foul_curve(directory: Path) -> pd.DataFrame:
-        """Observed cards per foul against the team's foul count in that match."""
+    def yellows_per_foul_curve(directory: Path) -> pd.DataFrame:
+        """Observed yellows per foul against the team's foul count in that match."""
         side = to_team_match(load_matches(directory))
         band = pd.cut(side.fouls, [0, 6, 8, 10, 12, 14, 16, 18, 20, 40],
                       include_lowest=True)
@@ -124,8 +124,8 @@ def main() -> None:
         grouped["weight"] = grouped.total
         return grouped.reset_index(drop=True)
 
-    written += story.cards_per_foul(
-        cards_per_foul_curve(directory), out / "fig3-cards-per-foul", snapshot=stamp)
+    written += story.yellows_per_foul(
+        yellows_per_foul_curve(directory), out / "fig3-yellows-per-foul", snapshot=stamp)
 
     def opponent_terciles(directory: Path) -> pd.DataFrame:
         """A club's own index, split by the strength of who it faced."""
@@ -207,7 +207,7 @@ def main() -> None:
     separating = int(((club.lo > 1) | (club.hi < 1)).sum())
     swing = float(ctx.multiplier.iloc[0] / ctx.multiplier.iloc[-1] - 1)
     permutation_p = float(np.mean(np.abs(null) >= abs(r)))
-    cpf = cards_per_foul_curve(directory)
+    cpf = yellows_per_foul_curve(directory)
 
     facts = {
         "snapshot": stamp,
@@ -234,7 +234,7 @@ def main() -> None:
             "permutation_p": permutation_p,
             "permutations": 5000,
         },
-        "cards_per_foul": {
+        "yellows_per_foul": {
             f"{row.fouls:.1f}": float(row.rate) for row in cpf.itertuples()
         },
         "all_leagues": {

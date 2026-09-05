@@ -1,9 +1,9 @@
-"""Expected cards for a team-match.
+"""Expected yellow cards for a team-match.
 
 The obvious model — ``expected = league_rate x fouls`` — is wrong, and wrong in a
 direction that matters. Cards are not proportional to fouls. Fitting
 ``cards = a + b x fouls`` per league-season gives an intercept worth 13% to 47%
-of mean cards, and observed cards per foul falls monotonically from 0.195 at six
+of mean yellows, and observed yellows per foul falls monotonically from 0.195 at six
 fouls to 0.127 at eighteen.
 
 The intercept is not noise. It is the cards that have nothing to do with a team's

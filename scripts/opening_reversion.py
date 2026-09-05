@@ -9,7 +9,7 @@ The archive can answer that without waiting. Every completed team-season in the
 snapshot is cut at the same point Porto's season currently stands, its opening
 index is computed, the most extreme openings are kept, and the rest of each of
 those seasons is read off. Nothing here is fitted or adjusted: the index is
-yellows over yellows expected at the league-season's own card-per-foul rate, so
+yellows over yellows expected at the league-season's own yellows-per-foul rate, so
 the comparison is deliberately cruder than the situation-adjusted figure on the
 same page, and it is only used to ask how openings and endings relate.
 

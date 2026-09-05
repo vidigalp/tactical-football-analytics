@@ -96,7 +96,7 @@ different in kind. Produced by `scripts/placement_ceiling.py` alongside
 The archive can answer that without waiting for November. Every completed team-season in the
 snapshot is cut at the point Porto's season now stands, four matches in, and its opening is
 compared with the rest of the same season. The index used for this is deliberately cruder than the
-one in the table above: yellows over yellows expected at the league-season's own card-per-foul
+one in the table above: yellows over yellows expected at the league-season's own yellows-per-foul
 rate, with no situation adjustment, because the comparison needs one scale that exists for every
 club in every league. On that scale Porto's opening reads **0.112**.
 

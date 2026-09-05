@@ -6,7 +6,7 @@
 
 ## What the data says
 
-A club's cards-per-foul rate over one season is mostly noise. **15% of the spread between clubs is
+A club's yellows-per-foul rate over one season is mostly noise. **15% of the spread between clubs is
 a real club property**; the other 85% is the Poisson accident of one season's bookings.
 
 That is enough to be worth measuring and not enough to rank on. A one-season rate is beaten as a

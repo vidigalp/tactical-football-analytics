@@ -83,7 +83,7 @@ def add_expectations(teams: pd.DataFrame) -> pd.DataFrame:
     """Three expectations, each adding one adjustment on top of the last."""
     teams = teams.copy()
 
-    # Era: the league's own cards-per-foul rate that season, so a league-wide
+    # Era: the league's own yellows-per-foul rate that season, so a league-wide
     # drift in strictness is not read as a club changing behaviour.
     rate = teams.groupby("season").apply(
         lambda g: g.yellows.sum() / g.fouls.sum(), include_groups=False).rename("rate")

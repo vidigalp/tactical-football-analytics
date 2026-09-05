@@ -79,7 +79,7 @@ def main() -> None:
     halftime_p = float(stats.chi2_contingency(
         [[h1_cards, h1_n - h1_cards], [h2_cards, h2_n - h2_cards]])[1])
 
-    # Share of the between-club spread in cards per foul that foul context
+    # Share of the between-club spread in yellows per foul that foul context
     # explains, via a logistic model of P(card | position, minute, score state).
     design = np.column_stack([
         np.ones(len(fouls)),

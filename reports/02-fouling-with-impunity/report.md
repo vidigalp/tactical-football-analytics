@@ -68,12 +68,12 @@ the better side, which they share with every strong club in Europe.
 
 ## Wrong (2): the expectation model was misspecified
 
-The expectation assumed cards are proportional to fouls: *expected = rate × fouls*. They are not.
+The expectation assumed yellow cards are proportional to fouls: *expected = rate × fouls*. They are not.
 
-![Cards per foul against foul count](figures/fig3-cards-per-foul.png)
+![Yellows per foul against foul count](figures/fig3-yellows-per-foul.png)
 
-Fitting `cards = a + b × fouls` per league-season gives an intercept worth 13% to 47% of mean
-cards, depending on the competition. Observed cards per foul falls monotonically across the range,
+Fitting `yellows = a + b × fouls` per league-season gives an intercept worth 13% to 47% of mean
+yellows, depending on the competition. Observed yellows per foul falls monotonically across the range,
 from 0.197 in matches where a side commits six fouls or fewer to 0.122 where it commits more than
 twenty. Every bin is in [`story.json`](story.json).
 
@@ -121,11 +121,11 @@ playing the same way, booked differently according to who is at the other end of
 
 So the correct statement is not *"dominant clubs are booked more."* It is:
 
-> Cards per foul scale with the quality of the fixture, for both teams.
+> Yellows per foul scale with the quality of the fixture, for both teams.
 
 A club's own quality is half of that fixture quality, so strong clubs genuinely do see a higher
 rate. They are not being singled out. They are playing in higher-quality matches, and those
-matches produce more cards per foul.
+matches produce more yellows per foul.
 
 ## If not the club, then the manager?
 

@@ -282,7 +282,7 @@ def context_all_leagues(profile: pd.DataFrame, path: Path, *, snapshot: str,
         snapshot=snapshot))
 
 
-def cards_per_foul(curve: pd.DataFrame, path: Path, *, snapshot: str) -> list[Path]:
+def yellows_per_foul(curve: pd.DataFrame, path: Path, *, snapshot: str) -> list[Path]:
     """Why an expectation proportional to fouls misprices the teams in question.
 
     ``expected = rate x fouls`` looks like a definition. Drawn against the data
@@ -317,13 +317,13 @@ def cards_per_foul(curve: pd.DataFrame, path: Path, *, snapshot: str) -> list[Pa
         ha="right", va="bottom", fontsize=7.5, color=theme.MUTED)
 
     ax.set_xlabel("Fouls committed in the match")
-    ax.set_ylabel("Cards received\nper foul")
-    ax.set_title("Cards are not proportional to fouls, so the flat line misprices both ends")
+    ax.set_ylabel("Yellow cards received\nper foul")
+    ax.set_title("Yellow cards are not proportional to fouls, so the flat line misprices both ends")
     theme.grid(ax, axis="y")
     ax.legend(loc="upper right", frameon=False, fontsize=7.5)
 
     return theme.save(fig, path, theme.Stamp(
-        metric="Cards per foul by the team's foul count in that match, 95% Poisson intervals",
+        metric="Yellows per foul by the team's foul count in that match, 95% Poisson intervals",
         sample="Eleven divisions, 2000-2026, all clubs pooled",
         source="football-data.co.uk",
         snapshot=snapshot))

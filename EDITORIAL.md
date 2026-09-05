@@ -64,7 +64,7 @@ representative. Anyone mining controversies for questions should expect to spend
 reporting that the striking thing was ordinary, which is precisely why this project treats a null
 week as publishable.
 
-**Answer narrowly and state the limits loudly.** Cards per foul is not "favouritism". It says
+**Answer narrowly and state the limits loudly.** Yellows per foul is not "favouritism". It says
 nothing about penalties, offsides, disallowed goals, added time, or whether any single decision
 was correct. A narrow finding stretched into a broad claim is how a chart becomes a talking point,
 and the limits belong in the post itself rather than in a reply to whoever points them out.

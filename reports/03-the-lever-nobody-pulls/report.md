@@ -86,7 +86,7 @@ This is the result. The card-rate gradient runs the length of the pitch. Club av
 
 Context matters enormously to whether *a* foul is carded. It barely matters to whether *a club* is
 carded more than another. Position, minute and score state together explain
-**3.1%** of the spread in cards per foul between clubs.
+**3.1%** of the spread in yellows per foul between clubs.
 
 That is the whole finding in one number, and it is not a contradiction of the sections above. A
 gradient can be steep and still explain nothing between actors, provided the actors all stand in
