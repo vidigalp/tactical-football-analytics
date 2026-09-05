@@ -124,6 +124,23 @@ def test_current_counts_match_the_raw_columns(meta: dict, current: dict,
             assert dates == sorted(dates), (code, team, "by_match order")
             assert sum(m["yellows"] for m in club["by_match"]) == club["yellows"], (code, team)
             assert sum(m["fouls"] for m in club["by_match"]) == club["fouls"], (code, team)
+            cards = fouls = 0
+            for match in club["by_match"]:
+                cards += match["yellows"] + match["reds"]
+                fouls += match["fouls"]
+                if fouls:
+                    assert match["cum_cards_per_foul"] == pytest.approx(cards / fouls, abs=0.0001)
+                else:
+                    assert match["cum_cards_per_foul"] is None, (code, team)
+            assert club["cards_per_foul"] == pytest.approx(
+                (club["yellows"] + club["reds"]) / club["fouls"], abs=0.0001), (code, team)
+        league_totals = totals.loc[code]
+        assert league["cards_per_foul"] == pytest.approx(
+            (league_totals.yellows.sum() + league_totals.reds.sum()) / league_totals.fouls.sum(),
+            abs=0.0001), code
+        first = now[now.Div == code].sort_values("Date").groupby("team").head(1)
+        assert league["by_matchweek"]["cards_per_foul"][0] == pytest.approx(
+            (first.yellows.sum() + first.reds.sum()) / first.fouls.sum(), abs=0.0001), code
 
 
 def test_current_statistics_follow_from_the_published_model(meta: dict, current: dict) -> None:
@@ -175,7 +192,8 @@ def test_history_totals_match_the_raw_columns(meta: dict, history: dict[str, dic
                                               team_matches: pd.DataFrame) -> None:
     done = team_matches[team_matches.season != meta["current_season"]]
     totals = done.groupby(["Div", "season", "team"]).agg(
-        matches=("fouls", "size"), fouls=("fouls", "sum"), yellows=("yellows", "sum"))
+        matches=("fouls", "size"), fouls=("fouls", "sum"), yellows=("yellows", "sum"),
+        reds=("reds", "sum"))
     for code, file in history.items():
         assert set(file["seasons"]) == set(meta["leagues"][code]["completed_seasons"]), code
         for season, block in file["seasons"].items():
@@ -186,6 +204,12 @@ def test_history_totals_match_the_raw_columns(meta: dict, history: dict[str, dic
                     int(row.matches), int(row.fouls), int(row.yellows)), (code, season, team)
                 assert len(club["cum_index"]) == club["matches"], (code, season, team)
                 assert club["cum_index"][-1] == pytest.approx(club["index"], abs=0.004)
+                reds = 0 if pd.isna(row.reds) else int(row.reds)
+                assert club["cards_per_foul"] == pytest.approx(
+                    (club["yellows"] + reds) / club["fouls"], abs=0.0001), (code, season, team)
+                assert len(club["cum_cards_per_foul"]) == club["matches"], (code, season, team)
+                assert club["cum_cards_per_foul"][-1] == pytest.approx(
+                    club["cards_per_foul"], abs=0.0001), (code, season, team)
                 assert club["complete"] == (club["matches"] >= meta["complete_threshold"])
                 lo, hi = poisson_interval(club["yellows"], club["expected"])
                 assert club["lo"] == pytest.approx(lo, abs=0.004), (code, season, team)

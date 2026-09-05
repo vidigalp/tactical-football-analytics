@@ -205,11 +205,25 @@ def cumulative(scored: pd.DataFrame, keys: list[str]) -> pd.DataFrame:
     grouped = out.groupby(keys)
     out["cum_fouls"] = grouped.fouls.cumsum()
     out["cum_yellows"] = grouped.yellows.cumsum()
+    reds = out.reds.fillna(0)
+    out["cum_cards"] = out.cum_yellows + reds.groupby([out[k] for k in keys]).cumsum()
     out["cum_expected"] = grouped.expected.cumsum()
     out["cum_index"] = out.cum_yellows / out.cum_expected
+    out["cum_cards_per_foul"] = (out.cum_cards / out.cum_fouls).astype("float64")
     lo, hi = interval(out.cum_yellows, out.cum_expected)
     out["cum_lo"], out["cum_hi"] = lo, hi
     return out
+
+
+def cards_per_foul(rows: pd.DataFrame) -> float | None:
+    """All cards over fouls: yellows plus reds as football-data records them.
+
+    football-data has no second-yellow column. In England and Scotland a
+    second-yellow dismissal is recorded as one red only; elsewhere it is one
+    yellow and one red, so it counts twice here (DATA_SOURCES.md). One
+    team-match in the history has no red count and contributes zero reds.
+    """
+    return num((rows.yellows.sum() + rows.reds.sum()) / rows.fouls.sum(), 4)
 
 
 def club_totals(group: pd.DataFrame) -> dict[str, int | None]:
@@ -246,7 +260,7 @@ def by_matchweek_rates(rows: pd.DataFrame) -> dict[str, list[float | None]]:
         "yellows_per_match": [num(v) for v in cum.yellows / cum.matches],
         "fouls_per_match": [num(v) for v in cum.fouls / cum.matches],
         "reds_per_match": [num(v) for v in cum.reds / cum.matches],
-        "cards_per_foul": [num(v, 4) for v in cum.yellows / cum.fouls],
+        "cards_per_foul": [num(v, 4) for v in (cum.yellows + cum.reds) / cum.fouls],
     }
 
 
@@ -336,6 +350,9 @@ def main() -> None:
                     "shrunk_hi": num(s.upper), "reliability": num(s.reliability),
                     "complete": bool(len(group) >= COMPLETE),
                     "cum_index": [num(v) for v in group.sort_values("n").cum_index],
+                    "cards_per_foul": cards_per_foul(group),
+                    "cum_cards_per_foul": [
+                        num(v, 4) for v in group.sort_values("n").cum_cards_per_foul],
                 }
             model_fit = era[(code, season)]
             history_seasons[season] = {
@@ -345,7 +362,7 @@ def main() -> None:
                 "model": {"intercept": num(model_fit.intercept, 6),
                           "slope": num(model_fit.slope, 6)},
                 "yellows": ints(rows.yellows), "fouls": ints(rows.fouls), "reds": ints(rows.reds),
-                "cards_per_foul": num(rows.yellows.sum() / rows.fouls.sum(), 4),
+                "cards_per_foul": cards_per_foul(rows),
                 "by_matchweek": by_matchweek_rates(rows),
             }
         full_rows = done_scored.set_index(keys).loc[full.index].reset_index()
@@ -414,6 +431,7 @@ def main() -> None:
                 "europe_percentile": num(row.europe_percentile, 1),
                 "league_history_percentile": num(same_point(row, pool_league), 1),
                 "europe_history_percentile": num(same_point(row, full_completed), 1),
+                "cards_per_foul": cards_per_foul(matches),
                 "by_match": [
                     {
                         "n": int(m.n), "date": str(m.Date)[:10], "opponent": str(m.opponent),
@@ -427,6 +445,7 @@ def main() -> None:
                         "expected": num(m.expected, 3),
                         "cum_index": num(m.cum_index), "cum_lo": num(m.cum_lo),
                         "cum_hi": num(m.cum_hi),
+                        "cum_cards_per_foul": num(m.cum_cards_per_foul, 4),
                     }
                     for m in matches.itertuples()
                 ],
@@ -436,7 +455,7 @@ def main() -> None:
             "matches": int(len(group) // 2),
             "latest_date": str(group.Date.max())[:10],
             "yellows": ints(group.yellows), "fouls": ints(group.fouls), "reds": ints(group.reds),
-            "cards_per_foul": num(group.yellows.sum() / group.fouls.sum(), 4),
+            "cards_per_foul": cards_per_foul(group),
             "by_matchweek": by_matchweek_rates(group),
             "survive_bh": sorted(
                 str(t) for t, r in clubs.items() if r["survives_bh"]),
@@ -464,7 +483,13 @@ def main() -> None:
         "team_seasons_completed": int(full_completed.groupby(keys).ngroups),
         "history_from": season_label(min(completed.season)),
         "units": {"index": "yellow cards observed ÷ yellow cards expected",
-                  "percentile": "% of clubs measured the same way at or below this index"},
+                  "percentile": "% of clubs measured the same way at or below this index",
+                  "cards_per_foul": "(yellow cards + red cards) ÷ fouls committed, as "
+                                    "football-data records them. There is no second-yellow "
+                                    "column: in England and Scotland a second-yellow dismissal "
+                                    "is one red only, elsewhere one yellow and one red, so it "
+                                    "counts twice. Yellows include dissent and bench cards, "
+                                    "which have no foul under them."},
         "sources": SOURCES,
         "caveats": CAVEATS,
     }, indent=1, sort_keys=True) + "\n")

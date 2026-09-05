@@ -29,7 +29,7 @@
  "current_season": "2627",
  "current_season_label": "2026-27",
  "fdr": 0.1,
- "generated_at": "2026-09-05T15:28:43+00:00",
+ "generated_at": "2026-09-05T17:26:01+00:00",
  "history_from": "2000-01",
  "leagues": {
   "B1": {
@@ -657,6 +657,7 @@
  ],
  "team_seasons_completed": 3100,
  "units": {
+  "cards_per_foul": "(yellow cards + red cards) \u00f7 fouls committed, as football-data records them. There is no second-yellow column: in England and Scotland a second-yellow dismissal is one red only, elsewhere one yellow and one red, so it counts twice. Yellows include dissent and bench cards, which have no foul under them.",
   "index": "yellow cards observed \u00f7 yellow cards expected",
   "percentile": "% of clubs measured the same way at or below this index"
  }

@@ -52,6 +52,16 @@ per match, reds per match and cards per foul after every club's k-th match, so a
 against earlier seasons at the same point. Per match means both sides counted: a league at 4.7
 yellows per match is booking about 2.3 per team.
 
+**`cards_per_foul`** (league and club, current and history) is yellow cards plus red cards over
+fouls committed, as football-data records them. **`cum_cards_per_foul`** is the same rate after
+each match: a field of every `by_match` row in the current season, and a list aligned with
+`cum_index` for a completed season. It is a description, not a model output: no expectation, no
+interval, and it is read against the league rate on the same axis. football-data has no
+second-yellow column, so a second-yellow dismissal is one card in England and Scotland and two
+elsewhere (see `DATA_SOURCES.md`); yellows also include dissent and bench cards, which have no
+foul under them. A club with no fouls yet has no rate (`null`). One team-match in the history
+(Alanyaspor, Turkey 2018-19) has no red count and contributes zero reds.
+
 **`cum_index_by_matchweek`** (history, per league) and **`europe_cum_index_by_matchweek`**
 (current) are the 5th, 25th, 50th, 75th and 95th percentiles of the cumulative index across every
 completed team-season after k matches, with `n`, the size of that pool. The pool is every
