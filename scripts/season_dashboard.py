@@ -346,8 +346,14 @@ def main() -> None:
     club_now["index"] = club_now.yellows / club_now.expected
     club_now["p"] = two_sided_poisson(club_now.yellows, club_now.expected)
     club_now["bh"] = club_now.groupby(level="Div", group_keys=False).p.apply(benjamini_hochberg)
-    club_now["europe_percentile"] = club_now["index"].rank(pct=True) * 100
-    club_now["league_percentile"] = club_now.groupby(level="Div")["index"].rank(pct=True) * 100
+    # Share of clubs at or below this index, the club itself included, so the
+    # site can say "X% of the N clubs are at or below" and mean exactly that.
+    def at_or_below(values: pd.Series) -> pd.Series:
+        return values.map(lambda x: float((values <= x).mean() * 100))
+
+    club_now["europe_percentile"] = at_or_below(club_now["index"])
+    club_now["league_percentile"] = club_now.groupby(level="Div", group_keys=False)["index"].apply(
+        at_or_below)
     lo, hi = interval(club_now.yellows, club_now.expected)
     club_now["lo"], club_now["hi"] = lo, hi
     post_shape = club_now.prior_shape + club_now.yellows
