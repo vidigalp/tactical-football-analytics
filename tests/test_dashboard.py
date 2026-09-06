@@ -132,3 +132,14 @@ def test_rates_are_per_match_and_band_summary_bounded(meta: dict, current: dict)
         assert 5 < summary["outside_at_end_pct"] < 15, (code, summary)
     europe = current["europe_band_summary"]
     assert europe["team_seasons"] == meta["team_seasons_completed"]
+
+
+def test_location_sensitivity_is_read_from_study_03(meta: dict) -> None:
+    """The bound is the study's number, not a copy that could go stale."""
+    facts = json.loads((ROOT / "reports" / "03-the-lever-nobody-pulls" / "facts.json").read_text())
+    bound = meta["location_sensitivity"]
+    assert bound["low"] == round(facts["location_bound_low"], 3)
+    assert bound["high"] == round(facts["location_bound_high"], 3)
+    assert bound["low"] == round(facts["attacking_fifth"] / facts["base_rate"], 3)
+    assert bound["high"] == round(facts["own_fifth"] / facts["base_rate"], 3)
+    assert 0 < bound["low"] < 1 < bound["high"]

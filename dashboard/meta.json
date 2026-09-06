@@ -23,7 +23,8 @@
   "Intervals are exact Poisson intervals on the count of yellow cards. Early in a season they are wide enough to admit almost anything, and that is the point of showing them.",
   "Percentiles say where a club sits among clubs measured the same way. Nothing here is a ranking, and a sorted list drawn from this file would be one.",
   "The situation multiplier needs odds. A match without them is priced at the era expectation alone.",
-  "Completed seasons use their own league-season fit. The season in progress uses the league's pooled fit on completed seasons since 2017-18, frozen, so four matches cannot set their own baseline."
+  "Completed seasons use their own league-season fit. The season in progress uses the league's pooled fit on completed seasons since 2017-18, frozen, so four matches cannot set their own baseline.",
+  "The feed has no foul location and no card type. Where a club fouls and how many of its yellows are for dissent or from the bench are outside the model; the league average of both is inside the expectation, so a club far from that average is mispriced by the difference. location_sensitivity bounds the first; nothing here bounds the second."
  ],
  "club_names": {
   "B1": {},
@@ -72,7 +73,7 @@
  "current_season": "2627",
  "current_season_label": "2026-27",
  "fdr": 0.1,
- "generated_at": "2026-09-06T09:51:06+00:00",
+ "generated_at": "2026-09-06T14:11:26+00:00",
  "history_from": "2000-01",
  "leagues": {
   "B1": {
@@ -679,6 +680,13 @@
     "underdog": 1.065
    }
   }
+ },
+ "location_sensitivity": {
+  "high": 2.053,
+  "low": 0.579,
+  "note": "Multiply a club's expected yellows by low (every foul in the attacking fifth) or high (every foul in its own fifth) for the range location alone could reach. A bound from another dataset, not an adjustment: no club's actual mix is near either end, and own-third share explains own_third_share_r2 of the between-club spread in card rate per foul where it is measured.",
+  "own_third_share_r2": 0.088,
+  "source": "reports/03-the-lever-nobody-pulls/facts.json"
  },
  "quantiles": [
   0.05,

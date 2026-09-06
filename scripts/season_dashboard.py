@@ -99,7 +99,32 @@ CAVEATS = [
     "Completed seasons use their own league-season fit. The season in progress uses the "
     "league's pooled fit on completed seasons since 2017-18, frozen, so four matches cannot "
     "set their own baseline.",
+    "The feed has no foul location and no card type. Where a club fouls and how many of its "
+    "yellows are for dissent or from the bench are outside the model; the league average of "
+    "both is inside the expectation, so a club far from that average is mispriced by the "
+    "difference. location_sensitivity bounds the first; nothing here bounds the second.",
 ]
+
+
+def location_sensitivity() -> dict:
+    """How far foul location alone can move an expected count, from study 03.
+
+    The bounds are the card rate per foul in the fouling team's own fifth and
+    attacking fifth over the base rate, on 47,955 located fouls from five
+    leagues in 2017-18. Read from the study's sidecar so the two cannot drift.
+    """
+    facts = json.loads((ROOT / "reports" / "03-the-lever-nobody-pulls" / "facts.json").read_text())
+    return {
+        "low": num(facts["location_bound_low"], 3),
+        "high": num(facts["location_bound_high"], 3),
+        "own_third_share_r2": num(facts["r2_own_third_share"], 3),
+        "source": "reports/03-the-lever-nobody-pulls/facts.json",
+        "note": "Multiply a club's expected yellows by low (every foul in the attacking fifth) "
+                "or high (every foul in its own fifth) for the range location alone could "
+                "reach. A bound from another dataset, not an adjustment: no club's actual mix "
+                "is near either end, and own-third share explains own_third_share_r2 of the "
+                "between-club spread in card rate per foul where it is measured.",
+    }
 
 
 def season_label(code: str) -> str:
@@ -534,6 +559,7 @@ def main() -> None:
                                     "compared across clubs, ranked, or put on an axis."},
         "sources": SOURCES,
         "caveats": CAVEATS,
+        "location_sensitivity": location_sensitivity(),
     }, indent=1, sort_keys=True) + "\n")
     (OUT / "current.json").write_text(json.dumps({
         "generated_at": generated,

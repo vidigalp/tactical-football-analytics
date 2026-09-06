@@ -35,9 +35,17 @@ def main() -> None:
     fouls["carded"] = (fouls.card != "none").astype(int)
     fouls["lat"] = (fouls.y - 50).abs()
 
+    # A foul in the fouling team's own third of the pitch. The mean position
+    # used below summarises where a club fouls; this share picks out the tail
+    # where the card gradient is steepest, which is the statistic outside
+    # analysts reach for first.
+    fouls["own_third"] = (fouls.x < 100 / 3).astype(int)
+
     clubs = fouls.groupby(["league", "team_id"]).agg(
         n=("carded", "size"), x=("x", "mean"), lat=("lat", "mean"),
-        minute=("minute", "mean"), carded=("carded", "mean")).reset_index()
+        minute=("minute", "mean"), carded=("carded", "mean"),
+        own_third=("own_third", "mean"), matches=("match_id", "nunique"),
+        cards=("carded", "sum"), own_third_fouls=("own_third", "sum")).reset_index()
     clubs = clubs[clubs.n >= MIN_FOULS]
 
     out = ROOT / "reports" / REPORT / "figures"
@@ -55,6 +63,20 @@ def main() -> None:
 
     r, p = stats.pearsonr(clubs.x, clubs.carded)
     z, se = np.arctanh(r), 1 / np.sqrt(len(clubs) - 3)
+
+    def correlation(a: pd.Series, b: pd.Series) -> dict[str, float]:
+        rho = float(stats.pearsonr(a, b)[0])
+        zeta = np.arctanh(rho)
+        return {"r": rho, "lo": float(np.tanh(zeta - 1.96 * se)),
+                "hi": float(np.tanh(zeta + 1.96 * se)), "r2": rho * rho}
+
+    # The same placement question asked with a tail share rather than a mean,
+    # and then asked the way it is asked in public: own-third fouls per match
+    # against cards per match, next to plain fouls per match.
+    own_share = correlation(clubs.own_third, clubs.carded)
+    own_per_match = correlation(clubs.own_third_fouls / clubs.matches,
+                                clubs.cards / clubs.matches)
+    fouls_per_match = correlation(clubs.n / clubs.matches, clubs.cards / clubs.matches)
 
     # How much of the between-club variation in where a club fouls is real
     # rather than the sampling error of a club mean?
@@ -163,6 +185,31 @@ def main() -> None:
         "r_placement_p": p,
         "reliability_x": reliability("x"),
         "reliability_minute": reliability("minute"),
+        # Card rate by third of the pitch, and the placement test rerun on the
+        # own-third share. Bounds on how far location alone can move a club's
+        # expected count are the fifth rates over the base rate; the dashboard
+        # reads them from this file.
+        "own_third": rate(fouls[fouls.own_third == 1]),
+        "middle_third": rate(fouls[(fouls.own_third == 0) & (fouls.x < 200 / 3)]),
+        "attacking_third": rate(fouls[fouls.x >= 200 / 3]),
+        "club_own_third_share_min": float(clubs.own_third.min()),
+        "club_own_third_share_max": float(clubs.own_third.max()),
+        "club_own_third_per_match_min": float((clubs.own_third_fouls / clubs.matches).min()),
+        "club_own_third_per_match_median": float(
+            (clubs.own_third_fouls / clubs.matches).median()),
+        "club_own_third_per_match_max": float((clubs.own_third_fouls / clubs.matches).max()),
+        "r_own_third_share": own_share["r"],
+        "r_own_third_share_lo": own_share["lo"],
+        "r_own_third_share_hi": own_share["hi"],
+        "r2_own_third_share": own_share["r2"],
+        "r_own_third_per_match": own_per_match["r"],
+        "r_own_third_per_match_lo": own_per_match["lo"],
+        "r_own_third_per_match_hi": own_per_match["hi"],
+        "r_fouls_per_match": fouls_per_match["r"],
+        "r_fouls_per_match_lo": fouls_per_match["lo"],
+        "r_fouls_per_match_hi": fouls_per_match["hi"],
+        "location_bound_low": rate(fouls[fouls.x > 80]) / rate(fouls),
+        "location_bound_high": rate(fouls[fouls.x <= 20]) / rate(fouls),
     }
     (ROOT / "reports" / REPORT / "facts.json").write_text(
         json.dumps(facts, indent=2, sort_keys=True) + "\n")

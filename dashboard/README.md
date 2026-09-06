@@ -78,6 +78,14 @@ cards (`null`), and it does not preserve the spacing between clubs: three clubs 
 `cards_per_foul` are not evenly stepped in `fouls_per_card`, and the distortion always flatters
 whichever club is the extreme. Use it to read one number, never to compare, rank or plot.
 
+**`location_sensitivity`** (`meta.json`) is how far foul location alone could move any club's
+expected count: multiply expected yellows by `low` for a club whose every foul fell in the
+attacking fifth, by `high` for one whose every foul fell in its own fifth. The numbers are study
+03's fifth rates over its base rate, read from that study's `facts.json` so they cannot drift
+from it, and `own_third_share_r2` is the share of between-club spread in card rate per foul that
+own-third share explains there. It is a bound from another dataset, not an adjustment: the feed
+has no foul location, and no club's real mix is near either end. Card type has no such bound.
+
 **`cum_index_by_matchweek`** (history, per league) and **`europe_cum_index_by_matchweek`**
 (current) are the 5th, 25th, 50th, 75th and 95th percentiles of the cumulative index across every
 completed team-season after k matches, with `n`, the size of that pool. The pool is every

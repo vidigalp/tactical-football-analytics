@@ -1,6 +1,6 @@
 # The lever nobody pulls
 
-**Published:** 2026-08-31 · **Data:** `fouls_bigfive_2017-18` · **Claim level:** L1 (descriptive)
+**Published:** 2026-08-31 · **Updated:** 2026-09-06 · **Data:** `fouls_bigfive_2017-18` · **Claim level:** L1 (descriptive)
 
 ---
 
@@ -13,10 +13,11 @@ A foul in the opening quarter of an hour is carded **6.5%** of the time; after n
 
 That is a large, exploitable difference, and it is not exploited. Across 98 clubs in five leagues,
 the average position of a club's fouls spans **48 to 58** on a hundred-point pitch, a tenth of the
-range over which the gradient is measured. Where a club fouls does not predict how often it is
-carded.
+range over which the gradient is measured. Where a club fouls predicts a little of how often it
+is carded: the share of its fouls in its own third accounts for about **9%** of the between-club
+spread in card rate, and nothing else tried here does better.
 
-The lever is real. Nobody appears to be pulling it.
+The lever is real. Nobody appears to be pulling it hard.
 
 ## Where this question came from
 
@@ -104,6 +105,40 @@ position survives correcting for the sampling error of a club average. They bare
 **when**, at 14%. Moving from the worst to the best observed foul mix would be worth about **18%**
 of the base card rate.
 
+## 5. The statistic other people use
+
+Section 4 summarises where a club fouls by the mean position of its fouls. That is not how the
+question is put in public. On 6 September 2026, answering the same Portuguese booking argument
+this project began with, the analytics outlet GoalPoint proposed fouls in the defensive third per
+match as the first thing a fouls-to-cards comparison leaves out. That is a tail share, not a mean,
+and the gradient is steepest in that tail, so it deserves its own test rather than an assumption
+that the mean already covers it.
+
+By thirds of the pitch, the card rate per foul is **24.1%** in the fouling team's own third,
+**14.0%** in the middle and **10.6%** in the attacking third. The own-third share of a club's
+fouls runs from **16.1%** to **29.9%** across the 98 clubs.
+
+It does better than the mean. Own-third share against card rate per foul gives
+**r = +0.30, 95% interval [+0.10, +0.47]**, where the mean position gave −0.14 and could not be
+separated from zero. Squared, that is **8.8%** of the between-club variation in card rate, against
+the **3.1%** the full context model explained in section 4. The lede has been changed to say so.
+The direction of the finding has not: nine tenths of the spread between clubs is still not where
+they foul.
+
+Asked the way it is asked in public, as a per-match count, the statistic stops adding anything.
+Own-third fouls per match against cards per match correlates at **0.67** [0.54, 0.77]. Plain fouls
+per match against cards per match correlates at **0.70** [0.58, 0.79]. A club that fouls more
+fouls more in its own third too, and the per-match count is mostly counting fouls. The share is
+the informative form; the count is a proxy for volume. Club-seasons run from **1.76** to **4.32**
+own-third fouls per match, median **3.07**, so a single club a few matches into a season quoted
+at either end of that range is within what a full season of a big-five club produces.
+
+For a club's expected count, the bound this gives is the useful output. A club whose every foul
+fell in the attacking fifth would be expected **0.58** times the cards of one fouling at the
+league mix; every foul in its own fifth, **2.05** times. Location alone cannot move an expected
+count outside that range, and no club's actual mix is near either end of it. Those two numbers
+are what the season dashboard reads from this study's `facts.json`.
+
 ## What this does and does not show
 
 **It does not show that tactical fouling is a myth.** A season average is a blunt instrument. A
@@ -115,8 +150,9 @@ way a real effect would hide from this test, and this data cannot rule it out.
 it defends, which is a consequence of who it is playing. None of that is randomised.
 
 **It does show** that card rate varies far more with the context of a foul than with which club
-committed it, and that clubs differ so little in aggregate foul placement that most of the
-available advantage is unclaimed. Whether referees are responding to context, or the fouls
+committed it, and that clubs differ little enough in aggregate foul placement that most of the
+available advantage is unclaimed: about a tenth of the between-club spread is placement, on the
+most favourable statistic tried. Whether referees are responding to context, or the fouls
 committed in those contexts are genuinely different, is not something these data separate.
 
 ### For the club in study 02
@@ -148,7 +184,7 @@ Per `METHODS.md` §11. Two of the six were not run, and saying so is the point o
 |---|---|---|
 | Specification | **run — survived** | Card probability is modelled as logistic in position, minute and score state rather than as a rate per foul, so the intercept problem that broke study 02 cannot arise. The model is still additive in those terms and would miss an interaction between them. |
 | Aggregation | **run — landed** | This *is* the study. The gradient is enormous at the level of the individual foul and absent at the level of the club, and the whole finding is that the two do not meet. |
-| Adjustment coarseness | **skipped** | Position enters as a quadratic in `x` and a linear term in lateral distance. A finer basis, or the pitch as a surface, might recover a club effect the quadratic cannot see. Not attempted. |
+| Adjustment coarseness | **run — partly landed** | Position enters as a quadratic in `x` and a linear term in lateral distance. Re-asked with the own-third share of a club's fouls (section 5), the placement correlation rises from −0.14 to +0.30 and the explained spread from 3.1% to 8.8%. A tail statistic sees what the mean does not; the lede was corrected. The pitch as a surface is still not attempted. |
 | Prior work | **run — survived** | Searched for published work on club-level exploitation of the card-position gradient and found none. Absence in one search is not absence in the literature, which §4 of `METHODS.md` records this project learning the hard way. |
 | Baseline sufficiency | **skipped** | The central null result, r = −0.14 for mean foul position against card rate, has no matched null. What r would arise if clubs differed *only* in the placement ranges they actually occupy, 48 to 58 on a hundred-point pitch, is not computed. Until it is, "no club exploits this" is not separated from "the spread is too narrow for any club to exploit it". |
 | Cross-sectional, few units | **not applicable** | No claim rests on a correlation across a handful of aggregate units. The 98-club correlation is the finding being reported as null, not evidence for a mechanism. |
