@@ -100,6 +100,20 @@ def test_quantiles_are_ordered(meta: dict, current: dict) -> None:
         assert all(ordered(r) for r in history(code)["cum_index_by_matchweek"].values()), code
 
 
+def test_every_club_is_labelled_and_keys_are_the_source_names(meta: dict, current: dict) -> None:
+    """Renaming a key would break the referee join and every shared club URL."""
+    mapped = meta["club_names"]
+    for code, league in current["leagues"].items():
+        for key, club in league["clubs"].items():
+            assert club["display_name"], f"{code} {key}"
+            assert club["display_name"] == mapped.get(code, {}).get(key, key), (code, key)
+        for season in history(code)["seasons"].values():
+            for key, club in season["clubs"].items():
+                assert club["display_name"] == mapped.get(code, {}).get(key, key), (code, key)
+    assert current["leagues"]["P1"]["clubs"]["Sp Lisbon"]["display_name"] == "Sporting CP"
+    assert len(set(mapped["P1"].values())) == len(mapped["P1"]), "two clubs share a display name"
+
+
 def test_rates_are_per_match_and_band_summary_bounded(meta: dict, current: dict) -> None:
     for code, league in current["leagues"].items():
         rates = league["by_matchweek"]

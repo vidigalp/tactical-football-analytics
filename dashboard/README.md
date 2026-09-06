@@ -62,6 +62,14 @@ elsewhere (see `DATA_SOURCES.md`); yellows also include dissent and bench cards,
 foul under them. A club with no fouls yet has no rate (`null`). One team-match in the history
 (Alanyaspor, Turkey 2018-19) has no red count and contributes zero reds.
 
+**`display_name`** (club, current and history) is the club's own name. The key beside it is the
+name football-data.co.uk uses, and that stays the identity: it keys these files, joins the referee
+table, and is what the site's club filter carries in a URL, so it must not be renamed. Only the
+label changes. The mapping lives in `data/club_names.csv` and is repeated in `meta.club_names` for
+labels drawn outside a club block. A club with no row there is labelled with the source name, so
+the field is always present and never empty. Portugal is mapped; the other ten leagues still fall
+back to source names.
+
 **`fouls_per_card`** (league and club, current and history) is the same ratio inverted, for
 reading one club on its own: "one card every 6.3 fouls" instead of "0.159 cards per foul". It is
 computed from the counts rather than from the rounded rate, and it is a season total with no

@@ -240,6 +240,19 @@ def fouls_per_card(rows: pd.DataFrame) -> float | None:
     return None if cards == 0 else num(rows.fouls.sum() / cards, 1)
 
 
+def load_club_names() -> dict[tuple[str, str], str]:
+    """Display names, keyed by the name football-data.co.uk uses.
+
+    The source name stays the identity everywhere: it is the key in these
+    files, the join key for the referee table, and the value the site's club
+    filter carries in a URL. Only the label changes, and a club with no row in
+    data/club_names.csv is labelled with the source name.
+    """
+    path = ROOT / "data" / "club_names.csv"
+    table = pd.read_csv(path)
+    return {(r.league, r.source): r.display for r in table.itertuples()}
+
+
 def club_totals(group: pd.DataFrame) -> dict[str, int | None]:
     return {
         "matches": int(len(group)),
@@ -293,6 +306,7 @@ def main() -> None:
     # Completed seasons keep their own league-season fit, as the studies do.
     era = fit_era_models(completed.rename(columns={"Div": "league"}))
 
+    club_names = load_club_names()
     leagues: dict[str, dict] = {}
     history_out: dict[str, dict] = {}
     scored_current: list[pd.DataFrame] = []
@@ -356,6 +370,7 @@ def main() -> None:
                 key = (code, season, team)
                 s = shrunk.loc[key]
                 clubs[str(team)] = {
+                    "display_name": club_names.get((code, str(team)), str(team)),
                     **club_totals(group),
                     "expected": num(group.expected.sum(), 2),
                     "index": num(group.yellows.sum() / group.expected.sum()),
@@ -437,6 +452,7 @@ def main() -> None:
             row = club_now.loc[(code, CURRENT_SEASON, team)]
             matches = matches.sort_values("n")
             clubs[str(team)] = {
+                "display_name": club_names.get((code, str(team)), str(team)),
                 **club_totals(matches),
                 "expected": num(row.expected, 2), "expected_era": num(row.expected_era, 2),
                 "index": num(row["index"]), "lo": num(row.lo), "hi": num(row.hi),
@@ -500,6 +516,9 @@ def main() -> None:
         "leagues": leagues,
         "team_seasons_completed": int(full_completed.groupby(keys).ngroups),
         "history_from": season_label(min(completed.season)),
+        "club_names": {code: {source: name for (league, source), name in club_names.items()
+                              if league == code}
+                       for code in leagues},
         "units": {"index": "yellow cards observed ÷ yellow cards expected",
                   "percentile": "% of clubs measured the same way at or below this index",
                   "cards_per_foul": "(yellow cards + red cards) ÷ fouls committed, as "
