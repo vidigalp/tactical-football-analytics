@@ -226,6 +226,20 @@ def cards_per_foul(rows: pd.DataFrame) -> float | None:
     return num((rows.yellows.sum() + rows.reds.sum()) / rows.fouls.sum(), 4)
 
 
+def fouls_per_card(rows: pd.DataFrame) -> float | None:
+    """Fouls per card: the same ratio the other way up, for reading one club.
+
+    Computed from the counts, not from the rounded rate. Season totals only:
+    the inverted form is undefined when a club has no cards, and its gaps are
+    not the rate's gaps. Three clubs evenly spaced in cards per foul are not
+    evenly spaced in fouls per card, and the distortion always flatters
+    whichever club is extreme, so there is no cumulative or by-matchweek
+    version and nothing should compare, rank or plot it.
+    """
+    cards = rows.yellows.sum() + rows.reds.sum()
+    return None if cards == 0 else num(rows.fouls.sum() / cards, 1)
+
+
 def club_totals(group: pd.DataFrame) -> dict[str, int | None]:
     return {
         "matches": int(len(group)),
@@ -351,6 +365,7 @@ def main() -> None:
                     "complete": bool(len(group) >= COMPLETE),
                     "cum_index": [num(v) for v in group.sort_values("n").cum_index],
                     "cards_per_foul": cards_per_foul(group),
+                    "fouls_per_card": fouls_per_card(group),
                     "cum_cards_per_foul": [
                         num(v, 4) for v in group.sort_values("n").cum_cards_per_foul],
                 }
@@ -363,6 +378,7 @@ def main() -> None:
                           "slope": num(model_fit.slope, 6)},
                 "yellows": ints(rows.yellows), "fouls": ints(rows.fouls), "reds": ints(rows.reds),
                 "cards_per_foul": cards_per_foul(rows),
+                "fouls_per_card": fouls_per_card(rows),
                 "by_matchweek": by_matchweek_rates(rows),
             }
         full_rows = done_scored.set_index(keys).loc[full.index].reset_index()
@@ -432,6 +448,7 @@ def main() -> None:
                 "league_history_percentile": num(same_point(row, pool_league), 1),
                 "europe_history_percentile": num(same_point(row, full_completed), 1),
                 "cards_per_foul": cards_per_foul(matches),
+                "fouls_per_card": fouls_per_card(matches),
                 "by_match": [
                     {
                         "n": int(m.n), "date": str(m.Date)[:10], "opponent": str(m.opponent),
@@ -456,6 +473,7 @@ def main() -> None:
             "latest_date": str(group.Date.max())[:10],
             "yellows": ints(group.yellows), "fouls": ints(group.fouls), "reds": ints(group.reds),
             "cards_per_foul": cards_per_foul(group),
+            "fouls_per_card": fouls_per_card(group),
             "by_matchweek": by_matchweek_rates(group),
             "survive_bh": sorted(
                 str(t) for t, r in clubs.items() if r["survives_bh"]),
@@ -489,7 +507,12 @@ def main() -> None:
                                     "column: in England and Scotland a second-yellow dismissal "
                                     "is one red only, elsewhere one yellow and one red, so it "
                                     "counts twice. Yellows include dissent and bench cards, "
-                                    "which have no foul under them."},
+                                    "which have no foul under them.",
+                  "fouls_per_card": "fouls ÷ (yellow cards + red cards), the same ratio inverted, "
+                                    "for reading one club on its own. Null when a club has no "
+                                    "cards yet. Season totals only: the inverted form does not "
+                                    "preserve the spacing between clubs, so it must not be "
+                                    "compared across clubs, ranked, or put on an axis."},
         "sources": SOURCES,
         "caveats": CAVEATS,
     }, indent=1, sort_keys=True) + "\n")
