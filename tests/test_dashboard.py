@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 from pathlib import Path
 
 import pytest
@@ -143,3 +144,15 @@ def test_location_sensitivity_is_read_from_study_03(meta: dict) -> None:
     assert bound["low"] == round(facts["attacking_fifth"] / facts["base_rate"], 3)
     assert bound["high"] == round(facts["own_fifth"] / facts["base_rate"], 3)
     assert 0 < bound["low"] < 1 < bound["high"]
+
+
+def test_club_colours_are_hex_unique_and_keyed_by_source_name(meta: dict) -> None:
+    """A colour is a label like display_name: it must not create a key or rank."""
+    colours = meta["club_colours"]
+    assert set(colours) == set(meta["leagues"])
+    for code, block in colours.items():
+        assert set(block) <= set(meta["club_names"].get(code, {})), code
+        for key, colour in block.items():
+            assert re.fullmatch(r"#[0-9A-F]{6}", colour), (code, key, colour)
+        assert len(set(block.values())) == len(block), f"{code}: two clubs share a colour"
+    assert set(colours["P1"]) == {"Benfica", "Porto", "Sp Lisbon"}

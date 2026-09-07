@@ -278,6 +278,20 @@ def load_club_names() -> dict[tuple[str, str], str]:
     return {(r.league, r.source): r.display for r in table.itertuples()}
 
 
+def load_club_colours() -> dict[tuple[str, str], str]:
+    """Series colours for the few clubs whose colour a reader already knows.
+
+    Same file and same key as the display names. Only clubs whose traditional
+    colour is unambiguous and unique in their league carry one; every other
+    club leaves the cell empty and the site keeps its own slot colours, so
+    nothing here ranks or singles out. The shades are readable versions of the
+    traditional colours on both site themes, not brand assets.
+    """
+    path = ROOT / "data" / "club_names.csv"
+    table = pd.read_csv(path).dropna(subset=["colour"])
+    return {(r.league, r.source): r.colour for r in table.itertuples()}
+
+
 def club_totals(group: pd.DataFrame) -> dict[str, int | None]:
     return {
         "matches": int(len(group)),
@@ -332,6 +346,7 @@ def main() -> None:
     era = fit_era_models(completed.rename(columns={"Div": "league"}))
 
     club_names = load_club_names()
+    club_colours = load_club_colours()
     leagues: dict[str, dict] = {}
     history_out: dict[str, dict] = {}
     scored_current: list[pd.DataFrame] = []
@@ -544,6 +559,9 @@ def main() -> None:
         "club_names": {code: {source: name for (league, source), name in club_names.items()
                               if league == code}
                        for code in leagues},
+        "club_colours": {code: {source: colour for (league, source), colour in club_colours.items()
+                                if league == code}
+                         for code in leagues},
         "units": {"index": "yellow cards observed ÷ yellow cards expected",
                   "percentile": "% of clubs measured the same way at or below this index",
                   "cards_per_foul": "(yellow cards + red cards) ÷ fouls committed, as "

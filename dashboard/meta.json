@@ -26,6 +26,23 @@
   "Completed seasons use their own league-season fit. The season in progress uses the league's pooled fit on completed seasons since 2017-18, frozen, so four matches cannot set their own baseline.",
   "The feed has no foul location and no card type. Where a club fouls and how many of its yellows are for dissent or from the bench are outside the model; the league average of both is inside the expectation, so a club far from that average is mispriced by the difference. location_sensitivity bounds the first; nothing here bounds the second."
  ],
+ "club_colours": {
+  "B1": {},
+  "D1": {},
+  "E0": {},
+  "F1": {},
+  "G1": {},
+  "I1": {},
+  "N1": {},
+  "P1": {
+   "Benfica": "#E03A3E",
+   "Porto": "#2F6FBF",
+   "Sp Lisbon": "#2E9E5B"
+  },
+  "SC0": {},
+  "SP1": {},
+  "T1": {}
+ },
  "club_names": {
   "B1": {},
   "D1": {},
@@ -73,7 +90,7 @@
  "current_season": "2627",
  "current_season_label": "2026-27",
  "fdr": 0.1,
- "generated_at": "2026-09-06T14:11:26+00:00",
+ "generated_at": "2026-09-07T10:23:37+00:00",
  "history_from": "2000-01",
  "leagues": {
   "B1": {

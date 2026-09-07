@@ -70,6 +70,13 @@ labels drawn outside a club block. A club with no row there is labelled with the
 the field is always present and never empty. Portugal is mapped; the other ten leagues still fall
 back to source names.
 
+**`club_colours`** (`meta.json`) gives a series colour for the few clubs whose colour a reader
+already knows, keyed like `club_names`. Only clubs whose traditional colour is unambiguous and
+unique in their league carry one (Portugal: Benfica, Porto, Sporting); every other club is absent
+and the site keeps its own slot colours. Colour alone must never carry the distinction: the site
+also varies marker shape, because the red and green here are one hue apart for a colour-blind
+reader. The shades are readable on both site themes, not brand assets.
+
 **`fouls_per_card`** (league and club, current and history) is the same ratio inverted, for
 reading one club on its own: "one card every 6.3 fouls" instead of "0.159 cards per foul". It is
 computed from the counts rather than from the rounded rate, and it is a season total with no
