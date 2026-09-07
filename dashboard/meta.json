@@ -90,7 +90,7 @@
  "current_season": "2627",
  "current_season_label": "2026-27",
  "fdr": 0.1,
- "generated_at": "2026-09-07T10:23:37+00:00",
+ "generated_at": "2026-09-07T15:24:09+00:00",
  "history_from": "2000-01",
  "leagues": {
   "B1": {
@@ -115,8 +115,8 @@
     "2526"
    ],
    "country": "Belgium",
-   "latest_date": "2026-08-30",
-   "matches_current": 33,
+   "latest_date": "2026-09-03",
+   "matches_current": 36,
    "model": {
     "intercept": 0.495308,
     "slope": 0.12329,
@@ -302,8 +302,8 @@
     "2526"
    ],
    "country": "France",
-   "latest_date": "2026-08-30",
-   "matches_current": 18,
+   "latest_date": "2026-09-03",
+   "matches_current": 19,
    "model": {
     "intercept": 0.469637,
     "slope": 0.112778,
@@ -567,8 +567,8 @@
     "2526"
    ],
    "country": "Scotland",
-   "latest_date": "2026-08-30",
-   "matches_current": 19,
+   "latest_date": "2026-09-03",
+   "matches_current": 25,
    "model": {
     "intercept": 0.33869,
     "slope": 0.123868,
@@ -627,8 +627,8 @@
     "2526"
    ],
    "country": "Spain",
-   "latest_date": "2026-08-31",
-   "matches_current": 30,
+   "latest_date": "2026-09-03",
+   "matches_current": 31,
    "model": {
     "intercept": 0.664616,
     "slope": 0.133605,
@@ -712,8 +712,8 @@
   0.75,
   0.95
  ],
- "snapshot": "2026-W36",
- "snapshot_created_at": "2026-09-01T16:11:12+00:00",
+ "snapshot": "2026-W37",
+ "snapshot_created_at": "2026-09-07T15:23:21+00:00",
  "sources": [
   {
    "attribution": "football-data.co.uk",
