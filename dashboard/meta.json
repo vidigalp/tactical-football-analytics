@@ -90,7 +90,7 @@
  "current_season": "2627",
  "current_season_label": "2026-27",
  "fdr": 0.1,
- "generated_at": "2026-09-08T20:18:09+00:00",
+ "generated_at": "2026-09-10T22:27:24+00:00",
  "history_from": "2000-01",
  "leagues": {
   "B1": {
@@ -346,8 +346,8 @@
     "2526"
    ],
    "country": "Greece",
-   "latest_date": "2026-09-07",
-   "matches_current": 20,
+   "latest_date": "2026-09-10",
+   "matches_current": 21,
    "model": {
     "intercept": 1.161763,
     "slope": 0.09083,
@@ -454,8 +454,8 @@
     "2526"
    ],
    "country": "Netherlands",
-   "latest_date": "2026-09-06",
-   "matches_current": 41,
+   "latest_date": "2026-09-09",
+   "matches_current": 44,
    "model": {
     "intercept": 0.206231,
     "slope": 0.12164,
@@ -502,8 +502,8 @@
     "2526"
    ],
    "country": "Portugal",
-   "latest_date": "2026-09-07",
-   "matches_current": 42,
+   "latest_date": "2026-09-10",
+   "matches_current": 44,
    "model": {
     "intercept": 1.125898,
     "slope": 0.095491,
@@ -567,8 +567,8 @@
     "2526"
    ],
    "country": "Scotland",
-   "latest_date": "2026-09-06",
-   "matches_current": 31,
+   "latest_date": "2026-09-09",
+   "matches_current": 33,
    "model": {
     "intercept": 0.33869,
     "slope": 0.123868,
@@ -713,7 +713,7 @@
   0.95
  ],
  "snapshot": "2026-W37",
- "snapshot_created_at": "2026-09-08T20:12:44+00:00",
+ "snapshot_created_at": "2026-09-10T22:26:58+00:00",
  "sources": [
   {
    "attribution": "football-data.co.uk",
