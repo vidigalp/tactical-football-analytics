@@ -1,6 +1,6 @@
 # The season in progress
 
-Regenerated every Monday by [`.github/workflows/update.yml`](../.github/workflows/update.yml)
+Regenerated every Tuesday by [`.github/workflows/update.yml`](../.github/workflows/update.yml)
 from the newest snapshot in `data/snapshots/`, by
 [`scripts/season_dashboard.py`](../scripts/season_dashboard.py). The site copies these files out
 of its `content` submodule at build time and serves them same-origin. Nothing here is a claim;

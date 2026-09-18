@@ -13,11 +13,16 @@ name: update snapshot and dashboard
 # outlier scan still runs, and lands in the job summary as a list of things a
 # person might look at, never as a post.
 #
-# WHY MONDAY, ONCE. football-data.co.uk publishes the weekend's matches on
-# Sunday night and midweek matches on Wednesday night. Snapshots are ISO-week
-# directories and nothing in them is ever overwritten, so one run per week is
-# the most this layout allows without a second run clobbering the first. The
-# guard below refuses to touch a week that is already committed.
+# WHY TUESDAY, ONCE. football-data.co.uk publishes the weekend's matches late
+# on Monday, not on Sunday night as this comment used to claim: the file's
+# last-modified was 22:39 UTC on Monday 2026-09-07, 22:10 on Thursday the 10th
+# and 22:57 on Monday the 14th. A Monday-morning run therefore fetched last
+# week's rows, found no delta, removed its own snapshot and exited green three
+# weeks running, leaving the dashboard a week stale each time. Tuesday morning
+# is after the Monday publication and still early in the week. Snapshots are
+# ISO-week directories and nothing in them is ever overwritten, so one run per
+# week is the most this layout allows without a second run clobbering the
+# first. The guard below refuses to touch a week that is already committed.
 #
 # GitHub's schedule trigger drifts and sometimes skips; see the energy archive's
 # workflow for the measurements. Dispatching from an external clock is the
@@ -26,7 +31,7 @@ name: update snapshot and dashboard
 on:
   workflow_dispatch:
   schedule:
-    - cron: "23 6 * * 1"
+    - cron: "23 6 * * 2"
 
 permissions:
   contents: write
