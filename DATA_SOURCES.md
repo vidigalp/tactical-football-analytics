@@ -12,10 +12,15 @@ block for eleven European top divisions.
 
 - `robots.txt` is fully open; no rate limit is imposed; files are plain CSV.
 - We identify ourselves with a descriptive User-Agent and fetch politely.
-- The site's published disclaimer covers gambling liability only. **We found no explicit
-  data-reuse or redistribution clause.** We therefore claim no licence over the underlying data,
-  attribute the source on every page that uses it, and commit only the fields this project
-  analyses. If the operator objects, we will comply.
+- The site's published notes state that the data is free, that its use is intended for private
+  individuals rather than commercial or data-training products built with automated bots, scrapers
+  or AI, and that the data is made available for league match prediction. This project is one
+  private individual doing non-commercial research, trains nothing on the data, and fetches eleven
+  files once a week with a descriptive User-Agent. **We found no redistribution clause**, so we
+  claim no licence over the underlying data, attribute the source on every page that uses it, and
+  commit only the fields this project analyses. The private-individual wording appeared between
+  2026-06-12 and 2026-09-18, dated against the Internet Archive; the match-prediction wording
+  predates it and is bracketed with the accuracy disclaimer. If the operator objects, we comply.
 
 ### What we measured, versus what is documented
 
