@@ -1,6 +1,6 @@
 # The season in progress
 
-Regenerated every Tuesday by [`.github/workflows/update.yml`](../.github/workflows/update.yml)
+Regenerated daily by [`.github/workflows/update.yml`](../.github/workflows/update.yml)
 from the newest snapshot in `data/snapshots/`, by
 [`scripts/season_dashboard.py`](../scripts/season_dashboard.py). The site copies these files out
 of its `content` submodule at build time and serves them same-origin. Nothing here is a claim;
@@ -111,3 +111,12 @@ the league, and it is not "most", which is why the number is in the file.
 percentile and pool from the raw parquet files using only the constants published in `meta.json`,
 with none of the code that wrote the files, and fails the weekly run if anything disagrees beyond
 the rounding in the files. Nothing in this directory reaches the site without passing it.
+
+## Cadence, and what a week's directory means
+
+The workflow runs every morning at 05:23 UTC, a few hours after football-data.co.uk publishes.
+Snapshots remain one directory per ISO week, so a run later in the same week rewrites that week's
+files rather than adding a directory: `data/snapshots/2026-W38` means the state of that week's data
+as of its last fetch, and every earlier state of it is in this repository's history. A day on which
+the source published nothing commits nothing, because refetching unchanged data produces
+byte-identical parquet files and the workflow compares them before it commits.

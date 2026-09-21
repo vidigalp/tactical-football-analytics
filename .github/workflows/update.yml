@@ -1,8 +1,8 @@
 name: update snapshot and dashboard
 
-# Once a week: fetch football-data.co.uk, write a new dated snapshot, regenerate
-# the dashboard dataset, and commit both. Then move the site's content pin to
-# that commit, which is what triggers the Cloudflare rebuild.
+# Once a day: fetch football-data.co.uk, write or refresh the week's snapshot,
+# regenerate the dashboard dataset, and commit both. Then move the site's content
+# pin to that commit, which is what triggers the Cloudflare rebuild.
 #
 # WHAT THIS PUBLISHES AND WHAT IT DOES NOT. The dashboard is a dataset: every
 # club's counts, expectation, interval and percentile, computed by a committed
@@ -13,16 +13,31 @@ name: update snapshot and dashboard
 # outlier scan still runs, and lands in the job summary as a list of things a
 # person might look at, never as a post.
 #
-# WHY TUESDAY, ONCE. football-data.co.uk publishes the weekend's matches late
-# on Monday, not on Sunday night as this comment used to claim: the file's
-# last-modified was 22:39 UTC on Monday 2026-09-07, 22:10 on Thursday the 10th
-# and 22:57 on Monday the 14th. A Monday-morning run therefore fetched last
-# week's rows, found no delta, removed its own snapshot and exited green three
-# weeks running, leaving the dashboard a week stale each time. Tuesday morning
-# is after the Monday publication and still early in the week. Snapshots are
-# ISO-week directories and nothing in them is ever overwritten, so one run per
-# week is the most this layout allows without a second run clobbering the
-# first. The guard below refuses to touch a week that is already committed.
+# WHY DAILY, AND WHY 05:23 UTC. football-data.co.uk publishes late in the
+# evening UTC: the P1 file's last-modified was 22:39 on Monday 2026-09-07,
+# 22:10 on Thursday the 10th and 22:57 on Monday the 14th. A weekly Monday-
+# morning run therefore fetched the previous week's rows, found no delta,
+# removed its own snapshot and exited green three weeks running, each time
+# leaving the dashboard a week stale while looking healthy. Rounds are also not
+# weekly: a midweek round publishes on a Wednesday or Thursday night, and a
+# rearranged fixture whenever it is played. Running every morning a few hours
+# after the publication window catches each of those within a day, and the
+# no-change path below costs one fetch and no commit.
+#
+# WHAT A DAY'S RUN MAY OVERWRITE. Snapshots are still one ISO-week directory,
+# so a run later in the same week rewrites that week's files rather than adding
+# a directory. A week's snapshot therefore means the state of that week's data
+# as of its last fetch, and every earlier state of it remains in this
+# repository's history, which is what the reproducibility promise in
+# DATA_SOURCES.md rests on. Daily directories were the alternative and were
+# rejected: twenty-three scripts find the current data by globbing `*-W*`, and
+# at 3.5 MB a snapshot the history would grow by about a gigabyte a year.
+#
+# WHY THE PARQUET COMPARISON BELOW IS SOUND. Refetching unchanged data produces
+# byte-identical parquet files: verified 2026-09-21 by refetching all eleven
+# leagues against the committed 2026-W38 snapshot, 11 of 11 identical. Only the
+# manifest's timestamps move. So git itself is the change detector, and a day
+# with no new matches commits nothing at all.
 #
 # GitHub's schedule trigger drifts and sometimes skips; see the energy archive's
 # workflow for the measurements. Dispatching from an external clock is the
@@ -31,7 +46,7 @@ name: update snapshot and dashboard
 on:
   workflow_dispatch:
   schedule:
-    - cron: "23 6 * * 2"
+    - cron: "23 5 * * *"
 
 permissions:
   contents: write
@@ -50,41 +65,83 @@ jobs:
           enable-cache: true
       - run: uv sync --all-extras --dev
 
-      - name: Refuse to overwrite a committed snapshot
+      # A week already committed is refreshed in place; a new week is written
+      # fresh. The two paths differ only in how "nothing new" is detected, and
+      # both must end with nothing committed.
+      - name: Is this week's snapshot already committed
         id: week
         run: |
           week="$(date -u +%G-W%V)"
+          echo "week=$week" >> "$GITHUB_OUTPUT"
           if git ls-files --error-unmatch "data/snapshots/$week/manifest.json" >/dev/null 2>&1; then
-            echo "snapshot $week is already committed; nothing to do"
-            echo "fresh=false" >> "$GITHUB_OUTPUT"
+            echo "refreshing the committed snapshot $week in place"
+            echo "committed=true" >> "$GITHUB_OUTPUT"
           else
-            echo "fresh=true" >> "$GITHUB_OUTPUT"
+            echo "writing a new snapshot $week"
+            echo "committed=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Fetch every league
-        if: steps.week.outputs.fresh == 'true'
         run: uv run python scripts/ingest_matches.py --to 2026
 
-      # Fewer leagues or fewer rows than last week is a broken fetch and fails
-      # the job. The same rows is a quiet week: the directory is removed and
-      # nothing is committed. More rows is new data.
+      # Refreshing a committed week: the parquet files are byte-identical when
+      # nothing was published, so an unchanged git diff means there is nothing
+      # to do. Restore the directory, since the manifest's timestamps always
+      # move and would otherwise be committed on their own.
+      - name: Did anything actually change
+        if: steps.week.outputs.committed == 'true'
+        id: refresh
+        run: |
+          week="${{ steps.week.outputs.week }}"
+          if git diff --quiet -- "data/snapshots/$week"/*.parquet; then
+            echo "no new matches since the last fetch; nothing to do"
+            git checkout -- "data/snapshots/$week"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git diff --stat -- "data/snapshots/$week"/*.parquet
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # A refresh that did change still has to clear the same sanity check as a
+      # new week: fewer leagues or fewer rows than the week before is a broken
+      # fetch, not new data, and must fail the job. Run the comparison without
+      # `--remove-if-unchanged`, because this week's directory is committed and
+      # deleting it is never the right answer.
+      - name: Sanity-check a refreshed week
+        if: steps.refresh.outputs.changed == 'true'
+        run: uv run python scripts/snapshot_delta.py
+
+      # Writing a new week. Fewer leagues or fewer rows than last week is a
+      # broken fetch and fails the job. The same rows means the source has not
+      # published since last week: the directory is removed and nothing is
+      # committed. More rows is new data.
       - name: Compare with the previous snapshot
-        if: steps.week.outputs.fresh == 'true'
+        if: steps.week.outputs.committed == 'false'
         id: delta
         run: uv run python scripts/snapshot_delta.py --remove-if-unchanged
 
+      - name: Decide whether to publish
+        id: publish
+        run: |
+          if [ "${{ steps.refresh.outputs.changed }}" = "true" ] \
+          || [ "${{ steps.delta.outputs.changed }}" = "true" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Regenerate the dashboard dataset
-        if: steps.delta.outputs.changed == 'true'
+        if: steps.publish.outputs.changed == 'true'
         run: uv run python scripts/season_dashboard.py
 
       - name: Check everything that is about to be committed
-        if: steps.delta.outputs.changed == 'true'
+        if: steps.publish.outputs.changed == 'true'
         run: |
           uv run ruff check .
           uv run pytest -m "not network" -q
 
       - name: Scan for things a person might look at
-        if: steps.delta.outputs.changed == 'true'
+        if: steps.publish.outputs.changed == 'true'
         run: |
           {
             echo '## Outlier scan'
@@ -97,13 +154,14 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit the snapshot and the dashboard
-        if: steps.delta.outputs.changed == 'true'
+        if: steps.publish.outputs.changed == 'true'
         id: commit
         run: |
           git config user.name  "snapshot bot"
           git config user.email "noreply@users.noreply.github.com"
           git add data/snapshots dashboard
-          git commit -q -m "Weekly snapshot $(date -u +%G-W%V) and dashboard refresh"
+          git commit -q -m "Snapshot $(date -u +%G-W%V) and dashboard refresh" \
+            -m "Fetched $(date -u +'%Y-%m-%d %H:%M') UTC by the daily update workflow."
           git pull --rebase --quiet
           git push --quiet
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
@@ -111,7 +169,7 @@ jobs:
       # The site mounts this repository as the `content` submodule and copies the
       # dashboard out of it at build time. Moving the pin is the whole deploy.
       - name: Check out the site
-        if: steps.delta.outputs.changed == 'true'
+        if: steps.publish.outputs.changed == 'true'
         uses: actions/checkout@v4
         with:
           repository: vidigalp/pedrovidigal.com
@@ -120,7 +178,7 @@ jobs:
           submodules: false
 
       - name: Move the site's content pin
-        if: steps.delta.outputs.changed == 'true'
+        if: steps.publish.outputs.changed == 'true'
         working-directory: site
         run: |
           git config user.name  "snapshot bot"
@@ -130,6 +188,6 @@ jobs:
           git -C content checkout --quiet "${{ steps.commit.outputs.sha }}"
           git add content
           git commit -q -m "Bump content to ${{ steps.commit.outputs.sha }}" \
-            -m "Weekly snapshot $(date -u +%G-W%V) and dashboard refresh, committed by the research repository's update workflow."
+            -m "Snapshot $(date -u +%G-W%V) and dashboard refresh, committed by the research repository's daily update workflow."
           git pull --rebase --quiet
           git push --quiet
