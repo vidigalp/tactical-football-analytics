@@ -65,6 +65,42 @@ jobs:
           enable-cache: true
       - run: uv sync --all-extras --dev
 
+      # SITE_PUSH_TOKEN's only job is to reach a private repository, and when it
+      # cannot the failure lands at the very last step of the run, after the
+      # snapshot has already been committed. That is how the live dashboard sat
+      # four weeks stale: the token was set on 2026-09-08 and never once worked,
+      # every run that published failed at "Check out the site", and every run
+      # in between had nothing to publish and went green. Check it at the top of
+      # every run instead, so a broken token is visible on quiet days too,
+      # before anyone is relying on a pin that is not going to move.
+      - name: Can the site token see the site
+        id: site_token
+        env:
+          TOKEN: ${{ secrets.SITE_PUSH_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            code="unset"
+          else
+            code=$(curl -s -o /dev/null -w '%{http_code}' \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/vidigalp/pedrovidigal.com)
+          fi
+          if [ "$code" = "200" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "## The site pin cannot move"
+              echo
+              echo "\`SITE_PUSH_TOKEN\` cannot read \`vidigalp/pedrovidigal.com\` (API said \`$code\`)."
+              echo "A snapshot committed by this run will **not** reach the live site until the"
+              echo "token is replaced: mint a fine-grained PAT with Contents: read and write on"
+              echo "that repository, then \`gh secret set SITE_PUSH_TOKEN --repo"
+              echo "vidigalp/tactical-football-analytics\`. Until then a person must move the pin."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       # A week already committed is refreshed in place; a new week is written
       # fresh. The two paths differ only in how "nothing new" is detected, and
       # both must end with nothing committed.
@@ -169,7 +205,7 @@ jobs:
       # The site mounts this repository as the `content` submodule and copies the
       # dashboard out of it at build time. Moving the pin is the whole deploy.
       - name: Check out the site
-        if: steps.publish.outputs.changed == 'true'
+        if: steps.publish.outputs.changed == 'true' && steps.site_token.outputs.ok == 'true'
         uses: actions/checkout@v4
         with:
           repository: vidigalp/pedrovidigal.com
@@ -178,7 +214,7 @@ jobs:
           submodules: false
 
       - name: Move the site's content pin
-        if: steps.publish.outputs.changed == 'true'
+        if: steps.publish.outputs.changed == 'true' && steps.site_token.outputs.ok == 'true'
         working-directory: site
         run: |
           git config user.name  "snapshot bot"
@@ -191,3 +227,17 @@ jobs:
             -m "Snapshot $(date -u +%G-W%V) and dashboard refresh, committed by the research repository's daily update workflow."
           git pull --rebase --quiet
           git push --quiet
+
+      # A snapshot that landed here but could not reach the site is the exact
+      # failure that hid for four weeks, so say it in the summary and fail the
+      # run. The data is committed either way; what is lost is the deploy.
+      - name: Say that the snapshot did not reach the site
+        if: steps.publish.outputs.changed == 'true' && steps.site_token.outputs.ok != 'true'
+        run: |
+          {
+            echo
+            echo "Snapshot \`${{ steps.commit.outputs.sha }}\` is committed here but the site still"
+            echo "points at the previous one. Move the pin by hand, or fix the token and re-run."
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "::error title=Site pin not moved::SITE_PUSH_TOKEN cannot reach vidigalp/pedrovidigal.com; snapshot ${{ steps.commit.outputs.sha }} is committed but not deployed"
+          exit 1
