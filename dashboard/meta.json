@@ -90,7 +90,7 @@
  "current_season": "2627",
  "current_season_label": "2026-27",
  "fdr": 0.1,
- "generated_at": "2026-10-21T10:21:20+00:00",
+ "generated_at": "2026-10-22T10:21:30+00:00",
  "history_from": "2000-01",
  "leagues": {
   "B1": {
@@ -627,8 +627,8 @@
     "2526"
    ],
    "country": "Spain",
-   "latest_date": "2026-10-19",
-   "matches_current": 88,
+   "latest_date": "2026-10-21",
+   "matches_current": 89,
    "model": {
     "intercept": 0.664616,
     "slope": 0.133605,
@@ -713,7 +713,7 @@
   0.95
  ],
  "snapshot": "2026-W43",
- "snapshot_created_at": "2026-10-21T10:21:02+00:00",
+ "snapshot_created_at": "2026-10-22T10:21:13+00:00",
  "sources": [
   {
    "attribution": "football-data.co.uk",
