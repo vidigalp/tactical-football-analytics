@@ -152,6 +152,110 @@ def main() -> None:
         round(float(r), 2) for r in np.arange(0.10, 0.60, 0.01)
         if 1 - stats.norm.cdf(1.96 - np.arctanh(r) * np.sqrt(len(clubs) - 3)) >= 0.80)
 
+    # Spatial-only logistic model for the matched placement Poisson null.
+    design_spatial = np.column_stack([
+        np.ones(len(fouls)),
+        (fouls.x - 50) / 50,
+        ((fouls.x - 50) / 50) ** 2,
+        (fouls.lat - 25) / 25,
+    ])
+    beta_sp = np.zeros(design_spatial.shape[1])
+    for _ in range(60):
+        prob_sp = 1 / (1 + np.exp(-np.clip(design_spatial @ beta_sp, -30, 30)))
+        weight_sp = np.maximum(prob_sp * (1 - prob_sp), 1e-9)
+        working_sp = design_spatial @ beta_sp + (outcome - prob_sp) / weight_sp
+        step_sp = np.linalg.solve(
+            (design_spatial.T * weight_sp) @ design_spatial + 1e-6 * np.eye(design_spatial.shape[1]),
+            (design_spatial.T * weight_sp) @ working_sp)
+        if np.max(np.abs(step_sp - beta_sp)) < 1e-9:
+            beta_sp = step_sp
+            break
+        beta_sp = step_sp
+    fouls = fouls.assign(
+        expected_spatial=1 / (1 + np.exp(-np.clip(design_spatial @ beta_sp, -30, 30))))
+
+    club_expected_sp = (
+        fouls.groupby(["league", "team_id"])["expected_spatial"].sum()
+        .reindex(by_club.index).to_numpy(float)
+    )
+    club_n_arr = by_club.n.to_numpy(float)
+    club_x_arr = clubs.set_index(["league", "team_id"]).reindex(by_club.index).x.to_numpy(float)
+    club_carded_arr = (by_club.observed / by_club.n).to_numpy(float)
+
+    null_draws = 2000
+    rng = np.random.default_rng(20260906)
+    null_r_sp = np.array([
+        stats.pearsonr(club_x_arr, rng.poisson(club_expected_sp) / club_n_arr)[0]
+        for _ in range(null_draws)
+    ])
+    perm_r = np.array([
+        stats.pearsonr(rng.permutation(club_x_arr), club_carded_arr)[0]
+        for _ in range(null_draws)
+    ])
+
+    # Late-game (minute >= 70), close-score (score_diff in {0, +1}),
+    # defensive/middle-third (x < 200/3) situational tactical fouling test.
+    fouls["def_mid_third"] = (fouls.x < 200 / 3).astype(int)
+    fouls["tactical_window"] = (
+        (fouls.minute >= 70) & (fouls.score_diff.isin([0, 1])) & (fouls.x < 200 / 3)
+    ).astype(int)
+    fouls["tactical_lead"] = (
+        (fouls.minute >= 70) & (fouls.score_diff == 1) & (fouls.x < 200 / 3)
+    ).astype(int)
+
+    tac_by_club = fouls.groupby(["league", "team_id"]).agg(
+        tactical_share=("tactical_window", "mean"),
+        tactical_n=("tactical_window", "sum"),
+    ).reindex(by_club.index)
+    tac_inside = fouls[fouls.tactical_window == 1].groupby(["league", "team_id"]).agg(
+        tac_rate=("carded", "mean"),
+        tac_x=("x", "mean"),
+    ).reindex(by_club.index)
+
+    tactical_share_corr = correlation(tac_by_club.tactical_share, by_club.observed / by_club.n)
+    tactical_placement_corr = correlation(tac_inside.tac_x, tac_inside.tac_rate)
+    tac_sampling = float(
+        (tac_inside.tac_rate * (1 - tac_inside.tac_rate) / tac_by_club.tactical_n).mean()
+    )
+    tac_obs_var = float(tac_inside.tac_rate.var())
+    reliability_tactical = max(tac_obs_var - tac_sampling, 0.0) / tac_obs_var
+
+    x_norm = (fouls.x - 50) / 50
+    m_norm = (fouls.minute - 45) / 45
+    ahead = (fouls.score_diff > 0).astype(float)
+    behind = (fouls.score_diff < 0).astype(float)
+    design_inter = np.column_stack([
+        design,
+        x_norm * m_norm,
+        x_norm * ahead,
+        x_norm * behind,
+        m_norm * ahead,
+        m_norm * behind,
+        fouls.tactical_window.astype(float),
+        fouls.tactical_lead.astype(float),
+    ])
+    beta_inter = np.zeros(design_inter.shape[1])
+    for _ in range(60):
+        prob_i = 1 / (1 + np.exp(-np.clip(design_inter @ beta_inter, -30, 30)))
+        weight_i = np.maximum(prob_i * (1 - prob_i), 1e-9)
+        working_i = design_inter @ beta_inter + (outcome - prob_i) / weight_i
+        step_i = np.linalg.solve(
+            (design_inter.T * weight_i) @ design_inter + 1e-6 * np.eye(design_inter.shape[1]),
+            (design_inter.T * weight_i) @ working_i)
+        if np.max(np.abs(step_i - beta_inter)) < 1e-9:
+            beta_inter = step_i
+            break
+        beta_inter = step_i
+    fouls = fouls.assign(
+        expected_inter=1 / (1 + np.exp(-np.clip(design_inter @ beta_inter, -30, 30))))
+    by_club_inter = fouls.groupby(["league", "team_id"])["expected_inter"].sum().reindex(by_club.index)
+    adjusted_inter_sd = float(
+        ((by_club.observed / by_club_inter) * (by_club.observed / by_club.n).mean()).std()
+    )
+    interaction_r2_clubs = float(
+        stats.pearsonr(by_club_inter / by_club.n, by_club.observed / by_club.n)[0] ** 2
+    )
+
     facts = {
         "fouls": int(len(fouls)),
         "halftime_peak": h1_rate,
@@ -210,6 +314,34 @@ def main() -> None:
         "r_fouls_per_match_hi": fouls_per_match["hi"],
         "location_bound_low": rate(fouls[fouls.x > 80]) / rate(fouls),
         "location_bound_high": rate(fouls[fouls.x <= 20]) / rate(fouls),
+        "null_draws": null_draws,
+        "placement_null_r_mean": float(null_r_sp.mean()),
+        "placement_null_r_lo": float(np.percentile(null_r_sp, 2.5)),
+        "placement_null_r_hi": float(np.percentile(null_r_sp, 97.5)),
+        "placement_perm_r_mean": float(perm_r.mean()),
+        "placement_perm_r_lo": float(np.percentile(perm_r, 2.5)),
+        "placement_perm_r_hi": float(np.percentile(perm_r, 97.5)),
+        "placement_perm_p": float(np.mean(np.abs(perm_r) >= abs(r))),
+        "tactical_window_fouls": int(fouls.tactical_window.sum()),
+        "tactical_window_share": float(fouls.tactical_window.mean()),
+        "tactical_window_rate": rate(fouls[fouls.tactical_window == 1]),
+        "non_tactical_window_rate": rate(fouls[fouls.tactical_window == 0]),
+        "tactical_lead_fouls": int(fouls.tactical_lead.sum()),
+        "tactical_lead_rate": rate(fouls[fouls.tactical_lead == 1]),
+        "club_tactical_share_min": float(tac_by_club.tactical_share.min()),
+        "club_tactical_share_max": float(tac_by_club.tactical_share.max()),
+        "club_tactical_n_median": float(tac_by_club.tactical_n.median()),
+        "r_tactical_share": tactical_share_corr["r"],
+        "r_tactical_share_lo": tactical_share_corr["lo"],
+        "r_tactical_share_hi": tactical_share_corr["hi"],
+        "r2_tactical_share": tactical_share_corr["r2"],
+        "r_tactical_placement": tactical_placement_corr["r"],
+        "r_tactical_placement_lo": tactical_placement_corr["lo"],
+        "r_tactical_placement_hi": tactical_placement_corr["hi"],
+        "r2_tactical_placement": tactical_placement_corr["r2"],
+        "reliability_tactical_rate": float(reliability_tactical),
+        "interaction_explains_spread": 1 - adjusted_inter_sd / raw_sd,
+        "interaction_r2_clubs": interaction_r2_clubs,
     }
     (ROOT / "reports" / REPORT / "facts.json").write_text(
         json.dumps(facts, indent=2, sort_keys=True) + "\n")

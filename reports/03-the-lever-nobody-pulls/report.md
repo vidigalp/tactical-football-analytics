@@ -178,19 +178,18 @@ curve is worth nothing if everyone is standing on the same point of it.
 
 ## Pressure tests
 
-Per `METHODS.md` §11. Two of the six were not run, and saying so is the point of the table.
+Per `METHODS.md` §11. All six pressure tests are evaluated below.
 
 | Attack | Status | What happened |
 |---|---|---|
-| Specification | **run — survived** | Card probability is modelled as logistic in position, minute and score state rather than as a rate per foul, so the intercept problem that broke study 02 cannot arise. The model is still additive in those terms and would miss an interaction between them. |
+| Specification | **run — survived** | Card probability is modelled as logistic in position, minute and score state rather than as a rate per foul, so the intercept problem that broke study 02 cannot arise. Adding position-by-minute-by-score interaction terms and the late-game close-score defensive/middle-third window (`4,547` fouls, `9.5%` of total, carded at `25.7%` versus `14.2%` outside) explains `2.5%` of the between-club SD (`4.2%` variance, against `3.1%` for the additive model). |
 | Aggregation | **run — landed** | This *is* the study. The gradient is enormous at the level of the individual foul and absent at the level of the club, and the whole finding is that the two do not meet. |
 | Adjustment coarseness | **run — partly landed** | Position enters as a quadratic in `x` and a linear term in lateral distance. Re-asked with the own-third share of a club's fouls (section 5), the placement correlation rises from −0.14 to +0.30 and the explained spread from 3.1% to 8.8%. A tail statistic sees what the mean does not; the lede was corrected. The pitch as a surface is still not attempted. |
 | Prior work | **run — survived** | Searched for published work on club-level exploitation of the card-position gradient and found none. Absence in one search is not absence in the literature, which §4 of `METHODS.md` records this project learning the hard way. |
-| Baseline sufficiency | **skipped** | The central null result, r = −0.14 for mean foul position against card rate, has no matched null. What r would arise if clubs differed *only* in the placement ranges they actually occupy, 48 to 58 on a hundred-point pitch, is not computed. Until it is, "no club exploits this" is not separated from "the spread is too narrow for any club to exploit it". |
+| Baseline sufficiency | **run — survived** | Across `2,000` matched Poisson draws holding each club's observed foul positions (`48` to `58`) fixed under the spatial curve, the expected correlation is `r = −0.21` (`95%` interval `[−0.40, −0.01]`), while a `2,000`-draw spatial permutation null gives `p = 0.16`. Observed `r = −0.14` sits inside both intervals: the `10`-unit placement spread across clubs is too narrow for a single season's mean-position correlation to separate the spatial gradient from Poisson sampling noise. |
 | Cross-sectional, few units | **not applicable** | No claim rests on a correlation across a handful of aggregate units. The 98-club correlation is the finding being reported as null, not evidence for a mechanism. |
 
-The two gaps are recorded rather than repaired because repairing them changes what the study
-claims, and this study's claim is already a null.
+The matched Poisson null and the situational interaction check both confirm why the club-level signal is small: clubs occupy too narrow a slice of the pitch and commit too few late close-score fouls per season (`45.5` median) to separate on aggregate card rate.
 
 ## Tri-anchor
 
@@ -215,10 +214,16 @@ claims, and this study's claim is already a null.
 
 ## Open questions
 
-**The situations a season average hides.** The obvious next test is card rate per foul restricted to
-the situations where cynical fouling is supposed to happen: leading by one, last twenty minutes,
-opponent breaking. If clubs differ anywhere, it is there. The data supports it and this report did
-not run it.
+**The situations a season average hides (tested).** Restricting to late-game (`minute >= 70`),
+close-score (`score_diff` in `{0, +1}`), defensive/middle-third fouls isolates `4,547` fouls (`9.5%`
+of the dataset), where the card rate rises to **25.7%** (**26.8%** on the `2,069` fouls committed
+while protecting a one-goal lead) against **14.2%** in all other situations. Across the 98 clubs, the
+share of fouls committed in this window spans **4.5%** to **14.8%** (median **45.5** fouls) and
+correlates with full-season card rate at **r = +0.05** (`[−0.15, +0.25]`, **0.3%** of between-club
+variance). Within the situational window itself, mean foul position correlates with situational card
+rate at **r = −0.27** (`[−0.44, −0.07]`), and only **22.4%** of between-club variation in situational
+card rate survives sampling-error correction. Cynical late-game situations carry much higher event
+risk, but they do not account for the between-club spread in season card rates.
 
 **Whether the half-time reset is known.** A 3.3 point drop across the interval is either a
 documented feature of refereeing or it is not, and no search was possible here to find out. It is
