@@ -21,13 +21,13 @@ OUT = ROOT / "paper" / "figures"
 
 plt.rcParams.update({
     "font.family": "serif",
-    "font.size": 8.5,
-    "axes.titlesize": 8.6,
+    "font.size": 8.4,
+    "axes.titlesize": 8.2,
     "axes.titleweight": "bold",
-    "axes.labelsize": 8.5,
-    "xtick.labelsize": 7.5,
-    "ytick.labelsize": 7.5,
-    "legend.fontsize": 7.2,
+    "axes.labelsize": 8.3,
+    "xtick.labelsize": 7.4,
+    "ytick.labelsize": 7.4,
+    "legend.fontsize": 6.8,
     "axes.spines.top": False,
     "axes.spines.right": False,
     "pdf.fonttype": 42,
@@ -96,7 +96,8 @@ def make_fig1() -> None:
     ax2.set_xlabel("Booking index (observed / expected yellows)")
     ax2.set_title("(b) Deconfounded Portuguese Clubs")
     ax2.set_xlim(0.78, 1.32)
-    ax2.legend(frameon=False, loc="lower right")
+    ax2.set_ylim(-1.45, 5.45)
+    ax2.legend(frameon=True, facecolor="white", framealpha=0.94, edgecolor="#CBD5E1", loc="lower right", fontsize=6.5)
 
     fig.savefig(OUT / "fig1.pdf", bbox_inches="tight")
     plt.close(fig)
@@ -106,7 +107,7 @@ def make_fig2() -> None:
     story = json.loads((ROOT / "reports/02-fouling-with-impunity/story.json").read_text())
     agg = json.loads((ROOT / "reports/02-fouling-with-impunity/aggregation.json").read_text())
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.2, 2.3), constrained_layout=True)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.2, 2.45), constrained_layout=True)
 
     # Panel A: Yellows per foul vs foul count
     ypf = story["yellows_per_foul"]
@@ -127,17 +128,31 @@ def make_fig2() -> None:
                 label="Proportional assumption ($a=0$)")
     ax1.set_xlabel("Team fouls committed in match")
     ax1.set_ylabel("Observed yellow cards per foul")
-    ax1.set_title("(a) Non-Foul Intercept Dilution (0.197 to 0.122)")
-    ax1.legend(frameon=False, loc="upper right")
+    ax1.set_title("(a) Non-Foul Intercept Dilution (0.197 $\\rightarrow$ 0.122)")
+    ax1.legend(frameon=True, facecolor="white", framealpha=0.94, edgecolor="#CBD5E1", loc="upper right", fontsize=6.5)
 
     # Panel B: Multi-level aggregation reversal
     g_by_lg = agg["gradient_by_league"]
     lgs = sorted(g_by_lg.keys())
     h_gd = [g_by_lg[k]["home_gd"] for k in lgs]
     grad = [abs(g_by_lg[k]["gradient"]) for k in lgs]
-    ax2.scatter(h_gd, grad, color=NAVY, s=36, zorder=3)
+    ax2.scatter(h_gd, grad, color=NAVY, s=34, zorder=3)
+    custom_offsets = {
+        "B1": (4, 1),
+        "G1": (4, -2),
+        "SC0": (4, -3),
+        "P1": (4, -2),
+        "I1": (4, 1),
+        "T1": (4, 1),
+        "E0": (4, -1),
+        "F1": (4, 1),
+        "N1": (4, 1),
+        "D1": (4, 1),
+        "SP1": (4, 1),
+    }
     for k, x_v, y_v in zip(lgs, h_gd, grad):
-        ax2.annotate(k, (x_v, y_v), xytext=(3, 2), textcoords="offset points", fontsize=6.8)
+        dx, dy = custom_offsets.get(k, (3, 2))
+        ax2.annotate(k, (x_v, y_v), xytext=(dx, dy), textcoords="offset points", fontsize=6.6, fontweight="bold", color=NAVY)
     m, b = np.polyfit(h_gd, grad, 1)
     xg = np.linspace(min(h_gd) - 0.01, max(h_gd) + 0.01, 50)
     ax2.plot(xg, m * xg + b, color=CORAL, linestyle="--", linewidth=1.4,
@@ -149,7 +164,9 @@ def make_fig2() -> None:
     ax2.set_xlabel("Mean home goal difference (goals / match)")
     ax2.set_ylabel("Strength-gradient magnitude ($|\\beta|$)")
     ax2.set_title("(b) Ecological Fallacy Across Aggregation Levels")
-    ax2.legend(frameon=False, loc="upper right", fontsize=6.8)
+    ax2.set_xlim(0.245, 0.422)
+    ax2.set_ylim(0.034, 0.145)
+    ax2.legend(frameon=True, facecolor="white", framealpha=0.94, edgecolor="#CBD5E1", loc="upper right", fontsize=6.3)
 
     fig.savefig(OUT / "fig2.pdf", bbox_inches="tight")
     plt.close(fig)
@@ -159,7 +176,7 @@ def make_fig3() -> None:
     chart = json.loads((ROOT / "reports/03-the-lever-nobody-pulls/chart.json").read_text())
     facts = json.loads((ROOT / "reports/03-the-lever-nobody-pulls/facts.json").read_text())
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.2, 2.3), constrained_layout=True)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.2, 2.45), constrained_layout=True)
 
     # Panel A: Pitch position gradient vs club mean range [48.2, 58.0]
     pos_rows = chart["position"]
@@ -182,7 +199,7 @@ def make_fig3() -> None:
     ax1.set_title("(a) Steep Event Gradient vs. Narrow Club Range")
     ax1.set_xlim(0, 100)
     ax1.set_ylim(5, 36)
-    ax1.legend(frameon=False, loc="upper right", fontsize=6.9)
+    ax1.legend(frameon=True, facecolor="white", framealpha=0.94, edgecolor="#CBD5E1", loc="upper right", fontsize=6.5)
 
     # Panel B: Match minute gradient + halftime reset + late close-score window
     min_rows = chart["minute"]
@@ -198,18 +215,19 @@ def make_fig3() -> None:
                  fmt="-s", color=TEAL, linewidth=1.8, markersize=4.2, capsize=2.5,
                  label="By 15-min band (6.5% to 25.6%)")
     ax2.axhline(facts["tactical_window_rate"] * 100, color=CORAL, linestyle="--", linewidth=1.3,
-                label=f"Late close-score window ({facts['tactical_window_rate']*100:.1f}%, R²=0.3%)")
-    ax2.annotate("Half-time reset:\n16.1% (40-45') -> 12.8% (45-50')\n(p = 4e-4)",
-                 xy=(2.5, 14.5), xytext=(1.2, 20.5),
+                label=f"Late close-score window ({facts['tactical_window_rate']*100:.1f}%, $R^2=0.3\\%$)")
+    ax2.annotate("Half-time reset:\n16.1% (40–45') $\\rightarrow$ 12.8% (45–50')\n($p = 4.1\\times 10^{-4}$)",
+                 xy=(2.55, 15.3), xytext=(0.45, 18.2),
                  arrowprops={"arrowstyle": "->", "color": NAVY, "lw": 0.9},
-                 fontsize=6.8, color=NAVY)
+                 fontsize=6.4, color=NAVY,
+                 bbox={"boxstyle": "round,pad=0.22", "facecolor": "white", "edgecolor": "#CBD5E1", "alpha": 0.92})
     ax2.set_xticks(mx)
     ax2.set_xticklabels(m_labels)
     ax2.set_xlabel("Match minute band")
     ax2.set_ylabel("Card probability per foul (%)")
     ax2.set_title("(b) Temporal Escalation & Situational Window")
-    ax2.set_ylim(4, 30)
-    ax2.legend(frameon=False, loc="upper left", fontsize=6.9)
+    ax2.set_ylim(4, 35.5)
+    ax2.legend(frameon=True, facecolor="white", framealpha=0.94, edgecolor="#CBD5E1", loc="upper left", fontsize=6.5)
 
     fig.savefig(OUT / "fig3.pdf", bbox_inches="tight")
     plt.close(fig)
@@ -220,7 +238,7 @@ def make_fig4() -> None:
     shrink = json.loads((ROOT / "reports/04-how-much-of-an-index-is-real/shrinkage.json").read_text())
     openings = json.loads((ROOT / "reports/live-season-portugal/openings.json").read_text())
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.2, 2.3), constrained_layout=True)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.2, 2.5), constrained_layout=True)
 
     # Panel A: Per-league persistence r across 11 leagues vs matched Poisson null
     per_lg = sorted(pers["per_league"], key=lambda d: d["r"])
@@ -232,18 +250,19 @@ def make_fig4() -> None:
                 label=f"Matched Poisson null max (+{pers['null_r_max']:.3f})")
     ax1.barh(y_pos, rs, color=NAVY, height=0.62, alpha=0.85, zorder=2)
     ax1.axvline(pers["r"], color=CORAL, linestyle="--", linewidth=1.5, zorder=3,
-                label=f"Pooled within-league r = +{pers['r']:.3f}")
+                label=f"Pooled within-league $r = +{pers['r']:.3f}$")
     ax1.set_yticks(y_pos)
     ax1.set_yticklabels(lgs)
-    ax1.set_xlabel("Year-to-year club booking index correlation (r)")
-    ax1.set_title("(a) Persistence Across 11 Leagues (N = 2,528)")
-    ax1.set_xlim(-0.08, 0.48)
-    ax1.text(0.18, 1.3,
+    ax1.set_xlabel("Year-to-year club booking index correlation ($r$)")
+    ax1.set_title("(a) Persistence Across 11 Leagues ($N = 2,528$)")
+    ax1.set_xlim(-0.06, 0.56)
+    ax1.set_ylim(-0.9, 10.7)
+    ax1.text(0.285, 3.0,
              f"True variance share: {pers['true_share']*100:.1f}%\n"
-             f"EB shrinkage beats raw: -{shrink['shrunk_beats_raw']*100:.1f}% RMSE\n"
-             f"League mean beats raw: -{shrink['league_mean_beats_raw']*100:.1f}% RMSE",
-             fontsize=6.7, bbox={"boxstyle": "round,pad=0.3", "facecolor": "#F8F9FA", "edgecolor": SLATE})
-    ax1.legend(frameon=False, loc="lower right", fontsize=6.8)
+             f"EB shrinkage: $-${shrink['shrunk_beats_raw']*100:.1f}% RMSE\n"
+             f"League mean: $-${shrink['league_mean_beats_raw']*100:.1f}% RMSE",
+             fontsize=6.2, bbox={"boxstyle": "round,pad=0.25", "facecolor": "#F8F9FA", "edgecolor": SLATE, "alpha": 0.94})
+    ax1.legend(frameon=True, facecolor="white", framealpha=0.94, edgecolor="#CBD5E1", loc="lower right", fontsize=6.2)
 
     # Panel B: 31 extreme 4-match openings (<= 0.292) vs rest of season
     ext = openings["extreme"]
@@ -254,16 +273,16 @@ def make_fig4() -> None:
                 label=f"Extreme-31 rest median ({openings['extreme_rest_median']:.3f})")
     ax2.axhline(openings["lowest_full_season"]["index"], color=CORAL, linestyle="-.", linewidth=1.1,
                 label=f"25-yr archive floor (Celtic {openings['lowest_full_season']['index']:.3f})")
-    ax2.scatter(x_open, y_rest, color=TEAL, edgecolor=NAVY, s=28, alpha=0.85,
-                label="Bottom 1% 4-match openings (n = 31)")
+    ax2.scatter(x_open, y_rest, color=TEAL, edgecolor=NAVY, s=26, alpha=0.85,
+                label="Bottom 1% 4-match openings ($n = 31$)")
     ax2.axvline(openings["club_index_open"], color=AMBER, linewidth=1.4,
                 label=f"Live case 4-match opening ({openings['club_index_open']:.3f})")
     ax2.set_xlabel("Opening 4-match booking index")
     ax2.set_ylabel("Rest-of-season booking index (matches 5+)")
-    ax2.set_title("(b) Reversion of Extreme Openings (N = 3,100)")
-    ax2.set_xlim(-0.02, 0.31)
-    ax2.set_ylim(0.45, 1.55)
-    ax2.legend(frameon=False, loc="lower right", fontsize=6.4)
+    ax2.set_title("(b) Reversion of Extreme Openings ($N = 3,100$)")
+    ax2.set_xlim(-0.02, 0.325)
+    ax2.set_ylim(0.45, 2.12)
+    ax2.legend(frameon=True, facecolor="white", framealpha=0.94, edgecolor="#CBD5E1", loc="upper right", fontsize=5.8)
 
     fig.savefig(OUT / "fig4.pdf", bbox_inches="tight")
     plt.close(fig)
