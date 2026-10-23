@@ -4,6 +4,17 @@
 
 ---
 
+## What the data says
+
+Public European football repositories exhibit severe longitudinal truncation, unrecorded rule
+differences in second-yellow accounting, non-foul conduct cards in the yellow-card numerator, and
+missing referee identifiers across 9 of 11 European leagues. Across 286 completed league-season
+files in 11 top divisions (2000-01 to 2025-26), only **179 files (62.6%)** carry foul and card
+statistics (**58,013** completed matches), while the remaining 107 files return HTTP 200 and parse
+cleanly into tables containing zero match events. Referee identity is recorded in only **55 of 286
+files** — continuously in England and Scotland, for two early seasons in Germany and Italy, and
+never in the other seven leagues.
+
 ## The question, registered before the data was pulled
 
 > Of the free, public football data that exists today, how much can actually support an

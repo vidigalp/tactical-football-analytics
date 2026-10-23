@@ -377,3 +377,73 @@ def opponent_test(terciles: pd.DataFrame, path: Path, *, snapshot: str,
         sample=f"{len(terciles)} divisions, terciles taken within each season",
         source="football-data.co.uk",
         snapshot=snapshot))
+
+
+def european_champions_before_after(
+    panel: pd.DataFrame, path: Path, *, snapshot: str
+) -> list[Path]:
+    """Pan-European deconfounding progression across domestic champions and BH outliers.
+
+    ``panel`` needs label, raw, role_ref, fixture, lo, hi, outlier (bool).
+    """
+    d = panel.iloc[::-1].reset_index(drop=True)
+    fig, ax = plt.subplots(figsize=(theme.DOUBLE_COLUMN + 0.4, 5.8))
+
+    y = np.arange(len(d))
+    ax.axvline(1.0, color=theme.MUTED, linewidth=0.9, linestyle="--", zorder=1)
+
+    for yi, row in zip(y, d.itertuples(), strict=True):
+        colour = theme.PALETTE[3] if row.outlier else theme.PALETTE[0]
+        if "Porto" in str(row.label):
+            colour = theme.PALETTE[1]
+        alpha = 0.95 if (row.outlier or "Porto" in str(row.label)) else 0.72
+        span_lo = min(float(row.raw), float(row.role_ref), float(row.fixture))
+        span_hi = max(float(row.raw), float(row.role_ref), float(row.fixture))
+        ax.plot([span_lo, span_hi], [yi, yi], color=colour, alpha=alpha * 0.45,
+                linewidth=1.0, zorder=2)
+        ax.plot([row.lo, row.hi], [yi, yi], color=colour, alpha=alpha * 0.45,
+                linewidth=2.4, solid_capstyle="butt", zorder=1)
+        ax.plot(row.raw, yi, marker="o", markersize=4.5, color=colour,
+                alpha=alpha * 0.65, markerfacecolor="white", zorder=3)
+        ax.plot(row.role_ref, yi, marker="^", markersize=4.5, color=theme.PALETTE[2],
+                alpha=alpha * 0.85, markerfacecolor="white", zorder=4)
+        ax.plot(row.fixture, yi, marker="s", markersize=5.0, color=colour,
+                alpha=alpha, zorder=5)
+
+    ax.set_yticks(y)
+    ax.set_yticklabels(d["label"], fontsize=7.8)
+    for tick, row in zip(ax.get_yticklabels(), d.itertuples(), strict=True):
+        if row.outlier:
+            tick.set_color(theme.PALETTE[3])
+            tick.set_fontweight("bold")
+        elif "Porto" in str(row.label):
+            tick.set_color(theme.PALETTE[1])
+            tick.set_fontweight("bold")
+
+    ax.set_xlabel("Booking index   (1.0 = booked as affine fouls and fixture quality predict)")
+    ax.set_title(
+        "Across 11 European leagues, domestic champions collapse to parity once fixture quality is netted out",
+        pad=12,
+        fontsize=9.2,
+    )
+    theme.grid(ax, axis="x")
+
+    handles = [
+        plt.Line2D([], [], marker="o", linestyle="", markersize=5.5,
+                   markerfacecolor="white", color=theme.MUTED,
+                   label="raw proportional ($I^{\\mathrm{raw}}$)"),
+        plt.Line2D([], [], marker="^", linestyle="", markersize=5.5,
+                   markerfacecolor="white", color=theme.PALETTE[2],
+                   label="role (+ referee) adjusted ($I^{\\mathrm{sit}} / I^{\\mathrm{ref}}$)"),
+        plt.Line2D([], [], marker="s", linestyle="", markersize=5.5,
+                   color=theme.PALETTE[0],
+                   label="affine + fixture adjusted ($I^{\\mathrm{fix}}$, 95% CI)"),
+    ]
+    ax.legend(handles=handles, loc="lower right", borderaxespad=0.8, fontsize=7.5)
+
+    return theme.save(fig, path, theme.Stamp(
+        metric="Deconfounding progression across 246 European clubs (150+ matches); * = BH q < 0.10",
+        sample="58,013 completed matches across 11 European leagues, 2000-2025",
+        source="football-data.co.uk + zerozero.pt",
+        snapshot=snapshot,
+    ))

@@ -201,6 +201,55 @@ def main() -> None:
     written += story.manager_travel(pairs, null, r, out / "fig5-manager-travel",
                                    snapshot=stamp)
 
+    # ---------- Pan-European champions & BH outliers figure ----------
+    se_path = ROOT / "reports" / REPORT / "strength_effect.json"
+    rd_path = ROOT / "reports" / REPORT / "referee_decomposition.json"
+    if se_path.exists() and rd_path.exists():
+        se_data = json.loads(se_path.read_text())
+        champions_map = se_data.get("champions_panel", {})
+        outliers_map = se_data.get("outliers_universe_bh10", {})
+        combined = {**champions_map, **outliers_map}
+        ref_table = json.loads((ROOT / "reports" / REPORT / "referee_table.json").read_text())["table"]
+        selected_euro = [
+            ("B1:St. Gilloise", "Union SG (B1)*", True, None),
+            ("P1:Sp Lisbon", "Sporting CP (P1)*", True, ref_table["Sp Lisbon"]["referee"]),
+            ("E0:Chelsea", "Chelsea (E0)*", True, 1.178),
+            ("SP1:Getafe", "Getafe (SP1)*", True, None),
+            ("P1:Porto", "FC Porto (P1)", False, ref_table["Porto"]["referee"]),
+            ("E0:Man City", "Man City (E0)", False, 1.072),
+            ("E0:Arsenal", "Arsenal (E0)", False, 1.093),
+            ("SP1:Real Madrid", "Real Madrid (SP1)", False, None),
+            ("D1:Bayern Munich", "Bayern Munich (D1)", False, None),
+            ("SP1:Barcelona", "Barcelona (SP1)", False, None),
+            ("I1:Juventus", "Juventus (I1)", False, None),
+            ("B1:Club Brugge", "Club Brugge (B1)", False, None),
+            ("SC0:Celtic", "Celtic (SC0)", False, 1.005),
+            ("P1:Benfica", "SL Benfica (P1)", False, ref_table["Benfica"]["referee"]),
+            ("G1:Olympiakos", "Olympiacos (G1)", False, None),
+            ("E0:Liverpool", "Liverpool (E0)*", True, 0.956),
+            ("SP1:Sociedad", "Real Sociedad (SP1)*", True, None),
+            ("N1:Heerenveen", "Heerenveen (N1)*", True, None),
+        ]
+        euro_rows = []
+        for key, label, is_outlier, ref_val in selected_euro:
+            if key in combined:
+                c = combined[key]
+                euro_rows.append({
+                    "label": label,
+                    "raw": float(c["idx_raw"]),
+                    "role_ref": float(ref_val if ref_val is not None else c["idx_band_sit"]),
+                    "fixture": float(c["idx_fixture"]),
+                    "lo": float(c["lo_fixture"]),
+                    "hi": float(c["hi_fixture"]),
+                    "outlier": is_outlier,
+                })
+        if euro_rows:
+            written += story.european_champions_before_after(
+                pd.DataFrame(euro_rows),
+                out / "fig8-european-champions-adjusted",
+                snapshot=stamp,
+            )
+
     for w in written:
         print("wrote", w.relative_to(ROOT))
 
@@ -237,6 +286,9 @@ def main() -> None:
         "yellows_per_foul": {
             f"{row.fouls:.1f}": float(row.rate) for row in cpf.itertuples()
         },
+        "yellows_per_foul_bins": [
+            {"fouls": float(row.fouls), "rate": float(row.rate)} for row in cpf.itertuples()
+        ],
         "all_leagues": {
             "n": int(len(profile)),
             "median_heavy_underdog": float(profile[NAMES[0]].median()),

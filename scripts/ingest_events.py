@@ -106,6 +106,12 @@ def fouls_for(events: list[dict], league: str) -> list[dict]:
             "y": float(positions[0]["y"]),
             "minute": when,
             "period": event["matchPeriod"],
+            # Wyscout's own foul vocabulary. Four of these ("Protest", "Time
+            # lost foul", "Simulation", "Out of game foul") are not challenges
+            # at all: they are carded almost by definition and their position
+            # is wherever the player was standing, so any location statistic
+            # has to be able to drop them.
+            "sub_type": event["subEventName"],
             "counter_attack": COUNTER in tags,
             "card": next((name for tag, name in CARDS.items() if tag in tags), "none"),
             "score_diff": scored - conceded,

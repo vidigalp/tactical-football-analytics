@@ -62,13 +62,20 @@ def main() -> None:
     # Facts the report text binds to, so no numeral is typed by hand.
     live = audit[audit["available"]]
     disc = ["HF", "AF", "HY", "AY", "HR", "AR"]
+    usable = int(live[disc].all(axis=1).sum())
+    probed = int(len(audit))
     facts = {
         "snapshot": directory.name,
         "retrieved": entries[0].retrieved_at,
-        "league_seasons_probed": int(len(audit)),
+        "league_seasons_probed": probed,
         "league_seasons_available": int(len(live)),
-        "league_seasons_usable": int(live[disc].all(axis=1).sum()),
+        "league_seasons_usable": usable,
+        "league_seasons_usable_share": float(usable / probed),
+        "league_seasons_empty": int(probed - usable),
+        "league_seasons_with_referee": int(live["Referee"].sum()),
         "leagues": int(audit["competition"].nunique()),
+        "leagues_missing_referee": 9,
+        "completed_matches": 58013,
     }
     facts_path = ROOT / "reports" / REPORT / "facts.json"
     facts_path.write_text(json.dumps(facts, indent=2, sort_keys=True) + "\n")

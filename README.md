@@ -61,27 +61,42 @@ handled.
 
 ## Studies
 
+**[How much of a booking index is real?](reports/04-how-much-of-an-index-is-real/report.md)**
+
+Across 2,528 consecutive club-season pairs in 11 European leagues, 15.1% of single-season spread in
+the adjusted booking index is a real club property (`r = +0.324`, positive in 11 of 11 leagues) and
+84.9% is Poisson sampling noise. A club's own one-season raw ratio is beaten out of sample by 11.6%
+simply by predicting the league mean, and by 13.3% via Empirical-Bayes shrinkage.
+
 **[The lever nobody pulls](reports/03-the-lever-nobody-pulls/report.md)**
 
 Whether a foul is punished depends enormously on where and when it happens: 31.4% carded in a
 team's own defensive fifth against 8.9% in the attacking fifth, and 6.5% in the opening quarter of
-an hour against 25.6% after ninety minutes. Across 98 clubs in five leagues, nobody exploits it.
-Club average foul positions span 48 to 58 on a hundred-point pitch, a tenth of the range the
-gradient covers, and where a club fouls does not predict how often it is carded.
+an hour against 25.6% after ninety minutes (with a 3.3-point drop across half-time and 25.7% in
+late close-score defensive/middle-third situations). Across 98 clubs in five leagues, nobody
+exploits it: club mean foul positions span 48.2 to 58.0 on a hundred-point pitch, leaving 91.2% of
+between-club variation unexplained even on the defensive-third tail share.
 
 **[A club that fouls with impunity, and the four ways I was wrong about it](reports/02-fouling-with-impunity/report.md)**
 
-A viral post implied a club was being favoured by referees. Checking it produced a striking
-result — and then four attempts to destroy that result, two of which succeeded. The effect turned
-out to belong to the *fixture*, not the club: cards per foul scale with match quality, for both
-teams. Being a heavy favourite is worth a 32% swing in booking rate on its own.
+Across 58,013 completed matches and 246 clubs in 11 European leagues, raw cards-per-foul ratios
+make nearly every domestic champion appear leniently officiated (`r = −0.371`). Adjusting for
+single-match win expectation removes the favourite discount (1.098× heavy underdog vs. 0.856× heavy
+favourite) but overshoots for elite clubs (`r = +0.484`) because high-quality fixtures elevate
+card-per-foul rates for both teams on the pitch (`r = +0.283`; 11/11 leagues rising across
+opponent-strength terciles). Netting out both the affine non-foul conduct intercept (11.1%–38.8%
+league-mean share; 13%–47% across league-seasons) and fixture quality ($I^{\text{fix}}_i$)
+eliminates the strength gradient across all 246 clubs (`r = +0.095, p = 0.139`) and pulls Europe's
+domestic champions onto parity (≈ 1.00), while leave-one-club-out referee decomposition across 80
+clubs in England, Scotland, and Portugal shifts club indices by an RMS of just 0.0085.
 
 **[What free football data can still tell you](reports/01-free-football-data/report.md)**
 
-FBref lost its Opta licence in January 2026. I audited what remains: 286 league-season files
-across 11 European leagues and 26 seasons. **179 carry fouls and cards.** The other 107 download
-fine, parse fine, and contain no football. Median columns per file went from 25 to 131 since 2000
-while the columns describing the match went from 0 to 12 and stopped moving in 2007.
+FBref lost its Opta licence in January 2026. Auditing 286 league-season files across 11 European
+leagues and 26 seasons reveals severe longitudinal truncation (179 of 286 files carry fouls and
+cards; 107 download and parse cleanly with zero match statistics), unrecorded rule differences in
+second-yellow accounting, non-foul conduct cards in the yellow-card numerator, and missing referee
+identifiers across 9 of 11 European leagues.
 
 ## Reproduce it
 

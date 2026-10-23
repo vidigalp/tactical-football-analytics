@@ -1,0 +1,123 @@
+{
+  "ambiguous_labels": [
+    "Late card foul",
+    "Violent Foul"
+  ],
+  "attacking_fifth_cards": 512,
+  "attacking_fifth_non_play_cards": 261,
+  "base_rate": 0.1531852778646648,
+  "by_sub_type": {
+    "Foul": {
+      "cards": 5533,
+      "fouls": 44293,
+      "hi": 0.1280298386658904,
+      "lo": 0.12187153579237346,
+      "rate": 0.12491815862551645
+    },
+    "Hand foul": {
+      "cards": 106,
+      "fouls": 1941,
+      "hi": 0.06562759944524636,
+      "lo": 0.04535398383639469,
+      "rate": 0.05461102524471922
+    },
+    "Late card foul": {
+      "cards": 300,
+      "fouls": 300,
+      "hi": 0.9999999999999999,
+      "lo": 0.9873565700022643,
+      "rate": 1.0
+    },
+    "Out of game foul": {
+      "cards": 470,
+      "fouls": 473,
+      "hi": 0.9978407221402575,
+      "lo": 0.9815201389926637,
+      "rate": 0.9936575052854123
+    },
+    "Protest": {
+      "cards": 561,
+      "fouls": 561,
+      "hi": 0.9999999999999999,
+      "lo": 0.9931988012214398,
+      "rate": 1.0
+    },
+    "Simulation": {
+      "cards": 102,
+      "fouls": 108,
+      "hi": 0.9742926208028179,
+      "lo": 0.884064198126811,
+      "rate": 0.9444444444444444
+    },
+    "Time lost foul": {
+      "cards": 205,
+      "fouls": 205,
+      "hi": 1.0,
+      "lo": 0.9816051974319293,
+      "rate": 1.0
+    },
+    "Violent Foul": {
+      "cards": 69,
+      "fouls": 74,
+      "hi": 0.9707963444514379,
+      "lo": 0.8513861389507532,
+      "rate": 0.9324324324324325
+    }
+  },
+  "cards": 7346,
+  "club_non_play_cards_max": 29,
+  "club_non_play_cards_min": 2,
+  "club_non_play_per_match_max": 0.7631578947368421,
+  "club_non_play_per_match_median": 0.34210526315789475,
+  "club_non_play_per_match_min": 0.058823529411764705,
+  "club_non_play_share_max": 0.3372093023255814,
+  "club_non_play_share_median": 0.17274535809018568,
+  "club_non_play_share_min": 0.0425531914893617,
+  "clubs": 98,
+  "composite_location_bound_high": 1.751300895980776,
+  "composite_location_bound_low": 0.47168794396455704,
+  "fouls": 47955,
+  "non_play_cards": 1338,
+  "non_play_fouls": 1347,
+  "non_play_labels": [
+    "Protest",
+    "Time lost foul",
+    "Simulation",
+    "Out of game foul"
+  ],
+  "non_play_share_of_cards": 0.18213994010345766,
+  "non_play_share_of_fouls": 0.028088833281201125,
+  "own_fifth_cards": 998,
+  "own_fifth_non_play_cards": 283,
+  "play_attacking_fifth": 0.045636363636363635,
+  "play_attacking_third": 0.07538314878638996,
+  "play_base_rate": 0.12890490902849297,
+  "play_location_bound_high": 1.9186179064372142,
+  "play_location_bound_low": 0.3540312310858249,
+  "play_middle_third": 0.12519478206669338,
+  "play_own_fifth": 0.24731926668972673,
+  "play_own_third": 0.20627973358705995,
+  "r_non_play_share_vs_card_rate": {
+    "hi": 0.3556932878343879,
+    "lo": -0.0302276124833445,
+    "r": 0.16921161995577394,
+    "r2": 0.028632572328057274
+  },
+  "r_non_play_vs_cards_per_match": {
+    "hi": 0.7316447995251849,
+    "lo": 0.48543783841007043,
+    "r": 0.6237781765209808,
+    "r2": 0.38909921350383986
+  },
+  "r_own_third_share_play": {
+    "hi": 0.4797025050885763,
+    "lo": 0.11983564694772231,
+    "r": 0.3108680502934391,
+    "r2": 0.09663894469324419
+  },
+  "split_half_clubs": 98,
+  "split_half_corrected": 0.26567465068234974,
+  "split_half_r": 0.15318616589838596,
+  "typology_bound_high": 1.2946561108362196,
+  "typology_bound_low": 0.7053438891637803
+}

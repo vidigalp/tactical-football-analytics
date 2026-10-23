@@ -1,8 +1,13 @@
 {
+  "completed_matches": 58013,
   "league_seasons_available": 286,
+  "league_seasons_empty": 107,
   "league_seasons_probed": 286,
   "league_seasons_usable": 179,
+  "league_seasons_usable_share": 0.6258741258741258,
+  "league_seasons_with_referee": 55,
   "leagues": 11,
+  "leagues_missing_referee": 9,
   "retrieved": "2026-08-29T21:22:07+00:00",
   "snapshot": "2026-W35"
 }
