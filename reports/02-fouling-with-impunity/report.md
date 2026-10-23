@@ -18,7 +18,7 @@ terciles **0.938** to **0.993** to **1.088**).
 
 Adjusting for single-match win expectation alone removes the favourite discount (**1.098** vs.
 **0.856**) but overshoots for elite clubs (**r = +0.484**) unless fixture quality is also accounted
-for. Netting out both the affine intercept and both teams' fixture quality ($I^{\text{fix}}_i$)
+for. Netting out both the affine intercept and both teams' fixture quality (`I_fix`)
 eliminates the residual strength gradient across all 246 European clubs (**r = +0.095**, **p =
 0.139**), equalises the top and bottom strength quartiles (**1.012** vs. **1.013**, **p = 0.917**),
 and pulls Europe's perennial domestic champions — Olympiacos (**0.767** raw to **0.920**), Celtic
@@ -66,10 +66,10 @@ Porto's raw booking index comes out at **0.890**. Comfortably below 1.0, interva
 Benfica sits at **0.885**. On its face, two clubs booked around 12% less than their fouls imply.
 
 Nor is that pattern peculiar to Portugal. Across all **246 European clubs** with 150+ matches in
-our eleven-league archive, the raw proportional booking index ($I^{\text{raw}}_i$) correlates
+our eleven-league archive, the raw proportional booking index (`I_raw`) correlates
 negatively with club strength at **r = −0.371**: the top strength quartile (62 clubs) averages
 **0.971** against **1.026** for the bottom quartile, and the 26 elite domestic title contenders
-($\bar{s}_i \ge 1.0$) average **0.949** (median **0.944**). Nearly every perennial domestic
+(mean strength ≥ 1.0) average **0.949** (median **0.944**). Nearly every perennial domestic
 champion in Europe sits below 1.00 on raw cards per foul: Olympiacos (**0.767**), Celtic
 (**0.828**), Liverpool (**0.876**), Club Brugge (**0.878**), SL Benfica (**0.885**), FC Porto
 (**0.890**), Juventus (**0.907**), Feyenoord (**0.918**), Borussia Dortmund (**0.920**), Rangers
@@ -144,7 +144,7 @@ index for each club's **opponents** in the matches played against that club.
 | corr(club strength, **own** role-adjusted index) | **+0.484** |
 | corr(club strength, **opponents'** role-adjusted index) | **+0.283** (p = 7×10⁻⁶) |
 | corr(own index, opponents' index) | +0.116 (p = 0.07) |
-| corr(club strength, **affine + fixture-adjusted** index $I^{\text{fix}}_i$) | **+0.095** (p = 0.139) |
+| corr(club strength, **affine + fixture-adjusted** index `I_fix`) | **+0.095** (p = 0.139) |
 
 All four from `scripts/strength_effect.py`, recorded in
 [`strength_effect.json`](strength_effect.json).
@@ -174,27 +174,27 @@ A club's own quality is half of that fixture quality, so strong clubs genuinely 
 rate. They are not being singled out. They are playing in higher-quality matches, and those
 matches produce more yellows per foul.
 
-### Deconfounding the 246-club European universe ($I^{\text{fix}}_i$)
+### Deconfounding the 246-club European universe (`I_fix`)
 
-Once we net out **both the affine non-foul intercept and both clubs' season strengths**
-($\bar{s}_{i,s}, \bar{s}_{j,s}$) alongside single-match role ($s_{i,m}$) in the Poisson expectation
-model ($I^{\text{fix}}_i$), the over-correction disappears across all **246 European clubs**:
+Once we net out **both the affine non-foul intercept and both clubs' season strengths** alongside
+single-match role in the Poisson expectation model (`I_fix`), the over-correction disappears across
+all **246 European clubs**:
 
 - The residual correlation between club strength and the booking index drops from **+0.484** to
   **r = +0.095** (**p = 0.139**).
 - The top and bottom strength quartiles become indistinguishable (**1.012** vs. **1.013**, two-sample
-  *t*-test **p = 0.917**), and the 26 elite title contenders ($\bar{s}_i \ge 1.0$) sit at a mean of
+  *t*-test **p = 0.917**), and the 26 elite title contenders (mean strength ≥ 1.0) sit at a mean of
   **1.031** (median **1.029**).
-- Perennial domestic champions across Europe that looked lenient on raw ratios ($I^{\text{raw}}_i < 1.00$),
+- Perennial domestic champions across Europe that looked lenient on raw ratios (`I_raw < 1.00`),
   as well as elite clubs like Manchester City (**1.000** raw to **1.076** role / **1.072** referee),
   Arsenal (**1.005** to **1.095** / **1.093**), and Rangers (**0.939** to **1.098** / **1.100**) that
   looked artificially elevated under single-match role adjustment because their fixtures are
-  high-intensity contests, collapse onto statistical parity ($I^{\text{fix}}_i \approx 1.00$, all
-  Benjamini–Hochberg $q_{\text{univ}} > 0.10$):
+  high-intensity contests, collapse onto statistical parity (`I_fix ≈ 1.00`, all
+  Benjamini–Hochberg `q_univ > 0.10`):
 
 ![European champions and outliers before and after fixture adjustment](figures/fig8-european-champions-adjusted.png)
 
-| League | Club | Matches | Strength $\bar{s}_i$ | Raw $I^{\text{raw}}_i$ | Affine $I^{\text{aff}}_i$ | Role Adj. $I^{\text{sit}}_i$ | Fixture Adj. $I^{\text{fix}}_i$ | 95% Poisson CI | BH $q_{\text{univ}}$ |
+| League | Club | Matches | Strength | Raw (`I_raw`) | Affine (`I_aff`) | Role Adj. (`I_sit`) | Fixture Adj. (`I_fix`) | 95% Poisson CI | BH `q_univ` |
 |---|---|---|---|---|---|---|---|---|---|
 | `G1` | Olympiacos | 243 | +1.552 | 0.767 | 0.751 | 0.905 | **0.920** | [0.837, 1.008] | 0.313 |
 | `SC0` | Celtic | 937 | +1.946 | 0.828 | 0.814 | 1.005 | **0.996** | [0.939, 1.055] | 0.975 |
@@ -215,7 +215,7 @@ model ($I^{\text{fix}}_i$), the over-correction disappears across all **246 Euro
 | `E0` | Manchester City | 941 | +1.054 | 1.000 | 0.985 | 1.076 | **1.029** | [0.977, 1.084] | 0.631 |
 | `E0` | Arsenal | 977 | +1.081 | 1.005 | 0.997 | 1.095 | **1.027** | [0.976, 1.080] | 0.655 |
 
-Across all 246 clubs, universe-wide Benjamini–Hochberg FDR control at $q < 0.10$ leaves **23 of
+Across all 246 clubs, universe-wide Benjamini–Hochberg FDR control at q < 0.10 leaves **23 of
 246** clubs (**9.3%**) separating from 1.00 (26 under within-league BH, down from 47 on raw ratios
 and 30 on role-only adjustment): 10 high-booking clubs led by Union SG (`B1`, **1.228**), AC
 Ajaccio (`F1`, **1.163**), SC Bastia (`F1`, **1.150**), Sporting CP (`P1`, **1.117** fixture /
@@ -366,8 +366,8 @@ them is that an attack never tried cannot pass as one tried and survived.
 | Attack | Status | What happened |
 |---|---|---|
 | Specification | **run — landed** | The expectation was `cards = rate x fouls`, proportional through the origin. Measured, the non-foul conduct intercept is 11.1% to 38.8% of league-mean cards (13% to 47% across league-seasons). Because dominant clubs foul *less*, that misspecification inflated exactly the clubs the finding was about. |
-| Aggregation | **run — landed** | Recomputed the index for the *opponents*: it correlates with club strength at r = +0.283 and rises across opponent-strength terciles in 11 of 11 leagues (0.938 to 0.993 to 1.088), proving the effect belongs to the fixture. Netting out both the affine intercept and fixture quality ($I^{\text{fix}}_i$) eliminates the residual strength gradient across all 246 clubs (r = +0.095, p = 0.139). |
-| Adjustment coarseness | **run — survived** | Five strength bands under-corrected the strongest clubs (r = +0.403); redone as a continuous quartic Poisson fit (r = +0.484) and then augmented with both teams' season strengths ($I^{\text{fix}}_i$, r = +0.095), equalising top and bottom quartiles (1.012 vs. 1.013, p = 0.917). |
+| Aggregation | **run — landed** | Recomputed the index for the *opponents*: it correlates with club strength at r = +0.283 and rises across opponent-strength terciles in 11 of 11 leagues (0.938 to 0.993 to 1.088), proving the effect belongs to the fixture. Netting out both the affine intercept and fixture quality (`I_fix`) eliminates the residual strength gradient across all 246 clubs (r = +0.095, p = 0.139). |
+| Adjustment coarseness | **run — survived** | Five strength bands under-corrected the strongest clubs (r = +0.403); redone as a continuous quartic Poisson fit (r = +0.484) and then augmented with both teams' season strengths (`I_fix`, r = +0.095), equalising top and bottom quartiles (1.012 vs. 1.013, p = 0.917). |
 | Prior work | **run — landed** | Dawson, Dobson, Goddard and Wilson (2007) published a strength gradient in cards. What may be new here is conditioning on fouls, not the gradient. |
 | Baseline sufficiency | **run — survived** | Asked and answered in [study 04](../04-how-much-of-an-index-is-real/report.md), which resamples the booking index from a world where clubs differ in nothing and finds the observed carry-over far outside it. The numbers live there rather than being restated here. |
 | Cross-sectional, few units | **run — landed** | The home-advantage explanation correlates at +0.782 across eleven league averages and −0.086 within leagues over time. One dataset, three aggregation levels, and the coarsest one manufactured it. |

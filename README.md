@@ -85,7 +85,7 @@ single-match win expectation removes the favourite discount (1.098× heavy under
 favourite) but overshoots for elite clubs (`r = +0.484`) because high-quality fixtures elevate
 card-per-foul rates for both teams on the pitch (`r = +0.283`; 11/11 leagues rising across
 opponent-strength terciles). Netting out both the affine non-foul conduct intercept (11.1%–38.8%
-league-mean share; 13%–47% across league-seasons) and fixture quality ($I^{\text{fix}}_i$)
+league-mean share; 13%–47% across league-seasons) and fixture quality (`I_fix`)
 eliminates the strength gradient across all 246 clubs (`r = +0.095, p = 0.139`) and pulls Europe's
 domestic champions onto parity (≈ 1.00), while leave-one-club-out referee decomposition across 80
 clubs in England, Scotland, and Portugal shifts club indices by an RMS of just 0.0085.
